@@ -1,0 +1,49 @@
+const express = require("express");
+const hbs  = require('hbs'); // require hbs instead of express-handlebars
+const app = express();
+const path = require("path");
+const mongoose = require("mongoose");
+const session = require('express-session');
+const admin_route = require("./routes/adminRoute"); // Assuming adminRoute is a middleware function
+
+const user_route = require("./routes/userRoute");
+
+// Set up the public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Set up Handlebars engine
+try {
+    app.set('view engine', 'hbs');
+    app.set('views', path.join(__dirname, 'views'));
+    hbs.registerPartials(path.join(__dirname, 'views/common'));
+} catch (error) {
+    console.error('Error setting up Handlebars:', error);
+}
+
+
+// Use your admin_route middleware
+app.use('/', admin_route);
+app.use('/api', user_route);
+
+app.use(express.urlencoded({extended:false}));
+
+app.use(session({
+    secret: 'session_secret_key', // Change this to a random secret key
+    resave: false,
+    saveUninitialized: false
+}));
+
+// Connect to MongoDB
+mongoose.connect("mongodb+srv://siancessp:ic4jfxeuxi67hp6e@cluster0.davapk5.mongodb.net", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log('MongoDB connected');
+}).catch((error) => {
+    console.error('MongoDB connection error:', error);
+});
+
+const PORT = 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
