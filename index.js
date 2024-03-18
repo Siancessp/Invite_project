@@ -34,7 +34,7 @@ app.use(session({
 }));
 
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://siancessp:ic4jfxeuxi67hp6e@cluster0.davapk5.mongodb.net", {
+mongoose.connect("mongodb+srv://swarupamohapatra11:CpMeZSu7zxgRYAX2@cluster0.8ujr7jw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
