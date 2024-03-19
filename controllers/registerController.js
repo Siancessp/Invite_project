@@ -16,7 +16,7 @@ const securePassword = async (password) => {
 
 const create_token = async (id) => {
     try {
-        const token = await jwt.sign({ id: _id }, config.secret_jwt);
+        const token = await jwt.sign({ _id: id }, config.secret_jwt);
         return token;
     } catch (error) {
         throw new Error(error.message);
