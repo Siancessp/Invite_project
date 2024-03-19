@@ -60,6 +60,7 @@ const insertuser = async (req, res) => {
 
             // Create JWT token for the newly registered user
             const token = await create_token(savedUser._id);
+            console.log("Generated Token:", token); // Log the generated token
 
             const response = {
                 success: true,
@@ -78,6 +79,7 @@ const insertuser = async (req, res) => {
         return res.status(500).send({ success: false, msg: "Error saving user data" });
     }
 }
+
 
 
 module.exports = {
