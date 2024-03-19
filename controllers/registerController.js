@@ -60,14 +60,14 @@ const insertuser = async (req, res) => {
 
             // Create JWT token for the newly registered user
             const token = await create_token(savedUser._id);
-            console.log("Generated Token:", token); // Log the generated token
+            console.log("Generated Token:", token);
 
             const response = {
                 success: true,
                 msg: "User registered successfully",
                 data: {
                     user: savedUser,
-                    token: token // Include the token in the response
+                    token: token
                 }
             }
             res.status(200).send(response);
