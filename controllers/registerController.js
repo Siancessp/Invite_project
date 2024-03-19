@@ -14,10 +14,18 @@ const securePassword = async (password) => {
     }
 }
 
-const insertuser = async (req,res)=>
-{
+const create_token = async (id) => {
+    try {
+        const token = await jwt.sign({ _id: id }, config.secret_jwt);
+        return token;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+const insertuser = async (req, res) => {
     const { roleid, fullname, mobileno, email, password, status, confirmpassword } = req.body;
-    try{
+    try {
         const existingUser = await Register.findOne({ email: email });
         if (existingUser) {
             return res.status(400).send({ success: false, msg: "Email already exists" });
@@ -31,7 +39,7 @@ const insertuser = async (req,res)=>
         if (password !== confirmpassword) {
             return res.status(400).send({ success: false, msg: "Both Password and Confirm Password are not Same" });
         }
-        
+
         const createddate = new Date();
         const spassword = await securePassword(password);
         const sconfirmpassword = await securePassword(confirmpassword);
@@ -45,26 +53,32 @@ const insertuser = async (req,res)=>
                 status: 1,
                 password: spassword,
                 confirmpassword: sconfirmpassword,
-                created_date : createddate
+                created_date: createddate
             });
 
             const savedUser = await newUser.save();
+
+            // Create JWT token for the newly registered user
+            const token = await create_token(savedUser._id);
+
             const response = {
                 success: true,
                 msg: "User registered successfully",
-                data: savedUser
+                data: {
+                    user: savedUser,
+                    token: token // Include the token in the response
+                }
             }
             res.status(200).send(response);
         } else {
             return res.status(400).send({ success: false, msg: "Passwords do not match" });
         }
-    }
-    catch(error)
-    {
+    } catch (error) {
         console.error(error);
         return res.status(500).send({ success: false, msg: "Error saving user data" });
     }
 }
+
 
 module.exports = {
     insertuser
