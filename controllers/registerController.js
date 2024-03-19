@@ -16,7 +16,7 @@ const securePassword = async (password) => {
 
 const create_token = async (id) => {
     try {
-        const token = await jwt.sign({ _id: id }, config.secret_jwt);
+        const token = await jwt.sign({ id: _id }, config.secret_jwt);
         return token;
     } catch (error) {
         throw new Error(error.message);
@@ -60,7 +60,6 @@ const insertuser = async (req, res) => {
 
             // Create JWT token for the newly registered user
             const token = await create_token(savedUser._id);
-            console.log("Generated Token:", token);
 
             const response = {
                 success: true,
