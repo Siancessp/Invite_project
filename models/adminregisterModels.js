@@ -12,7 +12,7 @@ const adminregisterSchema = new mongoose.Schema({
     mobileno: {
         type: String,
         required: true
-    },
+      },
     email: {
         type: String,
         required: true
