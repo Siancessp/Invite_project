@@ -8,6 +8,11 @@ user_route.use(bodyParser.urlencoded({ extended: true }));
 const userController = require("../controllers/api/userConroller");
 const eventController = require("../controllers/api/eventcontroller");
 
+user_route.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname + '/index.js'));
+});
+
+
 user_route.post('/register', userController.insertuserData);
 user_route.get('/login', userController.user_login);
 user_route.get('/eventtemplate', eventController.eventtemplate);
