@@ -57,10 +57,15 @@ const insertuserData = async (req,res)=>
             });
 
             const savedUser = await newUser.save();
+            const token = await create_token(savedUser._id);
+
             const response = {
                 success: true,
                 msg: "User registered successfully",
-                data: savedUser
+                data: {
+                    user: savedUser,
+                    token: token
+                }
             }
             res.status(200).send(response);
         } else {
