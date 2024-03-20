@@ -36,6 +36,7 @@ const addeventController = require("../controllers/eventController");
 admin_route.post('/register', registerController.insertuser);
 
 admin_route.post('/insertcategory', categoryController.insertcategory);
+admin_route.get('/category', categoryController.category);
 admin_route.post('/insertweakendcategory', weakendcategoryController.insertweakendcategory);
 
 admin_route.get('/',loginController.login);
