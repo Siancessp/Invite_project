@@ -159,7 +159,7 @@ Nora Silvester
 <div class="container-fluid">
 <div class="row mb-2">
 <div class="col-sm-6">
-<h1>Event Category</h1>
+<h1>Weakend Event Category</h1>
 </div>
 <div class="col-sm-6">
 <ol class="breadcrumb float-sm-right">
@@ -177,18 +177,23 @@ Nora Silvester
 
 <div class="card card-primary">
 <div class="card-header">
-<h3 class="card-title">Event Category</h3>
+<h3 class="card-title">Weakend Category</h3>
 </div>
 
 
-<form action="" method="POST" enctype="multipart/form-data">
+<form action="/insertweakendcategorydata" method="POST" enctype="multipart/form-data">
 <div class="card-body">
 <div class="form-group">
-<label for="categoryname">Category Name</label>
-   
+        <label for="weakendcategorySelect">Select Category</label>
+        <select class="form-control" id="weakendcategorySelect" name="weakendcategoryid">
+            <option value="">Select a category</option>
+            {{#each weakendcategories}}
+                <option value="{{this._id}}">{{this.weakendcategoryname}}</option>
+            {{/each}}
+        </select>
 </div>
 <div class="form-group">
-<label for="exampleInputFile">Event Template</label>
+<label for="exampleInputFile">Weakend Template</label>
 <div class="input-group">
 <div class="custom-file">
 <input type="file" class="custom-file-input" id="exampleInputFile" name="eventtemplate">

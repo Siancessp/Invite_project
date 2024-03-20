@@ -37,7 +37,10 @@ admin_route.post('/register', registerController.insertuser);
 
 admin_route.post('/insertcategory', categoryController.insertcategory);
 admin_route.get('/category', categoryController.category);
-admin_route.post('/insertweakendcategory', weakendcategoryController.insertweakendcategory);
+admin_route.get('/wekendcategory', weakendcategoryController.wekendcategory);
+admin_route.get('/insertweakendcategory', weakendcategoryController.insertweakendcategory);
+admin_route.get('/fetchCategories', weakendcategoryController.fetchCategories);
+admin_route.post('/insertweakendcategorydata', weakendcategoryController.insertweakendcategorydata);
 
 admin_route.get('/',loginController.login);
 admin_route.get('/login',loginController.login);

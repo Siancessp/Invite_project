@@ -9,7 +9,7 @@ const Category = require("../models/addcategoryModel");
 
 const category = async (req, res) => {
     try {
-        res.render('addeventname'); // Make sure you have a 'login.hbs' file in your 'views' directory
+        res.render('addeventname');
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
@@ -18,11 +18,11 @@ const category = async (req, res) => {
 
 const insertcategory = async (req,res) =>
 {
-    const { categoryname } = req.body;
     try 
     {
+        const categoryname = req.body.categoryname;
         const newCategory = new Category({
-            categoryname: categoryname,
+            categoryname: categoryname
         });
 
         const savedCategory = await newCategory.save();
