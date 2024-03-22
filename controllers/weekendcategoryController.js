@@ -47,27 +47,30 @@ const fetchCategories = async () => {
     } catch (error) {
         throw new Error(error.message);
     }
-};
+}
+
 
 const insertweakendcategorydata = async (req, res) => {
     const { weakendcategoryid } = req.body;
+
     try {
         const newWeakend = new weakEnd({
             weakendcategoryid: weakendcategoryid,
             weakendtemplate: req.file.filename
         });
+
         const savedWeakend = await newWeakend.save();
         if (savedWeakend) {
             const weakendcategories = await fetchCategories();
-            res.render('addweakendcategory', { message: "Your event has been created successfully!", weakendcategories });
+            res.render('addeventcategory', { message: "Your event has been created successfully!", weakendcategories });
         } else {
-            res.render('addweakendcategory', { message: "Failed to create event!" });
+            res.render('addeventcategory', { message: "Failed to create event!" });
         }
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
     }
-};
+}
 
 
 

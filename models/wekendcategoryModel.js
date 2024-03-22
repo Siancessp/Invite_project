@@ -7,6 +7,6 @@ const weakendcategorySchema = new mongoose.Schema({
     }
 });
 
-const weakendcategory = mongoose.model("Weekendcategory", weakendcategorySchema);
+const weakendcategory = mongoose.model("WeakEndcategory", weakendcategorySchema);
 
 module.exports = weakendcategory;

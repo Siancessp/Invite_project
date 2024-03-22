@@ -7,10 +7,10 @@ const weakendcategorySchema = new mongoose.Schema({
     },
     weakendtemplate: {
         type: String,
-        required: true 
+        required: false 
     }
 });
 
-const weakendcategory = mongoose.model("Weakendcategory", weakendcategorySchema);
+const weakendcategory = mongoose.model("Weakendcategorytemplate", weakendcategorySchema);
 
 module.exports = weakendcategory;
