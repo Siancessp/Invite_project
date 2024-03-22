@@ -1,34 +1,28 @@
 const express = require("express");
-const hbs  = require('hbs'); // require hbs instead of express-handlebars
+const hbs  = require('hbs');
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const session = require('express-session');
-const admin_route = require("./routes/adminRoute"); // Assuming adminRoute is a middleware function
-
+const admin_route = require("./routes/adminRoute");
 const user_route = require("./routes/userRoute");
 
 // Set up the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set up Handlebars engine
-try {
-    app.set('view engine', 'hbs');
-    app.set('views', path.join(__dirname, 'views'));
-    hbs.registerPartials(path.join(__dirname, 'views/common'));
-} catch (error) {
-    console.error('Error setting up Handlebars:', error);
-}
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
+hbs.registerPartials(path.join(__dirname, 'views/common'));
 
-
-// Use your admin_route middleware
+// Use middleware
 app.use('/', admin_route);
 app.use('/api', user_route);
 
 app.use(express.urlencoded({extended:false}));
 
 app.use(session({
-    secret: 'session_secret_key', // Change this to a random secret key
+    secret: 'session_secret_key',
     resave: false,
     saveUninitialized: false
 }));

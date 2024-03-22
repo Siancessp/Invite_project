@@ -182,34 +182,36 @@ Nora Silvester
 
 
 <form action="/insertweakendcategorydata" method="POST" enctype="multipart/form-data">
-<div class="card-body">
-<div class="form-group">
-        <label for="weakendcategorySelect">Select Category</label>
-        <select class="form-control" id="weakendcategorySelect" name="weakendcategoryid">
-            <option value="">Select a category</option>
-            {{#each weakendcategories}}
-                <option value="{{this._id}}">{{this.weakendcategoryname}}</option>
-            {{/each}}
-        </select>
-</div>
-<div class="form-group">
-<label for="exampleInputFile">Weakend Template</label>
-<div class="input-group">
-<div class="custom-file">
-<input type="file" class="custom-file-input" id="exampleInputFile" name="weakendtemplate">
-<label class="custom-file-label" for="exampleInputFile">Choose file</label>
-</div>
-<div class="input-group-append">
-<span class="input-group-text">Upload</span>
-</div>
-</div>
-</div>
-</div>
+    <div class="card-body">
+        <div class="form-group">
+            <label for="weakendcategorySelect">Select Category</label>
+            <select class="form-control" id="weakendcategorySelect" name="weakendcategoryid">
+                <option value="">Select a category</option>
+                {{#each weakendcategories}}
+                    <option value="{{this._id}}">{{this.weakendcategoryname}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputFile">Weakend Template</label>
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="exampleInputFile" name="weakendtemplate">
+                    <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                </div>
+                <div class="input-group-append">
+                    <span class="input-group-text">Upload</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div class="card-footer">
-<button type="submit" class="btn btn-primary">Submit</button>
-</div>
+    <div class="card-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
 </form>
+
+
 </div>
 </div>
 

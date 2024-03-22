@@ -8,6 +8,7 @@ const config = require("../config/config");
 const weakendCategory = require("../models/wekendcategoryModel");
 const weakEnd = require("../models/addweakendcategoryModel");
 
+
 const wekendcategory = async (req, res) => {
     try {
         res.render('addweakendcategory');
@@ -17,25 +18,20 @@ const wekendcategory = async (req, res) => {
     }
 }
 
-const insertweakendcategory = async (req,res) =>
-{
+const insertweakendcategory = async (req, res) => {
     const { weakendcategoryname } = req.body;
-    try 
-    {
+    try {
         const newwaekendCategory = new weakendCategory({
             weakendcategoryname: weakendcategoryname,
         });
-
         const saveweakendCategory = await newwaekendCategory.save();
         const response = {
             success: true,
-            msg: "Weakend Category added Successfully!",
+            msg: "Weekend Category added Successfully!",
             data: saveweakendCategory
         }
         res.status(200).send(response);
-    } 
-    catch (error) 
-    {
+    } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
     }
@@ -53,27 +49,13 @@ const fetchCategories = async () => {
     }
 };
 
-
-const addweakendcategory = async (req, res) => {
-    try {
-        const weakendcategories = await fetchCategories();
-        res.render('addweakendcategory', { weakendcategories });
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send('Internal Server Error');
-    }
-};
-
-
 const insertweakendcategorydata = async (req, res) => {
     const { weakendcategoryid } = req.body;
-
     try {
         const newWeakend = new weakEnd({
             weakendcategoryid: weakendcategoryid,
             weakendtemplate: req.file.filename
         });
-
         const savedWeakend = await newWeakend.save();
         if (savedWeakend) {
             const weakendcategories = await fetchCategories();
@@ -92,7 +74,6 @@ const insertweakendcategorydata = async (req, res) => {
 module.exports = {
     insertweakendcategory,
     insertweakendcategorydata,
-    addweakendcategory,
     fetchCategories,
     wekendcategory
 }
