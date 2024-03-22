@@ -41,9 +41,8 @@ admin_route.get('/category', categoryController.category);
 admin_route.get('/wekendcategory', weakendcategoryController.wekendcategory);
 admin_route.post('/insertweakendcategory', weakendcategoryController.insertweakendcategory);
 
-admin_route.get('/fetchweakendCategories', weakendcategoryController.fetchweakendCategories);
-admin_route.get('/addweakendcategory', weakendcategoryController.addweakendcategory);
-admin_route.post('/insertweakendcategorydata', upload.single('weakendtemplate'), weakendcategoryController.insertweakendcategorydata);
+
+
 
 admin_route.get('/',loginController.login);
 admin_route.get('/login',loginController.login);
@@ -52,6 +51,8 @@ admin_route.post('/verifylogin',loginController.verifylogin);
 admin_route.get('/addeventcategory',addeventController.addeventcategory);
 admin_route.post('/eventcategory',upload.single('eventtemplate'),addeventController.inserteventcategory);
 admin_route.get('/eventcategorylist',addeventController.eventcategorylist);
+
+admin_route.post('/insertweakendcategorydata', upload.single('weakendtemplate'), weakendcategoryController.insertweakendcategorydata);
 
 
 module.exports = admin_route;

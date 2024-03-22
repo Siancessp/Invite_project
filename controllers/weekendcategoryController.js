@@ -44,7 +44,7 @@ const fetchweakendCategories = async (req, res) => {
             _id: weakendcategory._id,
             weakendcategoryname: weakendcategory.weakendcategoryname
         }));
-        res.status(200).json(formattedCategories);
+        return formattedCategories;
     } catch (error) {
         console.error("Error fetching weakend categories:", error.message);
         res.status(500).json({ error: "Internal server error" });
@@ -62,6 +62,7 @@ const addweakendcategory = async (req, res) => {
 }
 
 
+
 const insertweakendcategorydata = async (req, res) => {
     const { weakendcategoryid } = req.body;
 
@@ -73,17 +74,17 @@ const insertweakendcategorydata = async (req, res) => {
 
         const savedWeakend = await newWeakend.save();
         if (savedWeakend) {
+            // Fetch the updated list of categories after saving
             const weakendcategories = await fetchweakendCategories();
-            res.render('addeventcategory', { message: "Your event has been created successfully!", weakendcategories });
+            res.render('addweakendcategory', { message: "Your event has been created successfully!", weakendcategories });
         } else {
-            res.render('addeventcategory', { message: "Failed to create event!" });
+            res.render('addweakendcategory', { message: "Failed to create event!" });
         }
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
     }
-}
-
+};
 
 
 module.exports = {

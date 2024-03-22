@@ -1,48 +1,55 @@
 const mongoose = require("mongoose");
 
-const eventregisterSchema = new mongoose.Schema({
+const weakendregisterSchema = new mongoose.Schema({
     user_id: {
         type: String,
         required: true
     },
-    eventtemplateid: {
+    weakendid: {
         type: String,
         required: true
     },
-    eventdescription: {
+    weakendtemplateid: {
         type: String,
         required: true
     },
-    event_start_date: {
+    weakenddescription: {
         type: String,
         required: true
     },
-    event_end_date: {
+    weakend_start_date: {
         type: String,
         required: true
     },
-    event_start_time: {
+    weakend_end_date: {
         type: String,
         required: true
     },
-    event_end_time: {
+    weakend_start_time: {
         type: String,
         required: true
     },
-    event_location: {
+    weakend_end_time: {
         type: String,
         required: true
     },
-    event_price_adult: {
+    weakend_location: {
         type: String,
         required: true
     },
-    event_price_child: {
+    weakend_price_adult: {
         type: String,
         required: true
+    },
+    weakend_price_child: {
+        type: String,
+        required: true
+    },
+    weakend_price_infant: {
+        type: String
     }
 });
 
-const eventdetails = mongoose.model("Event", eventregisterSchema);
+const weakenddetails = mongoose.model("Weakenddetails", weakendregisterSchema);
 
-module.exports = eventdetails;
+module.exports = weakenddetails;
