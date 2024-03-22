@@ -37,16 +37,27 @@ const insertweakendcategory = async (req, res) => {
     }
 }
 
-const fetchweakendCategories = async () => {
+const fetchweakendCategories = async (req, res) => {
     try {
         const existingWeakendCategories = await weakendCategory.find({}, '_id weakendcategoryname');
-        return existingWeakendCategories.map(weakendcategory => ({
+        const formattedCategories = existingWeakendCategories.map(weakendcategory => ({
             _id: weakendcategory._id,
             weakendcategoryname: weakendcategory.weakendcategoryname
         }));
+        res.status(200).json(formattedCategories);
     } catch (error) {
         console.error("Error fetching weakend categories:", error.message);
-        return [];
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+const addweakendcategory = async (req, res) => {
+    try {
+        const weakendcategories = await fetchweakendCategories();
+        res.render('addweakendcategory', { weakendcategories });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send('Internal Server Error');
     }
 }
 
@@ -79,5 +90,6 @@ module.exports = {
     insertweakendcategory,
     insertweakendcategorydata,
     fetchweakendCategories,
-    wekendcategory
+    wekendcategory,
+    addweakendcategory
 }

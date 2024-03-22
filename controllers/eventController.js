@@ -64,5 +64,6 @@ const eventcategorylist = async (req, res) => {
 module.exports = {
     addeventcategory,
     inserteventcategory,
-    eventcategorylist
+    eventcategorylist,
+    fetchCategories
 }
