@@ -91,10 +91,11 @@ const getselectedtemplate = async (req, res) => {
 const geteventcategory = async () => {
     try {
         const existingCategories = await Category.find({}, '_id categoryname');
-        return existingCategories.map(category => ({
+        const formattedCategories =  existingCategories.map(category => ({
             _id: category._id,
             categoryname: category.categoryname
         }));
+        res.status(200).json(formattedCategories);
     } catch (error) {
         throw error; // Simply throw the caught error
     }
