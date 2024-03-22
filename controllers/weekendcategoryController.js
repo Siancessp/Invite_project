@@ -37,15 +37,16 @@ const insertweakendcategory = async (req, res) => {
     }
 }
 
-const fetchCategories = async () => {
+const fetchweakendCategories = async () => {
     try {
-        const existingweakendCategories = await weakendCategory.find({}, '_id weakendcategoryname');
-        return existingweakendCategories.map(weakendcategory => ({
+        const existingWeakendCategories = await weakendCategory.find({}, '_id weakendcategoryname');
+        return existingWeakendCategories.map(weakendcategory => ({
             _id: weakendcategory._id,
             weakendcategoryname: weakendcategory.weakendcategoryname
         }));
     } catch (error) {
-        throw new Error(error.message);
+        console.error("Error fetching weakend categories:", error.message);
+        return [];
     }
 }
 
@@ -61,7 +62,7 @@ const insertweakendcategorydata = async (req, res) => {
 
         const savedWeakend = await newWeakend.save();
         if (savedWeakend) {
-            const weakendcategories = await fetchCategories();
+            const weakendcategories = await fetchweakendCategories();
             res.render('addeventcategory', { message: "Your event has been created successfully!", weakendcategories });
         } else {
             res.render('addeventcategory', { message: "Failed to create event!" });
@@ -77,6 +78,6 @@ const insertweakendcategorydata = async (req, res) => {
 module.exports = {
     insertweakendcategory,
     insertweakendcategorydata,
-    fetchCategories,
+    fetchweakendCategories,
     wekendcategory
 }
