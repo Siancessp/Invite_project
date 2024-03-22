@@ -4,6 +4,7 @@ const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const session = require('express-session');
+const Razorpay = require('razorpay');
 const admin_route = require("./routes/adminRoute");
 const user_route = require("./routes/userRoute");
 
@@ -26,6 +27,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+
 
 // Connect to MongoDB
 mongoose.connect("mongodb+srv://swarupamohapatra11:CpMeZSu7zxgRYAX2@cluster0.8ujr7jw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
