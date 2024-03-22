@@ -40,7 +40,7 @@ admin_route.get('/category', categoryController.category);
 admin_route.get('/wekendcategory', weakendcategoryController.wekendcategory);
 admin_route.get('/insertweakendcategory', weakendcategoryController.insertweakendcategory);
 admin_route.get('/fetchCategories', weakendcategoryController.fetchCategories);
-admin_route.post('/insertweakendcategorydata', weakendcategoryController.insertweakendcategorydata);
+admin_route.post('/insertweakendcategorydata',upload.single('weakendtemplate'), weakendcategoryController.insertweakendcategorydata);
 
 admin_route.get('/',loginController.login);
 admin_route.get('/login',loginController.login);
