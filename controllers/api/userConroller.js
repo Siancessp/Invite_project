@@ -80,6 +80,36 @@ const insertuserData = async (req,res)=>
     }
 }
 
+const getprofile = async (req, res) => {
+    try {
+        const user_id = req.params.user_id;
+        const existedUserDetails = await userRegister.findOne({ _id: user_id });
+
+        if (!existedUserDetails) {
+            return res.status(404).json({ success: false, msg: 'User Details not found' });
+        }
+
+        const userexistedResult = {
+            _id: existedUserDetails._id,
+            user_name: existedUserDetails.fullname,
+            email: existedUserDetails.email
+        };
+
+        const userresponse = {
+            status: true,
+            msg: "Existing User Details",
+            data: userexistedResult
+        };
+
+        return res.status(200).json(userresponse);
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, msg: 'Server Error' });
+    }
+};
+
+
 const user_login = async (req, res) => {
     try {
         const email = req.body.email;
@@ -98,7 +128,7 @@ const user_login = async (req, res) => {
                     token: tokenDta
                 }
                 const response = {
-                    success: true,
+                    status: true,
                     msg: "User Details",
                     data: userResult
                 }
@@ -117,5 +147,6 @@ const user_login = async (req, res) => {
 
 module.exports = {
     insertuserData,
-    user_login
+    user_login,
+    getprofile
 }
