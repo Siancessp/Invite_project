@@ -1,5 +1,6 @@
 const express = require("express");
 const user_route = express.Router();
+const Razorpay = require('razorpay');
 
 const bodyParser = require('body-parser');
 user_route.use(bodyParser.json());
@@ -8,6 +9,7 @@ user_route.use(bodyParser.urlencoded({ extended: true }));
 const userController = require("../controllers/api/userConroller");
 const eventController = require("../controllers/api/eventcontroller");
 const weakendController = require("../controllers/api/weakendController");
+const paymentController = require("../controllers/api/paymentController");
 
 user_route.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.js'));
@@ -31,5 +33,7 @@ user_route.get('/getweakendcategory', weakendController.getweakendcategory);
 user_route.post('/addweakenddetails', weakendController.addweakendDetails);
 user_route.get('/getweakenddetails', weakendController.getweakendDetails);
 user_route.get('/getalleventdetails/:weakendid', weakendController.getalleventdetailsbyid);
+
+// user_route.post('/payment', paymentController.payment);
 
 module.exports = user_route;
