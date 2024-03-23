@@ -13,6 +13,18 @@ const userregisterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    profile_image: {
+        type: String,
+        required: false
+    },
+    background_image: {
+        type: String,
+        required: false
+    },
+    user_bio: {
+        type: String,
+        required: false
+    },
     confirmpassword: {
         type: String,
         required: true

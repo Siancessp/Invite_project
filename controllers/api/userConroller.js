@@ -90,7 +90,7 @@ const getprofile = async (req, res) => {
         }
 
         const userexistedResult = {
-            _id: existedUserDetails._id,
+            user_id: existedUserDetails._id,
             user_name: existedUserDetails.fullname,
             email: existedUserDetails.email
         };
@@ -109,6 +109,34 @@ const getprofile = async (req, res) => {
     }
 };
 
+const updateprofileById = async (req, res) => {
+    const user_id = req.params.user_id;
+    const { fullname, mobile, email, user_bio, profile_image, background_image } = req.body;
+
+    try {
+        const updatedUser = await userRegister.findOneAndUpdate(
+            { _id: user_id }, // Find user by userId
+            { $set: { fullname: fullname, mobile: mobile, email: email, user_bio: user_bio, profile_image: profile_image, background_image:background_image } }, // Update fields
+            { new: true } 
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, msg: "User not found" });
+        }
+
+        const response = {
+            success: true,
+            msg: "User updated successfully",
+            data: updatedUser
+        };
+        res.status(200).send(response);
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ success: false, msg: "Error updating user data" });
+    }
+};
+
 
 const user_login = async (req, res) => {
     try {
@@ -121,7 +149,7 @@ const user_login = async (req, res) => {
             if (passwordMatch) {
                 const tokenDta = await create_token(userloginData._id);
                 const userResult = {
-                    _id: userloginData._id,
+                    user_id: userloginData._id,
                     user_name: `${userloginData.fullname}`,
                     email: userloginData.email,
                     password: userloginData.password,
@@ -148,5 +176,6 @@ const user_login = async (req, res) => {
 module.exports = {
     insertuserData,
     user_login,
-    getprofile
+    getprofile,
+    updateprofileById
 }
