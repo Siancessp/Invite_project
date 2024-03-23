@@ -31,6 +31,8 @@ const registerController = require("../controllers/registerController");
 const categoryController = require("../controllers/categoryController");
 const weakendcategoryController = require("../controllers/weekendcategoryController");
 
+const tourcategoryController = require("../controllers/tourcategoryController");
+
 const addeventController = require("../controllers/eventController");
 
 admin_route.post('/register', registerController.insertuser);
@@ -41,8 +43,8 @@ admin_route.get('/category', categoryController.category);
 admin_route.get('/wekendcategory', weakendcategoryController.wekendcategory);
 admin_route.post('/insertweakendcategory', weakendcategoryController.insertweakendcategory);
 
-
-
+admin_route.get('/tourcategory', tourcategoryController.tourcategory);
+admin_route.post('/inserttourtemplate', tourcategoryController.inserttourtemplate);
 
 admin_route.get('/',loginController.login);
 admin_route.get('/login',loginController.login);
@@ -53,6 +55,7 @@ admin_route.post('/eventcategory',upload.single('eventtemplate'),addeventControl
 admin_route.get('/eventcategorylist',addeventController.eventcategorylist);
 
 admin_route.post('/insertweakendcategorydata', upload.single('weakendtemplate'), weakendcategoryController.insertweakendcategorydata);
+admin_route.post('/inserttourcategorydata', upload.single('tourtemplate'), tourcategoryController.inserttourcategorydata);
 
 
 module.exports = admin_route;
