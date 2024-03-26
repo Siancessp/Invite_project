@@ -50,6 +50,6 @@ const tourregisterSchema = new mongoose.Schema({
     }
 });
 
-const tourdetails = mongoose.model("Weakenddetails", weakendregisterSchema);
+const tourdetails = mongoose.model("Tourdetails", tourregisterSchema);
 
 module.exports = tourdetails;

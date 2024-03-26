@@ -10,6 +10,7 @@ const userController = require("../controllers/api/userConroller");
 const eventController = require("../controllers/api/eventcontroller");
 const weakendController = require("../controllers/api/weakendController");
 const paymentController = require("../controllers/api/paymentController");
+const tourController = require("../controllers/api/tourcontroller");
 
 user_route.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.js'));
@@ -17,7 +18,7 @@ user_route.get('/', function(req, res) {
 
 
 user_route.post('/register', userController.insertuserData);
-user_route.get('/login', userController.user_login);
+user_route.post('/login', userController.user_login);
 user_route.get('/getprofile/:user_id', userController.getprofile);
 user_route.post('/updateprofile/:user_id', userController.updateprofileById);
 
@@ -32,7 +33,13 @@ user_route.get('/weakendtemplate', weakendController.weakendtemplate);
 user_route.get('/getweakendcategory', weakendController.getweakendcategory);
 user_route.post('/addweakenddetails', weakendController.addweakendDetails);
 user_route.get('/getweakenddetails', weakendController.getweakendDetails);
-user_route.get('/getalleventdetails/:weakendid', weakendController.getalleventdetailsbyid);
+user_route.get('/getalleventdetails/:weakendid', weakendController.getallweakenddetailsbyid);
+
+user_route.get('/tourtemplate', tourController.tourtemplate);
+user_route.get('/gettourcategory', tourController.gettourcategory);
+user_route.post('/addtourdetails', tourController.addtourDetails);
+user_route.get('/gettourdetails', tourController.gettourDetails);
+user_route.get('/getalltourdetailsbyid/:tourid', tourController.getalltourdetailsbyid);
 
 // user_route.post('/payment', paymentController.payment);
 

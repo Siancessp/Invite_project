@@ -15,7 +15,7 @@ const RAZORPAY_SECRET_KEY = process.env.RAZORPAY_SECRET_KEY;
 
 const checkout = async (req, res) => {
     try {
-        const { user_id, amount } = req.body;
+        const { user_id, amount, status_code } = req.body;
         const orderOptions = {
             amount: amount * 100,
             currency: "INR",
@@ -26,15 +26,17 @@ const checkout = async (req, res) => {
 
         const paymentData = {
             user_id: user_id,
-            razorpay_order_id: order.id
+            razorpay_order_id: order.id,
+            status_code: status_code
         };
 
         const newPayment = new Payment(paymentData);
-        await newPayment.save();
+        const savedPayment = await newPayment.save();
         res.status(201).json({
             status: true,
             order: order,
-            amount: amount
+            amount: amount,
+            payment: savedPayment
         });
 
     } catch (error) {

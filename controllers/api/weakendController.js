@@ -163,7 +163,7 @@ const getweakendDetails = async (req, res) => {
     }
 };
 
-const getalleventdetailsbyid = async (req, res) => {
+const getallweakenddetailsbyid = async (req, res) => {
     try {
         const weakendid = req.params.weakendid;
         const existedWeakendDetails = await WeakendDetails.findOne({ _id: weakendid });
@@ -215,5 +215,5 @@ module.exports = {
     getweakendcategory,
     addweakendDetails,
     getweakendDetails,
-    getalleventdetailsbyid
+    getallweakenddetailsbyid
 }
