@@ -114,28 +114,40 @@ const updateprofileById = async (req, res) => {
     const { fullname, mobile, email, user_bio, profile_image, background_image } = req.body;
 
     try {
+        // Update in userRegister collection
         const updatedUser = await userRegister.findOneAndUpdate(
-            { _id: user_id }, // Find user by userId
-            { $set: { fullname: fullname, mobile: mobile, email: email, user_bio: user_bio, profile_image: profile_image, background_image:background_image } }, // Update fields
-            { new: true } 
+            { _id: user_id },
+            { $set: { fullname, mobile, email, user_bio, profile_image, background_image } },
+            { new: true }
         );
 
-        if (!updatedUser) {
+        // Update in Register collection
+        const updatedRegister = await userRegister.findOneAndUpdate(
+            { _id: user_id },
+            { $set: { fullname, mobile, email, user_bio, profile_image, background_image } },
+            { new: true }
+        );
+
+        if (!updatedUser || !updatedRegister) {
             return res.status(404).json({ success: false, msg: "User not found" });
         }
 
         const response = {
             success: true,
             msg: "User updated successfully",
-            data: updatedUser
+            data: {
+                updatedUser,
+                updatedRegister
+            }
         };
         res.status(200).send(response);
 
     } catch (error) {
         console.error(error);
-        return res.status(500).send({ success: false, msg: "Error updating user data" });
+        return res.status(500).send({ success: false, msg: "Error updating user data", error: error.message });
     }
 };
+
 
 
 const user_login = async (req, res) => {
