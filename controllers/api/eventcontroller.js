@@ -27,36 +27,31 @@ const create_token = async (id) => {
     }
 }
 
-const eventtemplate = async (req,res)=>
-{
-    try{
+const eventtemplate = async (req, res) => {
+    try {
         const baseImageUrl = "/uploads/event_template";
-        const existingEvent = await Event.find({});
+        const existingEvents = await Event.find({});
 
-        const eventsWithUrls = existingEvent.map(event => {
-            const eventWithUrl = {
-                _id: event._id,
-                categoryid: event.categoryid,
-                eventtemplate: baseImageUrl + '/' + event.eventtemplate,
-                __v: event.__v
-            };
-            return eventWithUrl;
-        });
+        const eventsWithUrls = existingEvents.map(event => ({
+            _id: event._id,
+            categoryid: event.categoryid,
+            eventtemplate: baseImageUrl + '/' + event.eventtemplate,
+            __v: event.__v
+        }));
 
         const response = {
             success: true,
-            msg: "Event Fetch Successfully!",
+            msg: "Events Fetched Successfully!",
             data: eventsWithUrls
         };
 
         res.status(200).send(response);
-    }
-    catch(error)
-    {
+    } catch (error) {
         console.error(error);
-        return res.status(500).send({ success: false, msg: "Error saving user data" });
+        return res.status(500).send({ success: false, msg: "Error fetching events" });
     }
-}
+};
+
 
 const getselectedtemplate = async (req, res) => {
     try {
@@ -65,7 +60,7 @@ const getselectedtemplate = async (req, res) => {
         const existingEventtemplate = await Event.findOne({ _id: eventtemplateid });
 
         if (!existingEventtemplate) {
-            return res.status(404).json({ success: false, msg: 'Event not found' });
+            return res.status(404).json({ success: false, msg: 'Event template not found' });
         }
 
         const eventWithUrl = {
@@ -77,7 +72,7 @@ const getselectedtemplate = async (req, res) => {
 
         const response = {
             success: true,
-            msg: "Event Fetch Successfully!",
+            msg: "Event Template Fetched Successfully!",
             data: eventWithUrl
         };
 
