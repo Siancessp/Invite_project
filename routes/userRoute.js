@@ -17,7 +17,7 @@ user_route.get('/', function(req, res) {
 
 
 user_route.post('/register', userController.insertuserData);
-user_route.get('/login', userController.user_login);
+user_route.post('/login', userController.user_login);
 user_route.get('/getprofile/:user_id', userController.getprofile);
 user_route.post('/updateprofile/:user_id', userController.updateprofileById);
 
