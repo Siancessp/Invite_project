@@ -83,18 +83,20 @@ const getselectedtemplate = async (req, res) => {
     }
 };
 
-const geteventcategory = async () => {
+const geteventcategory = async (req, res) => {
     try {
         const existingCategories = await Category.find({}, '_id categoryname');
-        const formattedCategories =  existingCategories.map(category => ({
+        const formattedCategories = existingCategories.map(category => ({
             _id: category._id,
             categoryname: category.categoryname
         }));
         res.status(200).json(formattedCategories);
     } catch (error) {
-        throw error; // Simply throw the caught error
+        console.error(error);
+        res.status(500).json({ success: false, msg: "Internal Server Error" });
     }
 };
+
 
 
 const addeventDetails = async (req,res)=>
