@@ -122,7 +122,7 @@ const updateprofileById = async (req, res) => {
         );
 
         // Update in Register collection
-        const updatedRegister = await Register.findOneAndUpdate(
+        const updatedRegister = await userRegister.findOneAndUpdate(
             { _id: user_id },
             { $set: { fullname, mobile, email, user_bio, profile_image, background_image } },
             { new: true }
