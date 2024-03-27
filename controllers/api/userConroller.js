@@ -144,9 +144,10 @@ const updateprofileById = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        return res.status(500).send({ success: false, msg: "Error updating user data" });
+        return res.status(500).send({ success: false, msg: "Error updating user data", error: error.message });
     }
 };
+
 
 
 const user_login = async (req, res) => {
