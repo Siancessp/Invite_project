@@ -136,7 +136,7 @@ const addeventDetails = async (req,res)=>
         console.error(error);
         return res.status(500).send({ success: false, msg: "Internal Server Error" });
     }
-}
+};
 
 const geteventDetails = async (req, res) => {
     try {
