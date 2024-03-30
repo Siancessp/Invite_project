@@ -111,7 +111,7 @@ const addeventDetails = async (req,res)=>
 {
     try {
         const eventtemplateid = req.body.eventtemplateid;
-        const { eventdescription, eventid, event_start_date, event_end_date, event_start_time, event_end_time, event_location, event_price_adult, event_price_child, user_id } = req.body;
+        const { eventdescription, eventname, event_start_date, event_end_date, event_start_time, event_end_time, event_location, event_price_adult, event_price_child, user_id } = req.body;
         const baseImageUrl = "/uploads/event_template";
         const existingEventtemplate = await Event.findOne({ _id: eventtemplateid });
 
@@ -123,7 +123,7 @@ const addeventDetails = async (req,res)=>
             user_id: user_id,
             eventtemplateid: eventtemplateid,
             eventdescription: eventdescription,
-            eventid: eventid,
+            eventname: eventname,
             event_start_date: event_start_date,
             event_end_date: event_end_date,
             event_start_time: event_start_time,

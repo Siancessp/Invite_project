@@ -9,6 +9,10 @@ const eventregisterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    eventname: {
+        type: String,
+        required: true
+    },
     eventdescription: {
         type: String,
         required: true
