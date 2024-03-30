@@ -5,7 +5,7 @@ const weakendregisterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    weakendid: {
+    weakendname: {
         type: String,
         required: true
     },

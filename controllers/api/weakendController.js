@@ -79,7 +79,7 @@ const addweakendDetails = async (req,res)=>
 {
     try {
         const weakendtemplateid = req.body.weakendtemplateid;
-        const { weakenddescription, weakendid, weakend_start_date, weakend_end_date, weakend_start_time, weakend_end_time, weakend_location, weakend_price_adult,weakend_price_child, user_id } = req.body;
+        const { weakenddescription, weakendname, weakend_start_date, weakend_end_date, weakend_start_time, weakend_end_time, weakend_location, weakend_price_adult,weakend_price_child, user_id } = req.body;
         const baseImageUrl = "/uploads/event_template";
         const existingWeakendtemplate = await weakEnd.findOne({ _id: weakendtemplateid });
 
@@ -91,7 +91,7 @@ const addweakendDetails = async (req,res)=>
             user_id: user_id,
             weakendtemplateid: weakendtemplateid,
             weakenddescription: weakenddescription,
-            weakendid: weakendid,
+            weakendname: weakendname,
             weakend_start_date: weakend_start_date,
             weakend_end_date: weakend_end_date,
             weakend_start_time: weakend_start_time,
