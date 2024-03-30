@@ -32,7 +32,7 @@ user_route.post('/addeventdetails', eventController.addeventDetails);
 user_route.get('/getalleventdetails', eventController.geteventDetails);
 user_route.get('/getselectedeventdetails/:eventid', eventController.getalleventdetailsbyid);
 
-user_route.get('/weakendtemplate', weakendController.weakendtemplate);
+user_route.get('/weakendtemplate/:weakendcategoryid', weakendController.weakendtemplate);
 user_route.get('/getweakendcategory', weakendController.getweakendcategory);
 user_route.post('/addweakenddetails', weakendController.addweakendDetails);
 user_route.get('/getweakenddetails', weakendController.getweakendDetails);

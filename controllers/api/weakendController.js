@@ -41,36 +41,38 @@ const getweakendcategory = async (req,res) => {
 };
 
 
-const weakendtemplate = async (req,res)=>
-{
-    try{
+const weakendtemplate = async (req, res) => {
+    try {
         const baseImageUrl = "/uploads/event_template";
-        const existingWeakend = await weakEnd.find({});
+        const { weakendcategoryid } = req.params;
 
-        const weakendWithUrls = existingWeakend.map(weakend => {
-            const weakendWithUrls = {
-                _id: weakend._id,
-                weakendcategoryid: weakend.weakendcategoryid,
-                weakendtemplate: baseImageUrl + '/' + weakend.weakendtemplate,
-                __v: weakend.__v
-            };
-            return weakendWithUrls;
-        });
+        let filter = {}; // Default filter to get all weekend templates
+        if (weakendcategoryid) {
+            filter = { weakendcategoryid: weakendcategoryid }; // Filter by weakendcategoryid if provided
+        }
+
+        const existingWeakends = await weakEnd.find(filter);
+
+        const weakendsWithUrls = existingWeakends.map(weakend => ({
+            _id: weakend._id,
+            weakendcategoryid: weakend.weakendcategoryid,
+            weakendtemplate: baseImageUrl + '/' + weakend.weakendtemplate,
+            __v: weakend.__v
+        }));
 
         const response = {
             success: true,
-            msg: "Weakend Fetch Successfully!",
-            data: weakendWithUrls
+            msg: "Weekend Templates Fetched Successfully!",
+            data: weakendsWithUrls
         };
 
         res.status(200).send(response);
-    }
-    catch(error)
-    {
+    } catch (error) {
         console.error(error);
-        return res.status(500).send({ success: false, msg: "Error saving user data" });
+        return res.status(500).send({ success: false, msg: "Error fetching weekend templates" });
     }
-}
+};
+
 
 //After choose a template we have to store data
 const addweakendDetails = async (req,res)=>

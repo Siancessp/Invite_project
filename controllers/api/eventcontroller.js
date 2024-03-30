@@ -243,8 +243,6 @@ const getalleventdetailsbyid = async (req, res) => {
     }
 };
 
-
-
 module.exports = {
     eventtemplate,
     getselectedtemplate,
