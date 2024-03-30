@@ -12,6 +12,9 @@ const weakendController = require("../controllers/api/weakendController");
 const paymentController = require("../controllers/api/paymentController");
 const tourController = require("../controllers/api/tourcontroller");
 
+const likeController = require("../controllers/api/likecontroller");
+const commentController = require("../controllers/api/commentcontroller");
+
 user_route.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.js'));
 });
@@ -40,6 +43,14 @@ user_route.get('/gettourcategory', tourController.gettourcategory);
 user_route.post('/addtourdetails', tourController.addtourDetails);
 user_route.get('/gettourdetails', tourController.gettourDetails);
 user_route.get('/getalltourdetailsbyid/:tourid', tourController.getalltourdetailsbyid);
+
+user_route.post('/storelikedetails', likeController.storelikeDetails);
+user_route.get('/getlikedetails/:post_id', likeController.getLikeDetails);
+
+// user_route.post('/storecommentdetails', commentController.storecommentDetails);
+// user_route.get('/getcommentdetails', commentController.getcommentDetails);
+// user_route.get('/addreplytocomment/:commentId', commentController.addReplyToComment);
+// user_route.get('/addreplytocomment/:commentId', commentController.addReplyToComment);
 
 // user_route.post('/payment', paymentController.payment);
 

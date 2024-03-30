@@ -170,7 +170,10 @@ const user_login = async (req, res) => {
                 const response = {
                     status: true,
                     msg: "User Details",
-                    data: userResult
+                    user_id: userResult.user_id,
+                    user_name: userResult.user_name,
+                    email: userResult.email,
+                    token: userResult.token
                 }
                 res.status(200).send(response);
             } else {
