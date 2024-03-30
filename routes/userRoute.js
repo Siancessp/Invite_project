@@ -25,7 +25,7 @@ user_route.post('/login', userController.user_login);
 user_route.get('/getprofile/:user_id', userController.getprofile);
 user_route.post('/updateprofile/:user_id', userController.updateprofileById);
 
-user_route.get('/eventtemplate', eventController.eventtemplate);
+user_route.get('/eventtemplate/:categoryid', eventController.eventtemplate);
 user_route.get('/geteventcategory', eventController.geteventcategory);
 user_route.get('/getselectedtemplate', eventController.getselectedtemplate);
 user_route.post('/addeventdetails', eventController.addeventDetails);
