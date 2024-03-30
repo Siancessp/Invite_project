@@ -30,7 +30,14 @@ const create_token = async (id) => {
 const eventtemplate = async (req, res) => {
     try {
         const baseImageUrl = "/uploads/event_template";
-        const existingEvents = await Event.find({});
+        const { categoryid } = req.params;
+
+        let filter = {}; // Default filter to get all events
+        if (categoryid) {
+            filter = { categoryid: categoryid }; // Filter by categoryid if provided
+        }
+
+        const existingEvents = await Event.find(filter);
 
         const eventsWithUrls = existingEvents.map(event => ({
             _id: event._id,
@@ -51,6 +58,7 @@ const eventtemplate = async (req, res) => {
         return res.status(500).send({ success: false, msg: "Error fetching events" });
     }
 };
+
 
 
 const getselectedtemplate = async (req, res) => {
