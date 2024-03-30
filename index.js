@@ -1,5 +1,5 @@
 const express = require("express");
-const hbs  = require('hbs');
+const hbs = require('hbs');
 const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
@@ -16,16 +16,16 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 hbs.registerPartials(path.join(__dirname, 'views/common'));
 
+// CORS middleware setup
 app.use((req, res, next) => {
-    res.header("Access-Controll-Allow-Origin", "*");
-    res.header(
-        "Access-Controll-Allow-Headers",
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+        "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept, Authorization"
     );
-    if(req.method === 'OPTIONS')
-    {
-        res.header('Access-Controll-Allow-Methods', 'PUT, POST, PETCH, GET, DELETE');
-        return res.status(200).json({});
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
     }
     next();
 });
@@ -34,15 +34,13 @@ app.use((req, res, next) => {
 app.use('/', admin_route);
 app.use('/api', user_route);
 
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
 
 app.use(session({
     secret: 'session_secret_key',
     resave: false,
     saveUninitialized: false
 }));
-
-
 
 // Connect to MongoDB
 mongoose.connect("mongodb+srv://swarupamohapatra11:CpMeZSu7zxgRYAX2@cluster0.8ujr7jw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
