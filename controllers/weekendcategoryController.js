@@ -11,7 +11,7 @@ const weakEnd = require("../models/addweakendcategoryModel");
 
 const wekendcategory = async (req, res) => {
     try {
-        res.render('addweakendcategory');
+        res.render('addweekendname');
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
