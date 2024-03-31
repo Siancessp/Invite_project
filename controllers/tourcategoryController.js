@@ -36,31 +36,30 @@ const inserttourcategory = async (req, res) => {
     }
 }
 
-const fetchtourCategories = async (req, res) => {
+const fetchTourCategories = async () => {
     try {
-        const existingtourCategories = await TourCategory.find({}, '_id tourcategoryname');
-        const formattedCategories = existingtourCategories.map(tourcategory => ({
+        const existingTourCategories = await Tour.find({}, '_id tourcategoryname');
+        const formattedCategories = existingTourCategories.map(tourcategory => ({
             _id: tourcategory._id,
             tourcategoryname: tourcategory.tourcategoryname
         }));
         return formattedCategories;
     } catch (error) {
-        console.error("Error fetching tour categories:", error.message);
-        res.status(500).json({ error: "Internal server error" });
+        throw new Error("Error fetching tour categories:", error.message);
     }
 };
 
-const addtourcategory = async (req, res) => {
+const addTourCategory = async (req, res) => {
     try {
-        const tourcategories = await fetchtourCategories();
+        const tourcategories = await fetchTourCategories();
         res.render('addtourcategory', { tourcategories });
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
     }
-}
+};
 
-const inserttourcategorydata = async (req, res) => {
+const insertTourCategoryData = async (req, res) => {
     const { tourcategoryid } = req.body;
 
     try {
@@ -81,10 +80,10 @@ const inserttourcategorydata = async (req, res) => {
         
         if (savedTour) {
             // Fetch the updated list of categories after saving
-            const tourcategories = await fetchtourCategories();
+            const tourcategories = await fetchTourCategories();
             return res.render('addtourcategory', { message: "Your tour has been created successfully!", tourcategories });
         } else {
-            return res.render('addtourcategory', { message: "Failed to create event!" });
+            return res.render('addtourcategory', { message: "Failed to create tour!" });
         }
     } catch (error) {
         console.error(error); // Log the full error for debugging
@@ -95,8 +94,8 @@ const inserttourcategorydata = async (req, res) => {
 
 module.exports = {
     tourcategory,
-    fetchtourCategories,
+    fetchTourCategories,
     inserttourcategory,
-    addtourcategory,
-    inserttourcategorydata
+    addTourCategory,
+    insertTourCategoryData
 }
