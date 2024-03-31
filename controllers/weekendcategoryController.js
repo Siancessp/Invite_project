@@ -37,6 +37,7 @@ const insertweakendcategory = async (req, res) => {
     }
 }
 
+
 const fetchweakendCategories = async (req, res) => {
     try {
         const existingWeakendCategories = await weakendCategory.find({}, '_id weakendcategoryname');
