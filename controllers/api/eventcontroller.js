@@ -146,14 +146,29 @@ const addeventDetails = async (req,res)=>
     }
 };
 
+const getHumanReadableDate = (date) => {
+    if (date instanceof Date) {
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const month = monthNames[date.getMonth()];
+        const day = date.getDate();
+        return `${day} ${month}`;
+    } else if (isFinite(date)) {
+        // If it's a timestamp, convert it to a Date object
+        const d = new Date();
+        d.setTime(date);
+        return getHumanReadableDate(d);
+    }
+};
+
 const geteventDetails = async (req, res) => {
     try {
-        const existingEventdetails = await EventDetails.find({ });
+        const existingEventdetails = await EventDetails.find({});
         const baseImageUrl = "/uploads/event_template";
 
         if (!existingEventdetails) {
             return res.status(404).json({ success: false, msg: 'Event Details not found' });
         }
+
         let eventDetailsWithUsers = [];
 
         for (let i = 0; i < existingEventdetails.length; i++) {
@@ -161,13 +176,12 @@ const geteventDetails = async (req, res) => {
             const eventtemplate = await Event.findOne({ _id: eventDetail.eventtemplateid });
 
             const categoryId = eventtemplate.categoryid;
-
             const category = await Category.findOne({ _id: categoryId });
 
             if (eventtemplate) {
                 const eventDetailWithUser = {
                     event_id: eventDetail._id,
-                    eventstartdate: eventDetail.event_start_date,
+                    eventstartdate: getHumanReadableDate(new Date(eventDetail.event_start_date)),
                     eventname: eventDetail.eventname,
                     eventlocation: eventDetail.event_location,
                     eventtemplate: {
@@ -196,6 +210,7 @@ const geteventDetails = async (req, res) => {
         return res.status(500).json({ success: false, msg: "Internal Server Error" });
     }
 };
+
 
 const getalleventdetailsbyid = async (req, res) => {
     try {
