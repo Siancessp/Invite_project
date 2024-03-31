@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { isNonNullObject } = require("razorpay/dist/utils/razorpay-utils");
 
 const userregisterSchema = new mongoose.Schema({
     fullname: {
@@ -15,15 +16,15 @@ const userregisterSchema = new mongoose.Schema({
     },
     profile_image: {
         type: String,
-        required: false
+        defult: null
     },
     background_image: {
         type: String,
-        required: false
+        defult: null
     },
     user_bio: {
         type: String,
-        required: false
+        defult: null
     },
     confirmpassword: {
         type: String,
