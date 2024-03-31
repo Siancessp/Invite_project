@@ -60,7 +60,7 @@ user_route.get('/weakendtemplate/:weakendcategoryid', weakendController.weakendt
 user_route.get('/getweakendcategory', weakendController.getweakendcategory);
 user_route.post('/addweakenddetails', weakendController.addweakendDetails);
 user_route.get('/getweakenddetails', weakendController.getweakendDetails);
-user_route.get('/getalleventdetails/:weakendid', weakendController.getallweakenddetailsbyid);
+user_route.get('/getallweekenddetails/:weakendid', weakendController.getallweakenddetailsbyid);
 
 user_route.get('/tourtemplate', tourController.tourtemplate);
 user_route.get('/gettourcategory', tourController.gettourcategory);
