@@ -161,13 +161,10 @@ const getHumanReadableDate = (date) => {
 };
 
 const formatTime = (time) => {
-    const date = new Date(`2000-01-01T${time}`);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    const formattedHours = hours % 12 || 12; // Convert to 12-hour format
-    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
-    return `${formattedHours}:${formattedMinutes} ${ampm}`;
+    const [hours, minutes] = time.split(':');
+    const formattedHours = parseInt(hours, 10) % 12 || 12; // Convert to 12-hour format
+    const ampm = parseInt(hours, 10) >= 12 ? 'PM' : 'AM';
+    return `${formattedHours}:${minutes} ${ampm}`;
 };
 
 const geteventDetails = async (req, res) => {
