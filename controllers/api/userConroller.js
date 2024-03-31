@@ -121,6 +121,11 @@ const updateprofileById = async (req, res) => {
     const { fullname, mobile, email, user_bio, user_id } = req.body;
 
     try {
+        // Check if profile_image and background_image files are uploaded
+        if (!req.files || !req.files['profile_image'] || !req.files['background_image']) {
+            return res.status(400).json({ success: false, msg: "Please upload both profile_image and background_image" });
+        }
+
         // Get filenames of the uploaded files
         const profileImageFilename = req.files['profile_image'][0].filename;
         const backgroundImageFilename = req.files['background_image'][0].filename;
