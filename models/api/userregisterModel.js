@@ -16,15 +16,15 @@ const userregisterSchema = new mongoose.Schema({
     },
     profile_image: {
         type: String,
-        defult: null
+        default: null  // Set default value to null
     },
     background_image: {
         type: String,
-        defult: null
+        default: null  // Set default value to null
     },
     user_bio: {
         type: String,
-        defult: null
+        default: null  // Set default value to null
     },
     confirmpassword: {
         type: String,
