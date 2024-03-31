@@ -92,7 +92,10 @@ const getprofile = async (req, res) => {
         const userexistedResult = {
             user_id: existedUserDetails._id,
             user_name: existedUserDetails.fullname,
-            email: existedUserDetails.email
+            email: existedUserDetails.email, 
+            user_bio:existedUserDetails.user_bio,
+            profile_image:existedUserDetails.profile_image,
+            background_image:existedUserDetails.background_image
         };
 
         const userresponse = {
