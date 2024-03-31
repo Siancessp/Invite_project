@@ -40,41 +40,37 @@ const gettourcategory = async (req,res) => {
     }
 };
 
-const tourtemplate = async (req,res)=>
-{
-    try{
+const tourtemplate = async (req, res) => {
+    try {
         const baseImageUrl = "/uploads/event_template";
         const { tourcategoryid } = req.params;
-        let filter = {}; // Default filter to get all weekend templates
-        if (tourcategoryid) {
-            filter = { tourcategoryid: tourcategoryid }; // Filter by weakendcategoryid if provided
-        }
-        const existingTour = await Tour.find({filter});
+        let filter = {}; // Default filter to get all tour templates
 
-        const tourWithUrls = existingTour.map(tour => {
-            const tourWithUrls = {
-                _id: tour._id,
-                tourcategoryid: tour.tourcategoryid,
-                tourtemplate: baseImageUrl + '/' + tour.tourtemplate,
-                __v: tour.__v
-            };
-            return tourWithUrls;
-        });
+        if (tourcategoryid) {
+            filter = { tourcategoryid: tourcategoryid }; // Filter by tourcategoryid if provided
+        }
+
+        const existingTour = await Tour.find(filter);
+
+        const tourWithUrls = existingTour.map(tour => ({
+            _id: tour._id,
+            tourcategoryid: tour.tourcategoryid,
+            tourtemplate: baseImageUrl + '/' + tour.tourtemplate,
+            __v: tour.__v
+        }));
 
         const response = {
             success: true,
-            msg: "Tour Fetch Successfully!",
+            msg: "Tours Fetched Successfully!",
             data: tourWithUrls
         };
 
         res.status(200).send(response);
-    }
-    catch(error)
-    {
+    } catch (error) {
         console.error(error);
-        return res.status(500).send({ success: false, msg: "Error saving user data" });
+        return res.status(500).send({ success: false, msg: "Error fetching tour data" });
     }
-}
+};
 
 //After choose a template we have to store data
 const addtourDetails = async (req,res)=>
