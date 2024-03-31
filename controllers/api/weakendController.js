@@ -121,6 +121,7 @@ const getHumanReadableDate = (date) => {
         const day = date.getDate();
         return `${day} ${month}`;
     } else if (isFinite(date)) {
+        // If it's a timestamp, convert it to a Date object
         const d = new Date();
         d.setTime(date);
         return getHumanReadableDate(d);
@@ -129,51 +130,49 @@ const getHumanReadableDate = (date) => {
 
 const formatTime = (time) => {
     const [hours, minutes] = time.split(':');
-    const formattedHours = parseInt(hours, 10) % 12 || 12;
+    const formattedHours = parseInt(hours, 10) % 12 || 12; // Convert to 12-hour format
     const ampm = parseInt(hours, 10) >= 12 ? 'PM' : 'AM';
     return `${formattedHours}:${minutes} ${ampm}`;
 };
 
+//Fetch all weakend details
 const getweakendDetails = async (req, res) => {
     try {
-        const existingWeakenddetails = await WeakendDetails.find({});
+        const existingWeakenddetails = await WeakendDetails.find({ });
         const baseImageUrl = "/uploads/event_template";
 
-        if (existingWeakenddetails.length === 0) {
+        if (!existingWeakenddetails) {
             return res.status(404).json({ success: false, msg: 'Weakend Details not found' });
         }
-
         let weakendDetailsWithUsers = [];
 
         for (let i = 0; i < existingWeakenddetails.length; i++) {
             const weakendDetail = existingWeakenddetails[i];
             const weakendtemplate = await weakEnd.findOne({ _id: weakendDetail.weakendtemplateid });
 
-            if (!weakendtemplate) {
-                // If weakendtemplate is not found, continue to the next iteration
-                continue;
-            }
-
             const weakendcategoryId = weakendtemplate.weakendcategoryid;
+
             const weakendcategory = await weakendCategory.findOne({ _id: weakendcategoryId });
 
-            const weakendDetailsWithUser = {
-                weakend_id: weakendDetail._id,
-                weakendstartdate: getHumanReadableDate(new Date(weakendDetail.weakend_start_date)),
-                weakendenddate: getHumanReadableDate(new Date(weakendDetail.weakend_end_date)),
-                weakendname: weakendDetail.weakendname,
-                weakendlocation: weakendDetail.weakend_location,
-                weakendtemplate: {
-                    weakendtemplate_id: weakendtemplate._id,
-                    weakendtemplate: baseImageUrl + '/' + weakendtemplate.weakendtemplate
-                },
-                weakendcategory: {
-                    weakendcategory_id: weakendcategory ? weakendcategory._id : null,
-                    weakend_name: weakendcategory ? weakendcategory.weakendcategoryname : "Unknown Category"
-                }
-            };
+            if (weakendtemplate) {
+                const weakendDetailsWithUser = {
+                    weakend_id: weakendDetail._id,
+                    weakendstartdate: weakendDetail.weakend_start_date,
+                    weakendenddate: getHumanReadableDate(new Date(weakendDetail.weakend_end_date)),
+                    weakendname: weakendDetail.weakendname,
+                    weakendlocation: weakendDetail.weakend_location,
+                    weakendtemplate: {
+                        weakendtemplate_id: weakendtemplate._id,
+                        weakendtemplate: baseImageUrl + '/' + weakendtemplate.weakendtemplate
+                    },
+                    weakendcategory: {
+                        weakendcategory_id: weakendcategory._id,
+                        weakend_name: weakendcategory.weakendcategoryname
+                    }
+                };
 
-            weakendDetailsWithUsers.push(weakendDetailsWithUser);
+                weakendDetailsWithUsers.push(weakendDetailsWithUser);
+            }
         }
 
         const response = {
