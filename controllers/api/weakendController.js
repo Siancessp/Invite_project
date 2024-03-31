@@ -198,9 +198,17 @@ const getallweakenddetailsbyid = async (req, res) => {
         }
 
         const weakendtemplatebackground = await weakEnd.findOne({ _id: existedWeakendDetails.weakendtemplateid });
-        const weakendcategoryId = weakendtemplatebackground.weakendcategoryid;
+        if (!weakendtemplatebackground) {
+            return res.status(404).json({ success: false, msg: 'Weakend Template not found' });
+        }
 
+        const weakendcategoryId = weakendtemplatebackground.weakendcategoryid;
         const weakendcategory = await weakendCategory.findOne({ _id: weakendcategoryId });
+
+        if (!weakendcategory) {
+            return res.status(404).json({ success: false, msg: 'Weakend Category not found' });
+        }
+
         const user = await userRegister.findOne({ _id: existedWeakendDetails.user_id });
 
         const baseImageUrl = "/uploads/event_template";
@@ -234,6 +242,7 @@ const getallweakenddetailsbyid = async (req, res) => {
         return res.status(500).json({ success: false, msg: "Internal Server Error" });
     }
 };
+
 
 module.exports = {
     weakendtemplate,
