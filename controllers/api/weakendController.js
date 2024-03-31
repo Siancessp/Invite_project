@@ -157,7 +157,7 @@ const getweakendDetails = async (req, res) => {
             if (weakendtemplate) {
                 const weakendDetailsWithUser = {
                     weakend_id: weakendDetail._id,
-                    weakendstartdate: weakendDetail.weakend_start_date,
+                    weakendstartdate: getHumanReadableDate(new Date(weakendDetail.weakend_start_date)),
                     weakendenddate: getHumanReadableDate(new Date(weakendDetail.weakend_end_date)),
                     weakendname: weakendDetail.weakendname,
                     weakendlocation: weakendDetail.weakend_location,
