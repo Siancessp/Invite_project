@@ -64,24 +64,34 @@ const inserttourcategorydata = async (req, res) => {
     const { tourcategoryid } = req.body;
 
     try {
+        if (!tourcategoryid) {
+            return res.status(400).json({ success: false, message: 'Tour Category ID is required' });
+        }
+
+        if (!req.file || !req.file.filename) {
+            return res.status(400).json({ success: false, message: 'Tour template file is required' });
+        }
+
         const newTour = new Tour({
             tourcategoryid: tourcategoryid,
             tourtemplate: req.file.filename
         });
 
         const savedTour = await newTour.save();
+        
         if (savedTour) {
             // Fetch the updated list of categories after saving
             const tourcategories = await fetchtourCategories();
-            res.render('addtourcategory', { message: "Your tour has been created successfully!", tourcategories });
+            return res.render('addtourcategory', { message: "Your tour has been created successfully!", tourcategories });
         } else {
-            res.render('addtourcategory', { message: "Failed to create event!" });
+            return res.render('addtourcategory', { message: "Failed to create event!" });
         }
     } catch (error) {
-        console.log(error.message);
-        res.status(500).send('Internal Server Error');
+        console.error(error); // Log the full error for debugging
+        return res.status(500).send('Internal Server Error');
     }
 };
+
 
 module.exports = {
     tourcategory,
