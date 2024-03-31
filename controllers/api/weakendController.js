@@ -114,6 +114,27 @@ const addweakendDetails = async (req,res)=>
     }
 }
 
+const getHumanReadableDate = (date) => {
+    if (date instanceof Date) {
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const month = monthNames[date.getMonth()];
+        const day = date.getDate();
+        return `${day} ${month}`;
+    } else if (isFinite(date)) {
+        // If it's a timestamp, convert it to a Date object
+        const d = new Date();
+        d.setTime(date);
+        return getHumanReadableDate(d);
+    }
+};
+
+const formatTime = (time) => {
+    const [hours, minutes] = time.split(':');
+    const formattedHours = parseInt(hours, 10) % 12 || 12; // Convert to 12-hour format
+    const ampm = parseInt(hours, 10) >= 12 ? 'PM' : 'AM';
+    return `${formattedHours}:${minutes} ${ampm}`;
+};
+
 //Fetch all weakend details
 const getweakendDetails = async (req, res) => {
     try {
@@ -136,7 +157,9 @@ const getweakendDetails = async (req, res) => {
             if (weakendtemplate) {
                 const weakendDetailsWithUser = {
                     weakend_id: weakendDetail._id,
-                    weakendstartdate: weakendDetail.weakend_start_date,
+                    weakendstartdate: getHumanReadableDate(new Date(eventDetail.weakend_start_date)),
+                    weakendenddate: getHumanReadableDate(new Date(eventDetail.weakend_end_date)),
+                    weakendname: eventDetail.weakendname,
                     weakendlocation: weakendDetail.weakend_location,
                     weakendtemplate: {
                         weakendtemplate_id: weakendtemplate._id,

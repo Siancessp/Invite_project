@@ -45,7 +45,6 @@ admin_route.post('/insertweakendcategory', weakendcategoryController.insertweake
 
 admin_route.get('/tourcategory', tourcategoryController.tourcategory);
 admin_route.post('/inserttourcategory', tourcategoryController.inserttourcategory);
-// admin_route.post('/inserttourtemplate', tourcategoryController.inserttourtemplate);
 
 admin_route.get('/',loginController.login);
 admin_route.get('/login',loginController.login);
@@ -57,6 +56,8 @@ admin_route.post('/eventcategory',upload.single('eventtemplate'),addeventControl
 
 admin_route.get('/addweakendcategory',weakendcategoryController.addweakendcategory);
 admin_route.post('/insertweakendcategorydata', upload.single('weakendtemplate'), weakendcategoryController.insertweakendcategorydata);
+
+admin_route.get('/addweakendcategory',weakendcategoryController.addweakendcategory);
 // admin_route.post('/inserttourcategorydata', upload.single('tourtemplate'), tourcategoryController.inserttourcategorydata);
 
 
