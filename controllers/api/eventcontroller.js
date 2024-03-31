@@ -166,7 +166,7 @@ const geteventDetails = async (req, res) => {
 
             if (eventtemplate) {
                 // Format eventstartdate into dd/mm/yy
-                const eventstartdate = formatDate(eventDetail.event_start_date);
+                const eventstartdate = moment(eventDetail.event_start_date).format('DD/MM/YY');
 
                 const eventDetailWithUser = {
                     event_id: eventDetail._id,
@@ -199,16 +199,6 @@ const geteventDetails = async (req, res) => {
         return res.status(500).json({ success: false, msg: "Internal Server Error" });
     }
 };
-
-// Function to format date into dd/mm/yy
-function formatDate(date) {
-    const eventstartdate = new Date(date);
-    const day = String(eventstartdate.getDate()).padStart(2, '0');
-    const month = String(eventstartdate.getMonth() + 1).padStart(2, '0');
-    const year = String(eventstartdate.getFullYear()).slice(-2);
-    return `${day}/${month}/${year}`;
-}
-
 
 const getalleventdetailsbyid = async (req, res) => {
     try {
