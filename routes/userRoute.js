@@ -7,21 +7,24 @@ user_route.use(bodyParser.json());
 user_route.use(bodyParser.urlencoded({ extended: true }));
 
 const multer = require("multer");
-const storage = multer.diskStorage(
-    {
-        destination:function(req,file,cb)
-        {
-            cb(null,path.join(__dirname, '../public/uploads/profile_image'));
-        },
-        filename:function(req,file,cb)
-        {
-            const name = Date.now()+'-'+file.originalname;
-            cb(null,name);
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        // Choose the destination folder based on the file fieldname
+        if (file.fieldname === "profile_image") {
+            cb(null, path.join(__dirname, '../public/uploads/profile_image'));
+        } else if (file.fieldname === "background_image") {
+            cb(null, path.join(__dirname, '../public/uploads/background_image'));
+        } else {
+            cb(new Error("Invalid fieldname"), null);
         }
+    },
+    filename: function(req, file, cb) {
+        const name = Date.now() + '-' + file.originalname;
+        cb(null, name);
     }
-);
+});
 
-const upload = multer({storage:storage});
+const upload = multer({ storage: storage });
 
 const userController = require("../controllers/api/userConroller");
 const eventController = require("../controllers/api/eventcontroller");
@@ -40,7 +43,11 @@ user_route.get('/', function(req, res) {
 user_route.post('/register', userController.insertuserData);
 user_route.post('/login', userController.user_login);
 user_route.get('/getprofile/:user_id', userController.getprofile);
-user_route.post('/updateprofile',upload.single('profile_image'), userController.updateprofileById);
+// user_route.post('/updateprofile',upload.single('profile_image'), userController.updateprofileById);
+user_route.post('/updateprofile', upload.fields([
+    { name: 'profile_image', maxCount: 1 },
+    { name: 'background_image', maxCount: 1 }
+]), userController.updateprofileById);
 
 user_route.get('/eventtemplate/:categoryid', eventController.eventtemplate);
 user_route.get('/geteventcategory', eventController.geteventcategory);
