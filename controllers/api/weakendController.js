@@ -197,13 +197,13 @@ const getallweakenddetailsbyid = async (req, res) => {
             return res.status(404).json({ success: false, msg: 'Weakend Details not found' });
         }
 
-        const weakendtemplatebackground = await Weakend.findOne({ _id: existedWeakendDetails.weakendtemplateid });
+        const weakendtemplatebackground = await weakEnd.findOne({ _id: existedWeakendDetails.weakendtemplateid });
         if (!weakendtemplatebackground) {
             return res.status(404).json({ success: false, msg: 'Weakend Template not found' });
         }
 
         const weakendcategoryId = weakendtemplatebackground.weakendcategoryid;
-        const weakendcategory = await WeakendCategory.findOne({ _id: weakendcategoryId });
+        const weakendcategory = await weakendCategory.findOne({ _id: weakendcategoryId });
 
         if (!weakendcategory) {
             return res.status(404).json({ success: false, msg: 'Weakend Category not found' });
