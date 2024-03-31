@@ -113,8 +113,7 @@ const getprofile = async (req, res) => {
 };
 
 const updateprofileById = async (req, res) => {
-    const user_id = req.params.user_id;
-    const { fullname, mobile, email, user_bio, profile_image, background_image } = req.body;
+    const { fullname, mobile, email, user_bio, profile_image, background_image,user_id } = req.body;
 
     try {
         // Update in userRegister collection
