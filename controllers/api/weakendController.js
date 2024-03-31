@@ -191,6 +191,12 @@ const getweakendDetails = async (req, res) => {
 const getallweakenddetailsbyid = async (req, res) => {
     try {
         const weakendid = req.params.weakendid;
+        
+        // Check if weakendid is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(weakendid)) {
+            return res.status(400).json({ success: false, msg: 'Invalid Weakend ID' });
+        }
+
         const existedWeakendDetails = await WeakendDetails.findOne({ _id: weakendid });
 
         if (!existedWeakendDetails) {
@@ -198,6 +204,7 @@ const getallweakenddetailsbyid = async (req, res) => {
         }
 
         const weakendtemplatebackground = await weakEnd.findOne({ _id: existedWeakendDetails.weakendtemplateid });
+
         if (!weakendtemplatebackground) {
             return res.status(404).json({ success: false, msg: 'Weakend Template not found' });
         }
@@ -210,6 +217,10 @@ const getallweakenddetailsbyid = async (req, res) => {
         }
 
         const user = await userRegister.findOne({ _id: existedWeakendDetails.user_id });
+
+        if (!user) {
+            return res.status(404).json({ success: false, msg: 'User not found' });
+        }
 
         const baseImageUrl = "/uploads/event_template";
 
@@ -242,6 +253,7 @@ const getallweakenddetailsbyid = async (req, res) => {
         return res.status(500).json({ success: false, msg: "Internal Server Error" });
     }
 };
+
 
 
 module.exports = {
