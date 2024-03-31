@@ -77,7 +77,7 @@ const addtourDetails = async (req,res)=>
 {
     try {
         const tourtemplateid = req.body.tourtemplateid;
-        const { tourdescription, tour_id, tour_start_date, tour_end_date, tour_start_time, tour_end_time, tour_location, tour_price_adult,tour_price_child, user_id } = req.body;
+        const { tourdescription, tourname, tour_start_date, tour_end_date, tour_start_time, tour_end_time, tour_location, tour_price_adult,tour_price_child, user_id } = req.body;
         const baseImageUrl = "/uploads/event_template";
         const existingTourtemplate = await Tour.findOne({ _id: tourtemplateid });
 
@@ -89,7 +89,7 @@ const addtourDetails = async (req,res)=>
             user_id: user_id,
             tourtemplateid: tourtemplateid,
             tourdescription: tourdescription,
-            tour_id: tour_id,
+            tourname: tourname,
             tour_start_date: tour_start_date,
             tour_end_date: tour_end_date,
             tour_start_time: tour_start_time,
@@ -110,7 +110,28 @@ const addtourDetails = async (req,res)=>
         console.error(error);
         return res.status(500).send({ success: false, msg: "Internal Server Error" });
     }
-}
+};
+
+const getHumanReadableDate = (date) => {
+    if (date instanceof Date) {
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const month = monthNames[date.getMonth()];
+        const day = date.getDate();
+        return `${day} ${month}`;
+    } else if (isFinite(date)) {
+        // If it's a timestamp, convert it to a Date object
+        const d = new Date();
+        d.setTime(date);
+        return getHumanReadableDate(d);
+    }
+};
+
+const formatTime = (time) => {
+    const [hours, minutes] = time.split(':');
+    const formattedHours = parseInt(hours, 10) % 12 || 12; // Convert to 12-hour format
+    const ampm = parseInt(hours, 10) >= 12 ? 'PM' : 'AM';
+    return `${formattedHours}:${minutes} ${ampm}`;
+};
 
 //Fetch all weakend details
 const gettourDetails = async (req, res) => {
@@ -134,7 +155,8 @@ const gettourDetails = async (req, res) => {
             if (tourtemplate) {
                 const tourDetailsWithUser = {
                     tour_id: tourDetail._id,
-                    tourstartdate: tourDetail.tour_start_date,
+                    tourstartdate: getHumanReadableDate(new Date(tourDetail.tour_start_date)),
+                    tourenddate: getHumanReadableDate(new Date(tourDetail.tour_end_date)),
                     tourlocation: tourDetail.tour_location,
                     tourtemplate: {
                         tourtemplate_id: tourtemplate._id,

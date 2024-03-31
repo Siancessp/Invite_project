@@ -216,6 +216,7 @@ const getallweakenddetailsbyid = async (req, res) => {
         const weakendDetailWithUser = {
             weakend_id: existedWeakendDetails._id,
             weakendstartdate: getHumanReadableDate(new Date(existedWeakendDetails.weakend_start_date)),
+            weakendname: existedWeakendDetails.weakendname,
             weakendenddate: getHumanReadableDate(new Date(existedWeakendDetails.weakend_end_date)),
             weakendstarttime: formatTime(existedWeakendDetails.weakend_start_time),
             weakendendtime: formatTime(existedWeakendDetails.weakend_end_time),

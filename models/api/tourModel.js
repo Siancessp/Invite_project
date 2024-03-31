@@ -5,7 +5,7 @@ const tourregisterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    tour_id: {
+    tourname: {
         type: String,
         required: true
     },
