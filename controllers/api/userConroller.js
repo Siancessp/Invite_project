@@ -53,7 +53,10 @@ const insertuserData = async (req,res)=>
                 email: email,
                 password: spassword,
                 confirmpassword: sconfirmpassword,
-                created_date : createddate
+                created_date : createddate,
+                profile_image: null,
+                background_image:null,
+                user_bio:null
             });
 
             const savedUser = await newUser.save();
