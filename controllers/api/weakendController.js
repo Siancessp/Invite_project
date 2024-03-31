@@ -114,23 +114,19 @@ const addweakendDetails = async (req,res)=>
     }
 }
 
-const getHumanReadableDate = (dateString) => {
-    if (!dateString) {
-        return ""; // Handle empty or undefined dates
-    }
-
-    const [day, month, year] = dateString.split("-");
-
-    if (day && month && year) {
+const getHumanReadableDate = (date) => {
+    if (date instanceof Date) {
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        const monthIndex = parseInt(month, 10) - 1; // Adjust for 0-based indexing
-        const formattedDate = `${day} ${monthNames[monthIndex]} ${year}`;
-        return formattedDate;
-    } else {
-        return "Invalid Date Format";
+        const month = monthNames[date.getMonth()];
+        const day = date.getDate();
+        return `${day} ${month}`;
+    } else if (isFinite(date)) {
+        // If it's a timestamp, convert it to a Date object
+        const d = new Date();
+        d.setTime(date);
+        return getHumanReadableDate(d);
     }
 };
-
 
 const formatTime = (time) => {
     const [hours, minutes] = time.split(':');
