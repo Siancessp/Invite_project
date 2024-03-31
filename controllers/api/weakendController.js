@@ -207,10 +207,10 @@ const getallweakenddetailsbyid = async (req, res) => {
 
         const weakendDetailWithUser = {
             weakend_id: existedWeakendDetails._id,
-            weakendstartdate: existedWeakendDetails.weakend_start_date,
-            weakendenddate: existedWeakendDetails.weakend_end_date,
-            weakendstarttime: existedWeakendDetails.weakend_start_time,
-            weakendendtime: existedWeakendDetails.weakend_end_time,
+            weakendstartdate: getHumanReadableDate(new Date(existedWeakendDetails.weakend_start_date)),
+            weakendenddate: getHumanReadableDate(new Date(existedWeakendDetails.weakend_end_date)),
+            weakendstarttime: formatTime(existedWeakendDetails.weakend_start_time),
+            weakendendtime: formatTime(existedWeakendDetails.weakend_end_time),
             weakendpriceadult: existedWeakendDetails.weakend_price_adult,
             weakendpricechild: existedWeakendDetails.weakend_price_child,
             weakendlocation: existedWeakendDetails.weakend_location,
