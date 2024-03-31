@@ -179,14 +179,14 @@ Nora Silvester
 <div class="card-header">
 <h3 class="card-title">Tour Category</h3>
 </div>
-<form action="/insertweakendcategorydata" method="POST" enctype="multipart/form-data">
+<form action="/inserttourcategorydata" method="POST" enctype="multipart/form-data">
     <div class="card-body">
         <div class="form-group">
-            <label for="weakendcategoryname">Select Category</label>
-            <select class="form-control" id="weakendcategorySelect" name="weakendcategoryid">
+            <label for="tourcategoryname">Select Category</label>
+            <select class="form-control" id="tourcategorySelect" name="tourcategoryid">
                 <option value="">Select a category</option>
-                {{#each weakendcategories}}
-                    <option value="{{this._id}}">{{this.weakendcategoryname}}</option>
+                {{#each tourcategories}}
+                    <option value="{{this._id}}">{{this.tourcategoryname}}</option>
                 {{/each}}
             </select>
         </div>
@@ -194,7 +194,7 @@ Nora Silvester
             <label for="exampleInputFile">Tour Template</label>
             <div class="input-group">
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="exampleInputFile" name="weakendtemplate">
+                    <input type="file" class="custom-file-input" id="exampleInputFile" name="tourtemplate">
                     <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                 </div>
                 <div class="input-group-append">
