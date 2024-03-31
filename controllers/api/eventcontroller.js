@@ -245,7 +245,7 @@ const getalleventdetailsbyid = async (req, res) => {
             eventstartdate: getHumanReadableDate(new Date(existedEventDetails.event_start_date)),
             eventenddate: getHumanReadableDate(new Date(existedEventDetails.event_end_date)),
             eventstarttime: formatTime(existedEventDetails.event_start_time),
-            eventendtime: existedEventDetails.event_end_time,
+            eventendtime: formatTime(existedEventDetails.event_end_time),
             eventpriceadult: existedEventDetails.event_price_adult,
             eventpricechild: existedEventDetails.event_price_child,
             eventlocation: existedEventDetails.event_location,
