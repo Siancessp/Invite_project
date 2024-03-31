@@ -20,6 +20,7 @@ const wekendcategory = async (req, res) => {
 
 const insertweakendcategory = async (req, res) => {
     try {
+        console.log(req.body);
         const { weakendcategoryname } = req.body;
         const newwaekendCategory = new weakendCategory({
             weakendcategoryname: weakendcategoryname,
