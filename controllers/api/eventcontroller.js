@@ -148,12 +148,13 @@ const addeventDetails = async (req,res)=>
 
 const geteventDetails = async (req, res) => {
     try {
-        const existingEventdetails = await EventDetails.find({ });
+        const existingEventdetails = await EventDetails.find({});
         const baseImageUrl = "/uploads/event_template";
 
         if (!existingEventdetails) {
             return res.status(404).json({ success: false, msg: 'Event Details not found' });
         }
+
         let eventDetailsWithUsers = [];
 
         for (let i = 0; i < existingEventdetails.length; i++) {
@@ -161,13 +162,15 @@ const geteventDetails = async (req, res) => {
             const eventtemplate = await Event.findOne({ _id: eventDetail.eventtemplateid });
 
             const categoryId = eventtemplate.categoryid;
-
             const category = await Category.findOne({ _id: categoryId });
 
             if (eventtemplate) {
+                // Format eventstartdate into dd/mm/yy
+                const eventstartdate = formatDate(eventDetail.event_start_date);
+
                 const eventDetailWithUser = {
                     event_id: eventDetail._id,
-                    eventstartdate: eventDetail.event_start_date,
+                    eventstartdate: eventstartdate,
                     eventname: eventDetail.eventname,
                     eventlocation: eventDetail.event_location,
                     eventtemplate: {
@@ -197,6 +200,16 @@ const geteventDetails = async (req, res) => {
     }
 };
 
+// Function to format date into dd/mm/yy
+function formatDate(date) {
+    const eventstartdate = new Date(date);
+    const day = String(eventstartdate.getDate()).padStart(2, '0');
+    const month = String(eventstartdate.getMonth() + 1).padStart(2, '0');
+    const year = String(eventstartdate.getFullYear()).slice(-2);
+    return `${day}/${month}/${year}`;
+}
+
+
 const getalleventdetailsbyid = async (req, res) => {
     try {
         const eventid = req.params.eventid;
@@ -216,6 +229,7 @@ const getalleventdetailsbyid = async (req, res) => {
 
         const eventDetailWithUser = {
             event_id: existedEventDetails._id,
+            eventname: existedEventDetails.eventname,
             eventstartdate: existedEventDetails.event_start_date,
             eventenddate: existedEventDetails.event_end_date,
             eventstarttime: existedEventDetails.event_start_time,
