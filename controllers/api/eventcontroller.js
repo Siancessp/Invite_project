@@ -160,6 +160,16 @@ const getHumanReadableDate = (date) => {
     }
 };
 
+const formatTime = (time) => {
+    const date = new Date(`2000-01-01T${time}`);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+    return `${formattedHours}:${formattedMinutes} ${ampm}`;
+};
+
 const geteventDetails = async (req, res) => {
     try {
         const existingEventdetails = await EventDetails.find({});
@@ -237,7 +247,7 @@ const getalleventdetailsbyid = async (req, res) => {
             eventdescription: existedEventDetails.eventdescription,
             eventstartdate: getHumanReadableDate(new Date(existedEventDetails.event_start_date)),
             eventenddate: getHumanReadableDate(new Date(existedEventDetails.event_end_date)),
-            eventstarttime: existedEventDetails.event_start_time,
+            eventstarttime: formatTime(existedEventDetails.event_start_time),
             eventendtime: existedEventDetails.event_end_time,
             eventpriceadult: existedEventDetails.event_price_adult,
             eventpricechild: existedEventDetails.event_price_child,
