@@ -166,8 +166,6 @@ const updateprofileById = async (req, res) => {
 };
 
 
-
-
 const user_login = async (req, res) => {
     try {
         const email = req.body.email;
