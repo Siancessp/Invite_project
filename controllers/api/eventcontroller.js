@@ -168,6 +168,7 @@ const geteventDetails = async (req, res) => {
                 const eventDetailWithUser = {
                     event_id: eventDetail._id,
                     eventstartdate: eventDetail.event_start_date,
+                    eventname: eventDetail.eventname,
                     eventlocation: eventDetail.event_location,
                     eventtemplate: {
                         eventtemplate_id: eventtemplate._id,
