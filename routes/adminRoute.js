@@ -57,8 +57,8 @@ admin_route.post('/eventcategory',upload.single('eventtemplate'),addeventControl
 admin_route.get('/addweakendcategory',weakendcategoryController.addweakendcategory);
 admin_route.post('/insertweakendcategorydata', upload.single('weakendtemplate'), weakendcategoryController.insertweakendcategorydata);
 
-admin_route.get('/addtourcategory',tourcategoryController.addTourCategory);
-admin_route.post('/inserttourcategorydata', upload.single('tourtemplate'), tourcategoryController.insertTourCategoryData);
+admin_route.get('/addtourcategory',tourcategoryController.addtourcategory);
+admin_route.post('/inserttourcategorydata', upload.single('tourtemplate'), tourcategoryController.inserttourcategorydata);
 
 
 module.exports = admin_route;
