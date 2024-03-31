@@ -120,13 +120,6 @@ const updateprofileById = async (req, res) => {
     const { fullname, mobile, email, user_bio, profile_image, background_image,user_id } = req.body;
 
     try {
-        // Update in userRegister collection
-        const updatedUser = await userRegister.findOneAndUpdate(
-            { _id: user_id },
-            { $set: { fullname, mobile, email, user_bio, profile_image, background_image } },
-            { new: true }
-        );
-
         // Update in Register collection
         const updatedRegister = await userRegister.findOneAndUpdate(
             { _id: user_id },
@@ -134,7 +127,7 @@ const updateprofileById = async (req, res) => {
             { new: true }
         );
 
-        if (!updatedUser || !updatedRegister) {
+        if (!updatedRegister) {
             return res.status(404).json({ success: false, msg: "User not found" });
         }
 
@@ -142,7 +135,6 @@ const updateprofileById = async (req, res) => {
             success: true,
             msg: "User updated successfully",
             data: {
-                updatedUser,
                 updatedRegister
             }
         };
