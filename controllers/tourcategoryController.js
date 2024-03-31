@@ -64,7 +64,7 @@ const inserttourcategorydata = async (req, res) => {
     const { tourcategoryid } = req.body;
 
     try {
-        const newTour = new weakEnd({
+        const newTour = new Tour({
             tourcategoryid: tourcategoryid,
             tourtemplate: req.file.filename
         });
