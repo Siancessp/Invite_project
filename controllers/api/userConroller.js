@@ -95,7 +95,8 @@ const getprofile = async (req, res) => {
             email: existedUserDetails.email, 
             user_bio:existedUserDetails.user_bio,
             profile_image:existedUserDetails.profile_image,
-            background_image:existedUserDetails.background_image
+            background_image:existedUserDetails.background_image,
+            mobile:existedUserDetails.mobile
         };
 
         const userresponse = {
