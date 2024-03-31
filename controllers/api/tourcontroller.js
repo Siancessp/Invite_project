@@ -44,7 +44,12 @@ const tourtemplate = async (req,res)=>
 {
     try{
         const baseImageUrl = "/uploads/event_template";
-        const existingTour = await Tour.find({});
+        const { tourcategoryid } = req.params;
+        let filter = {}; // Default filter to get all weekend templates
+        if (tourcategoryid) {
+            filter = { tourcategoryid: tourcategoryid }; // Filter by weakendcategoryid if provided
+        }
+        const existingTour = await Tour.find({filter});
 
         const tourWithUrls = existingTour.map(tour => {
             const tourWithUrls = {
