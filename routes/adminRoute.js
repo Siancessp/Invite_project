@@ -44,6 +44,7 @@ admin_route.get('/wekendcategory', weakendcategoryController.wekendcategory);
 admin_route.post('/insertweakendcategory', weakendcategoryController.insertweakendcategory);
 
 admin_route.get('/tourcategory', tourcategoryController.tourcategory);
+admin_route.post('/inserttourcategory', tourcategoryController.inserttourcategory);
 // admin_route.post('/inserttourtemplate', tourcategoryController.inserttourtemplate);
 
 admin_route.get('/',loginController.login);

@@ -86,6 +86,7 @@ const inserttourcategorydata = async (req, res) => {
 module.exports = {
     tourcategory,
     fetchtourCategories,
+    inserttourcategory,
     addtourcategory,
     inserttourcategorydata
 }
