@@ -182,8 +182,10 @@ const geteventDetails = async (req, res) => {
                 const eventDetailWithUser = {
                     event_id: eventDetail._id,
                     eventstartdate: getHumanReadableDate(new Date(eventDetail.event_start_date)),
+                    eventenddate: getHumanReadableDate(new Date(eventDetail.event_end_date)),
                     eventname: eventDetail.eventname,
                     eventlocation: eventDetail.event_location,
+                    eventdescription: eventDetail.eventdescription,
                     eventtemplate: {
                         eventtemplate_id: eventtemplate._id,
                         eventtemplate: baseImageUrl + '/' + eventtemplate.eventtemplate
@@ -232,8 +234,9 @@ const getalleventdetailsbyid = async (req, res) => {
         const eventDetailWithUser = {
             event_id: existedEventDetails._id,
             eventname: existedEventDetails.eventname,
-            eventstartdate: existedEventDetails.event_start_date,
-            eventenddate: existedEventDetails.event_end_date,
+            eventdescription: existedEventDetails.eventdescription,
+            eventstartdate: getHumanReadableDate(new Date(existedEventDetails.event_start_date)),
+            eventenddate: getHumanReadableDate(new Date(existedEventDetails.event_end_date)),
             eventstarttime: existedEventDetails.event_start_time,
             eventendtime: existedEventDetails.event_end_time,
             eventpriceadult: existedEventDetails.event_price_adult,

@@ -130,7 +130,7 @@ const updateprofileById = async (req, res) => {
         const profileImageFilename = req.files['profile_image'][0].filename;
         const backgroundImageFilename = req.files['background_image'][0].filename;
 
-        // Update in Register collection with the filenames
+        // Update user profile in the database
         const updatedRegister = await userRegister.findOneAndUpdate(
             { _id: user_id },
             {
@@ -143,7 +143,7 @@ const updateprofileById = async (req, res) => {
                     background_image: backgroundImageFilename
                 }
             },
-            { new: true }
+            { new: true } // Return the updated document
         );
 
         if (!updatedRegister) {
@@ -164,6 +164,7 @@ const updateprofileById = async (req, res) => {
         return res.status(500).json({ success: false, msg: "Error updating user data", error: error.message });
     }
 };
+
 
 
 
