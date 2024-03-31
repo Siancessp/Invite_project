@@ -148,13 +148,12 @@ const addeventDetails = async (req,res)=>
 
 const geteventDetails = async (req, res) => {
     try {
-        const existingEventdetails = await EventDetails.find({});
+        const existingEventdetails = await EventDetails.find({ });
         const baseImageUrl = "/uploads/event_template";
 
         if (!existingEventdetails) {
             return res.status(404).json({ success: false, msg: 'Event Details not found' });
         }
-
         let eventDetailsWithUsers = [];
 
         for (let i = 0; i < existingEventdetails.length; i++) {
@@ -162,15 +161,13 @@ const geteventDetails = async (req, res) => {
             const eventtemplate = await Event.findOne({ _id: eventDetail.eventtemplateid });
 
             const categoryId = eventtemplate.categoryid;
+
             const category = await Category.findOne({ _id: categoryId });
 
             if (eventtemplate) {
-                // Format eventstartdate into dd/mm/yy
-                const eventstartdate = moment(eventDetail.event_start_date).format('DD/MM/YY');
-
                 const eventDetailWithUser = {
                     event_id: eventDetail._id,
-                    eventstartdate: eventstartdate,
+                    eventstartdate: eventDetail.event_start_date,
                     eventname: eventDetail.eventname,
                     eventlocation: eventDetail.event_location,
                     eventtemplate: {
