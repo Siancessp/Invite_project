@@ -117,34 +117,60 @@ const getprofile = async (req, res) => {
 };
 
 const updateprofileById = async (req, res) => {
-    const { fullname, mobile, email, user_bio, profile_image, background_image,user_id } = req.body;
+    const { fullname, mobile, email, user_bio, user_id } = req.body;
 
     try {
-        // Update in Register collection
-        const updatedRegister = await userRegister.findOneAndUpdate(
-            { _id: user_id },
-            { $set: { fullname, mobile, email, user_bio, profile_image, background_image } },
-            { new: true }
-        );
+        // Update fields in Register collection
+        const updateFields = { fullname, mobile, email, user_bio };
 
-        if (!updatedRegister) {
-            return res.status(404).json({ success: false, msg: "User not found" });
-        }
-
-        const response = {
-            success: true,
-            msg: "User updated successfully",
-            data: {
-                updatedRegister
+        // Use multer middleware for profile_image and background_image uploads
+        upload.fields([
+            { name: 'profile_image', maxCount: 1 },
+            { name: 'background_image', maxCount: 1 }
+        ])(req, res, async (err) => {
+            if (err instanceof multer.MulterError) {
+                // A Multer error occurred
+                return res.status(400).json({ success: false, msg: "File upload error" });
+            } else if (err) {
+                // An unknown error occurred
+                return res.status(500).json({ success: false, msg: "Unknown error" });
             }
-        };
-        res.status(200).send(response);
+
+            // Update profile_image and background_image fields if files were uploaded
+            if (req.files && req.files['profile_image']) {
+                updateFields.profile_image = req.files['profile_image'][0].filename;
+            }
+            if (req.files && req.files['background_image']) {
+                updateFields.background_image = req.files['background_image'][0].filename;
+            }
+
+            // Perform the update in the Register collection
+            const updatedRegister = await userRegister.findOneAndUpdate(
+                { _id: user_id },
+                { $set: updateFields },
+                { new: true }
+            );
+
+            if (!updatedRegister) {
+                return res.status(404).json({ success: false, msg: "User not found" });
+            }
+
+            const response = {
+                success: true,
+                msg: "User updated successfully",
+                data: {
+                    updatedRegister
+                }
+            };
+            res.status(200).send(response);
+        });
 
     } catch (error) {
         console.error(error);
-        return res.status(500).send({ success: false, msg: "Error updating user data", error: error.message });
+        return res.status(500).json({ success: false, msg: "Error updating user data", error: error.message });
     }
 };
+
 
 
 
