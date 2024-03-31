@@ -117,7 +117,8 @@ const getHumanReadableDate = (date) => {
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const month = monthNames[date.getMonth()];
         const day = date.getDate();
-        return `${day} ${month}`;
+        const year = date.getFullYear();
+        return `${day} ${month} ${year}`;
     } else if (isFinite(date)) {
         // If it's a timestamp, convert it to a Date object
         const d = new Date();
@@ -204,13 +205,13 @@ const getalltourdetailsbyid = async (req, res) => {
 
         const tourDetailWithUser = {
             tour_id: existedTourDetails._id,
-            tourstartdate: existedTourDetails.weakend_start_date,
-            tourenddate: existedTourDetails.weakend_end_date,
-            tourstarttime: existedTourDetails.weakend_start_time,
-            tourendtime: existedTourDetails.weakend_end_time,
-            tourpriceadult: existedTourDetails.weakend_price_adult,
-            tourpricechild: existedTourDetails.weakend_price_child,
-            tourlocation: existedTourDetails.weakend_location,
+            tourstartdate: getHumanReadableDate(new Date(existedTourDetails.tour_start_date)),
+            tourenddate: getHumanReadableDate(new Date(existedTourDetails.tour_end_date)),
+            tourstarttime: formatTime(existedTourDetails.tour_start_time),
+            tourendtime: formatTime(existedTourDetails.tour_end_time),
+            tourpriceadult: existedTourDetails.tour_price_adult,
+            tourpricechild: existedTourDetails.tour_price_child,
+            tourlocation: existedTourDetails.tour_location,
             tourtemplate: {
                 tourtemplate_id: tourtemplatebackground._id,
                 tourtemplate: baseImageUrl + '/' + tourtemplatebackground.tourtemplate
