@@ -119,7 +119,8 @@ const getHumanReadableDate = (date) => {
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const month = monthNames[date.getMonth()];
         const day = date.getDate();
-        return `${day} ${month}`;
+        const year = date.getFullYear();
+        return `${day} ${month} ${year}`;
     } else if (isFinite(date)) {
         // If it's a timestamp, convert it to a Date object
         const d = new Date();
@@ -127,6 +128,7 @@ const getHumanReadableDate = (date) => {
         return getHumanReadableDate(d);
     }
 };
+
 
 const formatTime = (time) => {
     const [hours, minutes] = time.split(':');
