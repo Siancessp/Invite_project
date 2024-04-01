@@ -75,11 +75,22 @@ const tourtemplate = async (req, res) => {
 };
 
 //After choose a template we have to store data
-const addtourDetails = async (req,res)=>
-{
+const addtourDetails = async (req, res) => {
     try {
         const tourtemplateid = req.body.tourtemplateid;
-        const { tourdescription, tourname, tour_start_date, tour_end_date, tour_start_time, tour_end_time, tour_location, tour_price_adult,tour_price_child, user_id } = req.body;
+        const {
+            tourname,
+            tour_start_date,
+            tour_end_date,
+            tour_start_time,
+            tour_end_time,
+            tour_location,
+            tour_price_adult,
+            tour_price_child,
+            user_id,
+            tour_descriptions // Added tour_descriptions from req.body
+        } = req.body;
+
         const baseImageUrl = "/uploads/event_template";
         const existingTourtemplate = await Tour.findOne({ _id: tourtemplateid });
 
@@ -87,25 +98,32 @@ const addtourDetails = async (req,res)=>
             return res.status(404).json({ success: false, msg: 'Tour not found' });
         }
 
-        const newTourDetails = new TourDetails({
-            user_id: user_id,
-            tourtemplateid: tourtemplateid,
-            tourdescription: tourdescription,
-            tourname: tourname,
-            tour_start_date: tour_start_date,
-            tour_end_date: tour_end_date,
-            tour_start_time: tour_start_time,
-            tour_end_time: tour_end_time,
-            tour_location: tour_location,
-            tour_price_adult: tour_price_adult,
-            tour_price_child: tour_price_child
-        });
+        const savedTourDetails = [];
 
-        const savedTourDetails = await newTourDetails.save();
+        for (const day of tour_descriptions) {
+            const newTourDetails = new TourDetails({
+                user_id: user_id,
+                tourtemplateid: tourtemplateid,
+                tourname: tourname,
+                tour_start_date: tour_start_date,
+                tour_end_date: tour_end_date,
+                tour_start_time: tour_start_time,
+                tour_end_time: tour_end_time,
+                tour_location: tour_location,
+                tour_price_adult: tour_price_adult,
+                tour_price_child: tour_price_child,
+                tour_description: day.description, // Store the description for the day
+                day_number: day.day // Store the day number
+            });
+
+            const savedDetail = await newTourDetails.save();
+            savedTourDetails.push(savedDetail);
+        }
+
         const response = {
             success: true,
             msg: "Tour added Successfully!",
-            data: savedTourDetails
+            data: savedTourDetails // Include saved tour details in the response
         }
         res.status(200).send(response);
     } catch (error) {
