@@ -21,13 +21,22 @@ const calculateGrandTotalPrice = async (req,res) =>
         const child_price = storedeventData.event_price_child;
 
 
-        const grand_total = numberofadult * adult_price * nummberofDays;
+        let grandTotalAdults = numberofadult * storedeventData.adult_price * nummberofDays;
+
+        // Calculate grand total for children only if numberOfChildren is present
+        let grandTotalChildren = 0;
+        if (numberofchild) {
+            grandTotalChildren = nummberofDays * storedeventData.child_price * nummberofDays;
+        }
+
+        // Calculate total price
+        let grandTotal = grandTotalAdults + grandTotalChildren;
 
         const response = {
             success: true,
             msg: "Events Fetched Successfully!",
             data: storedeventData,
-            data2:grand_total
+            data2:grandTotal
         };
         res.status(200).send(response);
     }
