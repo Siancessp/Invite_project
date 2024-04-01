@@ -102,13 +102,24 @@ const addtourDetails = async (req,res)=>
         });
 
         const savedTourDetails = await newTourDetails.save();
+        const tourId = savedTourDetails._id;
+
+
+        const multiData = req.body.multiData; // Array of objects with flexible fields
+        const insertedData = await AnotherTable.insertMany(
+            multiData.map(item => ({
+                tourId: tourId,
+                ...item // Spread operator to include all fields from the request
+            }))
+        );
         
         const response = {
             success: true,
             msg: "Tour added Successfully!",
             data1: savedTourDetails,
             data: {
-                tourId: savedTourDetails._id  // Get the ID of the saved document
+                tourId: savedTourDetails._id,
+                insertedData:insertedData  // Get the ID of the saved document
             }
         }
         res.status(200).send(response);
