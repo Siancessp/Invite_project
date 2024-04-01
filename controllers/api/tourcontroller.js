@@ -155,11 +155,20 @@ const gettourDetails = async (req, res) => {
 
             const tourcategory = await tourCategory.findOne({ _id: tourcategoryId });
 
+            const startDate = new Date(tourDetail.tour_start_date);
+            const endDate = new Date(tourDetail.tour_end_date);
+            const timeDiff = endDate.getTime() - startDate.getTime();
+            const numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
             if (tourtemplate) {
                 const tourDetailsWithUser = {
                     tour_id: tourDetail._id,
                     tourstartdate: getHumanReadableDate(new Date(tourDetail.tour_start_date)),
                     tourenddate: getHumanReadableDate(new Date(tourDetail.tour_end_date)),
+                    numberOfNights: numberOfNights,
+                    numberOfDays: numberOfNights + 1,
+                    tourstarttime: formatTime(tourDetail.tour_start_time),
+                    tourendtime: formatTime(tourDetail.tour_end_time),
                     tourlocation: tourDetail.tour_location,
                     tourtemplate: {
                         tourtemplate_id: tourtemplate._id,
