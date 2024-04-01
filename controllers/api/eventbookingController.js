@@ -52,23 +52,24 @@ const eventbook_adult = async (req, res) => {
         // Now you can use grand total response data for further processing
         const grandTotal = grandTotalResponse.data;
 
-        // Your logic for event booking using the calculated grand total
-        // For example:
-        // const eventBooking = await EventBooking.create({
-        //     user_id: user_id,
-        //     eventBookingDates: eventBookingDates,
-        //     nummberofDays: nummberofDays,
-        //     numberofadult: numberofadult,
-        //     numberofchild: numberofchild,
-        //     grandTotal: grandTotal
-        // });
+        // Convert eventBookingDates array to a single string
+        const formattedEventBookingDates = eventBookingDates.join(", ");
+
+        // Assuming EventBooking is your mongoose model
+        const createdEventBooking = await EventBooking.create({
+            user_id: user_id,
+            eventBookingDates: formattedEventBookingDates,
+            nummberofDays: nummberofDays,
+            numberofadult: numberofadult,
+            numberofchild: numberofchild,
+            grandTotal: grandTotal
+        });
 
         const response = {
             success: true,
-            msg: "Event Booking Successful!",
+            msg: "Event Bookings Successful!",
             data: {
-                // Include event booking details if needed
-                // eventBooking: eventBooking,
+                eventBookingDates: formattedEventBookingDates,
                 grandTotal: grandTotal
             }
         };
@@ -81,6 +82,7 @@ const eventbook_adult = async (req, res) => {
         });
     }
 }
+
 
 
 module.exports = {
