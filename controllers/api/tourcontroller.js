@@ -77,8 +77,9 @@ const tourtemplate = async (req, res) => {
 //After choose a template we have to store data
 const addtourDetails = async (req, res) => {
     try {
-        const tourtemplateid = req.body.tourtemplateid;
         const {
+            user_id,
+            tourtemplateid,
             tourname,
             tour_start_date,
             tour_end_date,
@@ -87,19 +88,18 @@ const addtourDetails = async (req, res) => {
             tour_location,
             tour_price_adult,
             tour_price_child,
-            user_id,
-            tour_descriptions // Added tour_descriptions from req.body
+            tour_descriptions // Array of day details
         } = req.body;
 
-        const baseImageUrl = "/uploads/event_template";
-        const existingTourtemplate = await Tour.findOne({ _id: tourtemplateid });
-
-        if (!existingTourtemplate) {
-            return res.status(404).json({ success: false, msg: 'Template not found' });
+        // Check if tour_descriptions is an array and not empty
+        if (!Array.isArray(tour_descriptions) || tour_descriptions.length === 0) {
+            return res.status(400).json({ success: false, msg: 'Tour descriptions array is required and cannot be empty.' });
         }
 
-        const savedTourDetails = [];
+        // Create an array to hold the created tour details
+        const createdTourDetails = [];
 
+        // Loop through each day's description and create a new TourDetails document
         for (const day of tour_descriptions) {
             const newTourDetails = new TourDetails({
                 user_id: user_id,
@@ -112,25 +112,27 @@ const addtourDetails = async (req, res) => {
                 tour_location: tour_location,
                 tour_price_adult: tour_price_adult,
                 tour_price_child: tour_price_child,
-                tour_description: day.description, // Store the description for the day
-                day_number: day.day // Store the day number
+                tour_description: day.description,
+                day_number: day.day_number
             });
 
-            const savedDetail = await newTourDetails.save();
-            savedTourDetails.push(savedDetail);
+            const savedTourDetails = await newTourDetails.save();
+            createdTourDetails.push(savedTourDetails);
         }
 
         const response = {
             success: true,
-            msg: "Tour added Successfully!",
-            data: savedTourDetails // Include saved tour details in the response
-        }
-        res.status(200).send(response);
+            msg: "Tour details added successfully!",
+            data: createdTourDetails
+        };
+
+        res.status(200).json(response);
     } catch (error) {
         console.error(error);
-        return res.status(500).send({ success: false, msg: "Internal Server Error" });
+        return res.status(500).json({ success: false, msg: "Internal Server Error" });
     }
 };
+
 
 const getHumanReadableDate = (date) => {
     if (date instanceof Date) {
