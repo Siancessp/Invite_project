@@ -21,12 +21,12 @@ const calculateGrandTotalPrice = async (req,res) =>
         const child_price = storedeventData.event_price_child;
 
 
-        let grandTotalAdults = numberofadult * storedeventData.adult_price * nummberofDays;
+        let grandTotalAdults = numberofadult * adult_price * nummberofDays;
 
         // Calculate grand total for children only if numberOfChildren is present
         let grandTotalChildren = 0;
         if (numberofchild) {
-            grandTotalChildren = nummberofDays * storedeventData.child_price * nummberofDays;
+            grandTotalChildren = numberofchild * child_price * nummberofDays;
         }
 
         // Calculate total price
