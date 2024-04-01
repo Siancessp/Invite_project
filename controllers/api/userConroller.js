@@ -117,53 +117,46 @@ const getprofile = async (req, res) => {
 };
 
 
-// const updateprofileById = async (req, res) => {
-//     const { fullname, mobile, email, user_bio, user_id } = req.body;
+const updateprofileById = async (req, res) => {
+    const { fullname, mobile, email, user_bio, user_id } = req.body;
+    const backgroundImageFilename = req.file.background_image;
+    const profileImageFilename = req.file.profile_image;
 
-//     try {
-//         // Check if profile_image and background_image files are uploaded
-//         if (!req.files || !req.files['profile_image'] || !req.files['background_image']) {
-//             return res.status(400).json({ success: false, msg: "Please upload both profile_image and background_image" });
-//         }
 
-//         // Get filenames of the uploaded files
-//         const profileImageFilename = req.files['profile_image'][0].filename;
-//         const backgroundImageFilename = req.files['background_image'][0].filename;
+    try {
+        const updatedRegister = await userRegister.findOneAndUpdate(
+            { _id: user_id },
+            {
+                $set: {
+                    fullname,
+                    mobile,
+                    email,
+                    user_bio,
+                    profile_image: profileImageFilename,
+                    background_image: backgroundImageFilename
+                }
+            },
+            { new: true } // Return the updated document
+        );
 
-//         // Update user profile in the database
-//         const updatedRegister = await userRegister.findOneAndUpdate(
-//             { _id: user_id },
-//             {
-//                 $set: {
-//                     fullname,
-//                     mobile,
-//                     email,
-//                     user_bio,
-//                     profile_image: profileImageFilename,
-//                     background_image: backgroundImageFilename
-//                 }
-//             },
-//             { new: true } // Return the updated document
-//         );
+        if (!updatedRegister) {
+            return res.status(404).json({ success: false, msg: "User not found" });
+        }
 
-//         if (!updatedRegister) {
-//             return res.status(404).json({ success: false, msg: "User not found" });
-//         }
+        const response = {
+            success: true,
+            msg: "User updated successfully",
+            data: {
+                updatedRegister
+            }
+        };
+        res.status(200).json(response);
 
-//         const response = {
-//             success: true,
-//             msg: "User updated successfully",
-//             data: {
-//                 updatedRegister
-//             }
-//         };
-//         res.status(200).json(response);
-
-//     } catch (error) {
-//         console.error(error);
-//         return res.status(500).json({ success: false, msg: "Error updating user data", error: error.message });
-//     }
-// };
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, msg: "Error updating user data", error: error.message });
+    }
+};
 
 
 const user_login = async (req, res) => {
@@ -208,5 +201,5 @@ module.exports = {
     insertuserData,
     user_login,
     getprofile,
-    // updateprofileById
+    updateprofileById
 }
