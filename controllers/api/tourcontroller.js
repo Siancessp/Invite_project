@@ -189,10 +189,16 @@ const gettourDetails = async (req, res) => {
 const getalltourdetailsbyid = async (req, res) => {
     try {
         const tourid = req.params.tourid;
+        
+        // Validate if tourid is a valid ObjectId
+        if (!ObjectId.isValid(tourid)) {
+            return res.status(400).json({ success: false, msg: 'Invalid tour ID' });
+        }
+
         const existedTourDetails = await TourDetails.findOne({ _id: tourid });
 
         if (!existedTourDetails) {
-            return res.status(404).json({ success: false, msg: 'Event Details not found' });
+            return res.status(404).json({ success: false, msg: 'Tour Details not found' });
         }
 
         const tourtemplatebackground = await weakEnd.findOne({ _id: existedTourDetails.tourtemplateid });
