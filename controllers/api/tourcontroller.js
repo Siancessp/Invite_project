@@ -3,6 +3,8 @@ const app = express();
 const bcryptjs = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const config = require("../../config/config");
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
 
 const tourCategory = require("../../models/tourcategoryModel");
 const Tour = require("../../models/addtourcategoryModel");
@@ -191,7 +193,9 @@ const getalltourdetailsbyid = async (req, res) => {
         const tourid = req.params.tourid;
         
         // Validate if tourid is a valid ObjectId
-      
+        if (!ObjectId.isValid(tourid)) {
+            return res.status(400).json({ success: false, msg: 'Invalid tour ID' });
+        }
 
         const existedTourDetails = await TourDetails.findOne({ _id: tourid });
 
