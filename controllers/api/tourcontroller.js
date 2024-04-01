@@ -154,16 +154,15 @@ const gettourDetails = async (req, res) => {
             const tourcategoryId = tourtemplate.tourcategoryid;
 
             const tourcategory = await tourCategory.findOne({ _id: tourcategoryId });
-
+            
             const startDateTime = new Date(tourDetail.tour_start_date + "T" + tourDetail.tour_start_time).getTime();
             const endDateTime = new Date(tourDetail.tour_end_date + "T" + tourDetail.tour_end_time).getTime();
 
-            // Calculate total duration in hours
             const timeDiffHours = (endDateTime - startDateTime) / (1000 * 3600);
 
             // Calculate total days and nights based on user input
             const numberOfDays = Math.min(timeDiffHours, Math.ceil(timeDiffHours / 24)); // Maximum of user-provided days or actual days
-            const numberOfNights = Math.min(timeDiffHours, numberOfDays - 1);
+            const numberOfNights = Math.max(0, numberOfDays - 1);
 
             if (tourtemplate) {
                 const tourDetailsWithUser = {
