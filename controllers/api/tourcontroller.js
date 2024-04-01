@@ -201,7 +201,7 @@ const getalltourdetailsbyid = async (req, res) => {
             return res.status(404).json({ success: false, msg: 'Tour Details not found' });
         }
 
-        const tourtemplatebackground = await weakEnd.findOne({ _id: existedTourDetails.tourtemplateid });
+        const tourtemplatebackground = await Tour.findOne({ _id: existedTourDetails.tourtemplateid });
         const tourcategoryId = tourtemplatebackground.tourcategoryid;
 
         const tourcategory = await tourCategory.findOne({ _id: tourcategoryId });
