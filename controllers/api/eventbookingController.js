@@ -16,11 +16,18 @@ const calculateGrandTotalPrice = async (req,res) =>
         if (!storedeventData) {
             throw new Error("Event not found");
         }
+
+        const adult_price = storedeventData.event_price_adult;
+        const child_price = storedeventData.event_price_child;
+
+
+        const grand_total = numberofadult * adult_price * nummberofDays;
+
         const response = {
             success: true,
             msg: "Events Fetched Successfully!",
             data: storedeventData,
-            data2:storedeventData.event_price_adult
+            data2:grand_total
         };
         res.status(200).send(response);
     }
