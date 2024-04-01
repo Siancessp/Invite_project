@@ -77,12 +77,10 @@ const tourtemplate = async (req, res) => {
 };
 
 //After choose a template we have to store data
-const addtourDetails = async (req,res)=>
-{
+const addtourDetails = async (req, res) => {
     try {
-        const tourtemplateid = req.body.tourtemplateid;
-        const { tourdescription, tourname, tour_start_date, tour_end_date, tour_start_time, tour_end_time, tour_location, tour_price_adult,tour_price_child, user_id } = req.body;
-        const baseImageUrl = "/uploads/event_template";
+        const { tourtemplateid, tourdescription, tourname, tour_start_date, tour_end_date, tour_start_time, tour_end_time, tour_location, tour_price_adult, tour_price_child, user_id, multiData } = req.body;
+        
         const existingTourtemplate = await Tour.findOne({ _id: tourtemplateid });
 
         if (!existingTourtemplate) {
@@ -106,7 +104,6 @@ const addtourDetails = async (req,res)=>
         const savedTourDetails = await newTourDetails.save();
         const tourId = savedTourDetails._id;
 
-        const multiData = req.body.multiData;
         const insertedData = await ActivityTable.insertMany(
             multiData.map(item => ({
                 tourId: tourId,
@@ -120,7 +117,7 @@ const addtourDetails = async (req,res)=>
             data1: savedTourDetails,
             data: {
                 tourId: savedTourDetails._id,
-                insertedData:insertedData  // Get the ID of the saved document
+                insertedData: insertedData  // Get the ID of the saved document
             }
         }
         res.status(200).send(response);
