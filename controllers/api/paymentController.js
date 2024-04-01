@@ -10,8 +10,10 @@ const Payment = require("../../models/api/paymentModel");
 const dotenv = require('dotenv');
 dotenv.config();
 
-const RAZORPAY_API_KEY = process.env.RAZORPAY_API_KEY;
-const RAZORPAY_SECRET_KEY = process.env.RAZORPAY_SECRET_KEY;
+const razorpayInstance = new Razorpay({
+    key_id: process.env.RAZORPAY_API_KEY,
+    key_secret: process.env.RAZORPAY_SECRET_KEY
+});
 
 const checkout = async (req, res) => {
     try {
@@ -30,8 +32,12 @@ const checkout = async (req, res) => {
             status_code: status_code
         };
 
+        // Create a new Payment instance
         const newPayment = new Payment(paymentData);
+
+        // Save the payment data to the database
         const savedPayment = await newPayment.save();
+
         res.status(201).json({
             status: true,
             order: order,

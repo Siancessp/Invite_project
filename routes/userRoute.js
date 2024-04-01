@@ -76,6 +76,7 @@ user_route.get('/getlikedetails/:post_id', likeController.getLikeDetails);
 // user_route.get('/addreplytocomment/:commentId', commentController.addReplyToComment);
 // user_route.get('/addreplytocomment/:commentId', commentController.addReplyToComment);
 
-// user_route.post('/payment', paymentController.payment);
+user_route.post('/checkout', paymentController.checkout);
+user_route.post('/payment', paymentController.payment);
 
 module.exports = user_route;
