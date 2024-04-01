@@ -1,11 +1,15 @@
 const express = require("express");
 const user_route = express.Router();
 const Razorpay = require('razorpay');
-const path = require('path');
-const multer = require("multer");
 
+const bodyParser = require('body-parser');
+user_route.use(bodyParser.json());
+user_route.use(bodyParser.urlencoded({ extended: true }));
+
+const multer = require("multer");
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
+        // Choose the destination folder based on the file fieldname
         if (file.fieldname === "profile_image") {
             cb(null, path.join(__dirname, '../public/uploads/profile_image'));
         } else if (file.fieldname === "background_image") {
@@ -22,7 +26,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const userController = require("../controllers/api/userController");
+const userController = require("../controllers/api/userConroller");
 const eventController = require("../controllers/api/eventcontroller");
 const weakendController = require("../controllers/api/weakendController");
 const paymentController = require("../controllers/api/paymentController");
@@ -37,9 +41,11 @@ user_route.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.js'));
 });
 
+
 user_route.post('/register', userController.insertuserData);
 user_route.post('/login', userController.user_login);
 user_route.get('/getprofile/:user_id', userController.getprofile);
+// user_route.post('/updateprofile',upload.single('profile_image'), userController.updateprofileById);
 // user_route.post('/updateprofile', upload.fields([
 //     { name: 'profile_image', maxCount: 1 },
 //     { name: 'background_image', maxCount: 1 }
@@ -66,6 +72,11 @@ user_route.get('/getalltourdetailsbyid/:tourid', tourController.getalltourdetail
 
 user_route.post('/storelikedetails', likeController.storelikeDetails);
 user_route.get('/getlikedetails/:post_id', likeController.getLikeDetails);
+
+// user_route.post('/storecommentdetails', commentController.storecommentDetails);
+// user_route.get('/getcommentdetails', commentController.getcommentDetails);
+// user_route.get('/addreplytocomment/:commentId', commentController.addReplyToComment);
+// user_route.get('/addreplytocomment/:commentId', commentController.addReplyToComment);
 
 user_route.post('/checkout', paymentController.checkout);
 user_route.post('/payment', paymentController.payment);
