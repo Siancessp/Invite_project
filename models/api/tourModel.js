@@ -13,18 +13,10 @@ const tourregisterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    tour_descriptions: [
-        {
-            day_number: {
-                type: Number,
-                required: true
-            },
-            description: {
-                type: String,
-                required: true
-            }
-        }
-    ],
+    tourdescription: {
+        type: String,
+        required: true
+    },
     tour_start_date: {
         type: String,
         required: true
