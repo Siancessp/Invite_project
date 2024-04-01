@@ -191,9 +191,7 @@ const getalltourdetailsbyid = async (req, res) => {
         const tourid = req.params.tourid;
         
         // Validate if tourid is a valid ObjectId
-        if (!ObjectId.isValid(tourid)) {
-            return res.status(400).json({ success: false, msg: 'Invalid tour ID' });
-        }
+      
 
         const existedTourDetails = await TourDetails.findOne({ _id: tourid });
 
