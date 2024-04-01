@@ -106,8 +106,6 @@ const addtourDetails = async (req,res)=>
         const savedTourDetails = await newTourDetails.save();
         const tourId = savedTourDetails._id;
 
-
-        const multiData = req.body.multiData; // Array of objects with flexible fields
         const insertedData = await ActivityTable.insertMany(
             multiData.map(item => ({
                 tourId: tourId,
