@@ -188,8 +188,8 @@ const gettourDetails = async (req, res) => {
 
 const getalltourdetailsbyid = async (req, res) => {
     try {
-        const eventid = req.params.eventid;
-        const existedTourDetails = await TourDetails.findOne({ _id: eventid });
+        const tourid = req.params.tourid;
+        const existedTourDetails = await TourDetails.findOne({ _id: tourid });
 
         if (!existedTourDetails) {
             return res.status(404).json({ success: false, msg: 'Event Details not found' });
