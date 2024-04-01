@@ -106,7 +106,7 @@ const addtourDetails = async (req,res)=>
         const response = {
             success: true,
             msg: "Tour added Successfully!",
-            data: savedTourDetails,
+            data1: savedTourDetails,
             data: {
                 tourId: savedTourDetails._id  // Get the ID of the saved document
             }
