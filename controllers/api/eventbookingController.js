@@ -30,13 +30,13 @@ const calculateGrandTotalPrice = async (req,res) =>
         }
 
         // Calculate total price
-        let grandTotal = grandTotalAdults + grandTotalChildren;
+        let grandTotals = grandTotalAdults + grandTotalChildren;
 
         const response = {
             success: true,
             msg: "Events Fetched Successfully!",
             data: storedeventData,
-            data2:grandTotal
+            data2:grandTotals
         };
         res.status(200).send(response);
     }
