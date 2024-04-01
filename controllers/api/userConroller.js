@@ -119,9 +119,7 @@ const getprofile = async (req, res) => {
 
 const updateprofileById = async (req, res) => {
     const { fullname, mobile, email, user_bio, user_id } = req.body;
-    const backgroundImageFilename = req.file.background_image;
-    const profileImageFilename = req.file.profile_image;
-
+    const { profile_image, background_image } = req.files;
 
     try {
         const updatedRegister = await userRegister.findOneAndUpdate(
@@ -132,8 +130,8 @@ const updateprofileById = async (req, res) => {
                     mobile,
                     email,
                     user_bio,
-                    profile_image: profileImageFilename,
-                    background_image: backgroundImageFilename
+                    profile_image: profile_image ? profile_image[0].filename : null,
+                    background_image: background_image ? background_image[0].filename : null
                 }
             },
             { new: true } // Return the updated document
@@ -157,6 +155,7 @@ const updateprofileById = async (req, res) => {
         return res.status(500).json({ success: false, msg: "Error updating user data", error: error.message });
     }
 };
+
 
 
 const user_login = async (req, res) => {
