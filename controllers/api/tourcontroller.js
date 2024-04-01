@@ -157,8 +157,20 @@ const gettourDetails = async (req, res) => {
 
             const startDate = new Date(tourDetail.tour_start_date);
             const endDate = new Date(tourDetail.tour_end_date);
+
+            // Calculate time difference in milliseconds
             const timeDiff = endDate.getTime() - startDate.getTime();
-            const numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            // Calculate number of nights
+            const numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24)); // Convert milliseconds to days
+
+            // Calculate number of days
+            const startDateTime = startDate.getTime();
+            const endDateTime = endDate.getTime();
+
+            // Calculate time difference in hours
+            const timeDiffHours = (endDateTime - startDateTime) / (1000 * 3600);
+            const numberOfDays = Math.ceil(timeDiffHours / 24);
 
             if (tourtemplate) {
                 const tourDetailsWithUser = {
@@ -166,7 +178,7 @@ const gettourDetails = async (req, res) => {
                     tourstartdate: getHumanReadableDate(new Date(tourDetail.tour_start_date)),
                     tourenddate: getHumanReadableDate(new Date(tourDetail.tour_end_date)),
                     numberOfNights: numberOfNights,
-                    numberOfDays: numberOfNights + 1,
+                    numberOfDays: numberOfDays,
                     tourstarttime: formatTime(tourDetail.tour_start_time),
                     tourendtime: formatTime(tourDetail.tour_end_time),
                     tourlocation: tourDetail.tour_location,
