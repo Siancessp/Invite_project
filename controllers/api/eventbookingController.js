@@ -5,15 +5,23 @@ const jwt = require("jsonwebtoken");
 const config = require("../../config/config");
 
 const EventBooking = require("../../models/api/eventbookingModel");
+const EventDetails = require("../../models/api/eventModel");
 
 const calculateGrandTotalPrice = async (nummberofDays, numberofadult, numberofchild, eventid) =>
 {
+    const { eventid } = req.body;
     try
     {
-        const storedeventId = await EventTemplate.findById(eventid);
+        const storedeventId = await EventDetails.findById(eventid);
         if (!storedeventId) {
             throw new Error("Event not found");
         }
+        const response = {
+            success: true,
+            msg: "Events Fetched Successfully!",
+            data: storedeventId
+        };
+        res.status(200).send(response);
     }
     catch (error) {
         throw new Error("Failed to calculate total price");
