@@ -10,7 +10,7 @@ const eventbookingSchema = new mongoose.Schema({
         required: true
     },
     eventBookingDates: {
-        type: String,
+        type: [Date], // Changed to array of Date objects
         required: true
     },
     numberofadult: {

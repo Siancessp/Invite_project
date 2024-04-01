@@ -53,7 +53,7 @@ const eventbook_adult = async (req, res) => {
         const grandTotal = grandTotalResponse.data;
 
         // Convert eventBookingDates array to a single string
-        const formattedEventBookingDates = eventBookingDates.split(", ").map(date => new Date(date));
+        const formattedEventBookingDates = eventBookingDates.map(date => new Date(date))
 
         // Assuming EventBooking is your mongoose model
         const createdEventBooking = await EventBooking.create({
