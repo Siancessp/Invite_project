@@ -91,13 +91,6 @@ const addtourDetails = async (req, res) => {
             tour_descriptions // Added tour_descriptions from req.body
         } = req.body;
 
-        const baseImageUrl = "/uploads/event_template";
-        const existingTourtemplate = await Tour.findOne({ _id: tourtemplateid });
-
-        if (!existingTourtemplate) {
-            return res.status(404).json({ success: false, msg: 'Tour not found' });
-        }
-
         const savedTourDetails = [];
 
         for (const day of tour_descriptions) {
