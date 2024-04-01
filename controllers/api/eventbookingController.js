@@ -7,7 +7,7 @@ const config = require("../../config/config");
 const EventBooking = require("../../models/api/eventbookingModel");
 const EventDetails = require("../../models/api/eventModel");
 
-const calculateGrandTotalPrice = async (nummberofDays, numberofadult, numberofchild, eventid) =>
+const calculateGrandTotalPrice = async (req,res) =>
 {
     const { eventid } = req.body;
     try
