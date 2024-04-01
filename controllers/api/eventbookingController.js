@@ -9,17 +9,18 @@ const EventDetails = require("../../models/api/eventModel");
 
 const calculateGrandTotalPrice = async (req,res) =>
 {
-    const { eventid } = req.body;
+    const { eventid,nummberofDays,numberofadult,numberofchild } = req.body;
     try
     {
-        const storedeventId = await EventDetails.findById(eventid);
-        if (!storedeventId) {
+        const storedeventData = await EventDetails.findById(eventid);
+        if (!storedeventData) {
             throw new Error("Event not found");
         }
         const response = {
             success: true,
             msg: "Events Fetched Successfully!",
-            data: storedeventId
+            data: storedeventData,
+            data2:storedeventData.event_price_adult
         };
         res.status(200).send(response);
     }
