@@ -107,15 +107,11 @@ const addtourDetails = async (req, res) => {
             tour_location: tour_location,
             tour_price_adult: tour_price_adult,
             tour_price_child: tour_price_child,
-            tour_description: day.description,
+            tour_description: tour_descriptions,
             day_number: day.day_number
         }));
 
-        console.log("Tour Details Array:", tourDetailsArray); // Log to check tourDetailsArray
-
         const createdTourDetails = await TourDetails.insertMany(tourDetailsArray);
-
-        console.log("Created Tour Details:", createdTourDetails); // Log to check createdTourDetails
 
         const response = {
             success: true,
@@ -129,7 +125,6 @@ const addtourDetails = async (req, res) => {
         return res.status(500).json({ success: false, msg: "Internal Server Error" });
     }
 };
-
 
 
 
