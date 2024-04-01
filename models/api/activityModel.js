@@ -6,9 +6,9 @@ const activityTableSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
-    dynamicFields: {
-        type: Schema.Types.Mixed,
-        required: true
+    activityData: {
+        type: Map,
+        of: mongoose.Schema.Types.Mixed
     }
 });
 
