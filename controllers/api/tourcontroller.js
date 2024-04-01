@@ -107,7 +107,7 @@ const addtourDetails = async (req, res) => {
             tour_location: tour_location,
             tour_price_adult: tour_price_adult,
             tour_price_child: tour_price_child,
-            tour_description: tour_descriptions,
+            tour_description: day.description,
             day_number: day.day_number
         }));
 
