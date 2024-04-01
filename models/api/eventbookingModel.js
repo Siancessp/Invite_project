@@ -10,7 +10,7 @@ const eventbookingSchema = new mongoose.Schema({
         required: true
     },
     eventBookingDates: {
-        type: Date,
+        type: String,
         required: true
     },
     numberofadult: {
