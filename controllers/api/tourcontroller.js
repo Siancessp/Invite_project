@@ -104,12 +104,13 @@ const addtourDetails = async (req, res) => {
         const savedTourDetails = await newTourDetails.save();
         const tourId = savedTourDetails._id;
 
-        const insertedData = await ActivityTable.insertMany(
-            multiData.map(item => ({
-                tourId: tourId,
-                ...item // Spread operator to include all fields from the request
-            }))
-        );
+        const activityDocs = multiData.map(item => ({
+            tourId: tourId,
+            ...item // Spread operator to include all fields from each item in multiData
+        }));
+
+        // Insert activity data into ActivityTable
+        const insertedData = await ActivityTable.insertMany(activityDocs);
         
         const response = {
             success: true,
