@@ -111,7 +111,11 @@ const addtourDetails = async (req, res) => {
             day_number: day.day_number
         }));
 
+        console.log("Tour Details Array:", tourDetailsArray); // Log to check tourDetailsArray
+
         const createdTourDetails = await TourDetails.insertMany(tourDetailsArray);
+
+        console.log("Created Tour Details:", createdTourDetails); // Log to check createdTourDetails
 
         const response = {
             success: true,
@@ -125,6 +129,7 @@ const addtourDetails = async (req, res) => {
         return res.status(500).json({ success: false, msg: "Internal Server Error" });
     }
 };
+
 
 
 
