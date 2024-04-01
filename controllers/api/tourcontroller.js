@@ -96,29 +96,22 @@ const addtourDetails = async (req, res) => {
             return res.status(400).json({ success: false, msg: 'Tour descriptions array is required and cannot be empty.' });
         }
 
-        // Create an array to hold the created tour details
-        const createdTourDetails = [];
+        const tourDetailsArray = tour_descriptions.map(day => ({
+            user_id: user_id,
+            tourtemplateid: tourtemplateid,
+            tourname: tourname,
+            tour_start_date: tour_start_date,
+            tour_end_date: tour_end_date,
+            tour_start_time: tour_start_time,
+            tour_end_time: tour_end_time,
+            tour_location: tour_location,
+            tour_price_adult: tour_price_adult,
+            tour_price_child: tour_price_child,
+            tour_description: day.description,
+            day_number: day.day_number
+        }));
 
-        // Loop through each day's description and create a new TourDetails document
-        for (const day of tour_descriptions) {
-            const newTourDetails = new TourDetails({
-                user_id: user_id,
-                tourtemplateid: tourtemplateid,
-                tourname: tourname,
-                tour_start_date: tour_start_date,
-                tour_end_date: tour_end_date,
-                tour_start_time: tour_start_time,
-                tour_end_time: tour_end_time,
-                tour_location: tour_location,
-                tour_price_adult: tour_price_adult,
-                tour_price_child: tour_price_child,
-                tour_description: day.description,
-                day_number: day.day_number
-            });
-
-            const savedTourDetails = await newTourDetails.save();
-            createdTourDetails.push(savedTourDetails);
-        }
+        const createdTourDetails = await TourDetails.insertMany(tourDetailsArray);
 
         const response = {
             success: true,
@@ -132,6 +125,7 @@ const addtourDetails = async (req, res) => {
         return res.status(500).json({ success: false, msg: "Internal Server Error" });
     }
 };
+
 
 
 const getHumanReadableDate = (date) => {
