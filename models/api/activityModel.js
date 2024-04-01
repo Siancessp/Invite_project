@@ -8,7 +8,9 @@ const activityTableSchema = new Schema({
     },
     activityData: {
         type: Map,
-        of: mongoose.Schema.Types.Mixed
+        of: {
+            type: Schema.Types.Mixed
+        }
     }
 });
 
