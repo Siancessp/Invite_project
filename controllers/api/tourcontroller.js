@@ -11,6 +11,8 @@ const Tour = require("../../models/addtourcategoryModel");
 const TourDetails = require("../../models/api/tourModel");
 const userRegister = require("../../models/api/userregisterModel");
 
+const ActivityTable = require("../../models/api/activityModel");
+
 const securePassword = async (password) => {
     try {
         const passwordHash = await bcryptjs.hash(password, 10); // You need to specify the salt rounds
@@ -106,7 +108,7 @@ const addtourDetails = async (req,res)=>
 
 
         const multiData = req.body.multiData; // Array of objects with flexible fields
-        const insertedData = await AnotherTable.insertMany(
+        const insertedData = await ActivityTable.insertMany(
             multiData.map(item => ({
                 tourId: tourId,
                 ...item // Spread operator to include all fields from the request
