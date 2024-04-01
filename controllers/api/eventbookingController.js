@@ -7,13 +7,15 @@ const config = require("../../config/config");
 const EventBooking = require("../../models/api/eventbookingModel");
 const EventDetails = require("../../models/api/eventModel");
 
-const calculateGrandTotalPrice = async (req,res,eventid,nummberofDays,numberofadult,numberofchild) =>
-{
-    try
-    {
+const calculateGrandTotalPrice = async (eventid, nummberofDays, numberofadult, numberofchild) => {
+    try {
         const storedeventData = await EventDetails.findById(eventid);
         if (!storedeventData) {
-            throw new Error("Event not found");
+            return {
+                success: false,
+                msg: "Event not found",
+                data: null
+            };
         }
         const adult_price = storedeventData.event_price_adult;
         const child_price = storedeventData.event_price_child;
@@ -24,23 +26,25 @@ const calculateGrandTotalPrice = async (req,res,eventid,nummberofDays,numberofad
         }
         let grandTotals = grandTotalAdults + grandTotalChildren;
 
-        const response = {
+        return {
             success: true,
             msg: "GrandTotal Fetched Successfully!",
             data: grandTotals
         };
-        res.status(200).send(response);
-    }
-    catch (error) {
-        throw new Error("Failed to calculate total price");
+    } catch (error) {
+        return {
+            success: false,
+            msg: "Failed to calculate total price",
+            error: error.message
+        };
     }
 }
 
 const eventbook_adult = async (req, res) => {
-    const { user_id, eventBookingDates, nummberofDays, numberofadult, numberofchild,eventid } = req.body;
+    const { user_id, eventBookingDates, nummberofDays, numberofadult, numberofchild, eventid } = req.body;
     try {
         // Call calculateGrandTotalPrice function
-        const grandTotalResponse = await calculateGrandTotalPrice(req, res,eventid,nummberofDays,numberofadult,numberofchild);
+        const grandTotalResponse = await calculateGrandTotalPrice(eventid, nummberofDays, numberofadult, numberofchild);
 
         // Now you can use grand total response data for further processing
         const grandTotal = grandTotalResponse.data;
@@ -74,6 +78,7 @@ const eventbook_adult = async (req, res) => {
         });
     }
 }
+
 
 module.exports = {
     calculateGrandTotalPrice,
