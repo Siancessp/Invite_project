@@ -89,6 +89,8 @@ const payment = async (req, res) => {
                 { $set: { status: "capture" } }
             );
 
+            console.log("Update Transaction Result:", updateTransactionResult);
+
             if (updateTransactionResult.nModified === 0) {
                 // If no documents were modified, handle it as an error
                 throw new Error("Status not updated to 'capture'");
