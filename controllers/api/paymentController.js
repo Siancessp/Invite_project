@@ -89,30 +89,7 @@ const payment = async (req, res) =>
                 { $set: { status: "capture" } }
             );
 
-            if (update_transaction.nModified > 0) {
-                const eventData = await eventBooking.find({ user_id });
-
-                const newBooking = await Booking.create({
-                    user_id: user_id,
-                    status_code:req.body.status_code,
-                    bookedevent_id: eventData.map(event => event._id), // Store the event IDs in bookedevent_id
-                    nummberofDays: eventData.map(event => event.nummberofDays), // Store the number of days from events
-                    BookingDates: eventData.map(event => event.eventBookingDates).flat(), // Store all event booking dates
-                    numberofadult: eventData.map(event => event.numberofadult), // Store the number of adults from events
-                    numberofchild: eventData.map(event => event.numberofchild), // Store the number of children from events
-                    grandtotalprice: eventData.map(event => event.grandtotalprice) // Store the total price from events
-                });
-        
-                // Make the eventBookingDates empty for the user
-                if (newBooking) {
-                    await eventBooking.updateMany({ user_id }, { $unset: { eventBookingDates: "" } });
-                    return res.status(200).json({ success: true, message: 'Payment captured successfully and booking created. Event table emptied.' });
-                } else {
-                    return res.status(500).json({ success: false, message: 'Failed to create booking' });
-                }
-            } else {
-                return res.status(400).json({ success: false, message: 'Failed to capture payment' });
-            }
+           
         } catch (error) {
             console.error(error);
             return res.status(500).json({ success: false, message: 'Server Error' });
