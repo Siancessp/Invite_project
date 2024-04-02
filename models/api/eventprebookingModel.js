@@ -14,9 +14,9 @@ const eventprebookingSchema = new mongoose.Schema({
         required: true
     },
     eventBookingDates: {
-        type: [Date], // Changed to array of Date objects
+        type: [String], // Array of date strings
         required: true
-    },
+      },
     numberofadult: {
         type: String,
         required: true
