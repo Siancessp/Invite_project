@@ -6,22 +6,22 @@ const eventbookingSchema = new mongoose.Schema({
         required: true
     },
     nummberofDays: {
-        type: String,
+        type: Number, // Changed to Number for numerical values
         required: true
     },
     eventBookingDates: {
-        type: [Date], // Changed to array of Date objects
+        type: [Date], // Array of Date objects
         required: true
     },
     numberofadult: {
-        type: String,
+        type: Number, // Changed to Number for numerical values
         required: true
     },
     numberofchild: {
-        type: String
+        type: Number // Changed to Number for numerical values
     },
     grandtotalprice: {
-        type: String,
+        type: Number, // Changed to Number for numerical values
         required: true
     }
 });
