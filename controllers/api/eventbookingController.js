@@ -146,7 +146,7 @@ const getAllEventBookings = async (req, res) => {
         const formattedEventBooking = {
             ...eventBooking._doc,
             eventBookingDates: formattedDates,
-            event:event
+            event:event.eventname
         };
 
         res.status(200).json({
