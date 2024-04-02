@@ -81,7 +81,7 @@ const payment = async (req, res) => {
 
         console.log("Update Transaction:", update_transaction);
 
-        if (update_transaction.nModified > 0) {
+        if (update_transaction) {
             const eventData = await eventBooking.find({ user_id });
 
             const newBooking = await Booking.create({
