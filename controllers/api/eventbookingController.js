@@ -56,8 +56,13 @@ const eventbook_adult = async (req, res) => {
 
             existingBooking.eventBookingDates = formattedEventBookingDates;
             existingBooking.nummberofDays = nummberofDays;
-            existingBooking.numberofadult = buttonClicked === 1 ? numberofadult : existingBooking.numberofadult;
-            existingBooking.numberofchild = buttonClicked === 2 ? numberofchild : existingBooking.numberofchild;
+
+            if (buttonClicked === 1) {
+                existingBooking.numberofadult = numberofadult > 0 ? numberofadult : 0;
+            } else if (buttonClicked === 2) {
+                existingBooking.numberofchild = numberofchild > 0 ? numberofchild : 0;
+            }
+
             existingBooking.grandtotalprice = grandTotal;
 
             await existingBooking.save();
@@ -83,8 +88,8 @@ const eventbook_adult = async (req, res) => {
                 eventid: eventid,
                 eventBookingDates: formattedEventBookingDates,
                 nummberofDays: nummberofDays,
-                numberofadult: buttonClicked === 1 ? numberofadult : 0,
-                numberofchild: buttonClicked === 2 ? numberofchild : 0,
+                numberofadult: buttonClicked === 1 ? (numberofadult > 0 ? numberofadult : 0) : 0,
+                numberofchild: buttonClicked === 2 ? (numberofchild > 0 ? numberofchild : 0) : 0,
                 grandtotalprice: grandTotal
             });
 
@@ -105,6 +110,7 @@ const eventbook_adult = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 
 
