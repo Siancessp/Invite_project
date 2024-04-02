@@ -31,11 +31,7 @@ const checkout = async (req, res) => {
             razorpay_order_id: order.id,
             status_code: status_code
         };
-
-        // Create a new Payment instance
         const newPayment = new Payment(paymentData);
-
-        // Save the payment data to the database
         const savedPayment = await newPayment.save();
 
         res.status(201).json({

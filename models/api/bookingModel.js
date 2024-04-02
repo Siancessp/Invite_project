@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
-const eventprebookingSchema = new mongoose.Schema({
+const bookingSchema = new mongoose.Schema({
     user_id: {
         type: String,
         required: true
     },
-    event_id: {
+    bookedevent_id: {
         type: String,
         required: true
     },
@@ -13,7 +13,7 @@ const eventprebookingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    eventBookingDates: {
+    BookingDates: {
         type: [String], // Array of date strings
         required: true
       },
@@ -30,6 +30,6 @@ const eventprebookingSchema = new mongoose.Schema({
     }
 });
 
-const eventprebookingdetails = mongoose.model("EventpreBooking", eventprebookingSchema);
+const bookingdetails = mongoose.model("Booking", bookingSchema);
 
-module.exports = eventprebookingdetails;
+module.exports = bookingdetails;
