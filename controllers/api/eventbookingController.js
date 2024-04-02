@@ -48,7 +48,7 @@ const eventbook_adult = async (req, res) => {
     try {
         const grandTotalResponse = await calculateGrandTotalPrice(eventid, nummberofDays, numberofadult, numberofchild);
 
-        const grandTotal = grandTotalResponse.data.grandtotalprice;
+        const grandtotalprice = grandTotalResponse.data.grandtotalprice;
 
         const formattedEventBookingDates = eventBookingDates.map(date => new Date(date))
 
@@ -58,7 +58,7 @@ const eventbook_adult = async (req, res) => {
             nummberofDays: nummberofDays, // Use as it is if nummberofDays is a String
             numberofadult: numberofadult, // Use as it is if numberofadult is a String
             numberofchild: numberofchild, // Use as it is if numberofchild is a String
-            grandtotalprice: grandTotal // Use the exact field name from the schema
+            grandtotalprice: grandtotalprice // Use the exact field name from the schema
         });
 
         const response = {
@@ -66,7 +66,7 @@ const eventbook_adult = async (req, res) => {
             msg: "Event Bookings Successful!",
             data: {
                 eventBookingDates: formattedEventBookingDates,
-                grandTotal: grandTotal
+                grandTotal: grandtotalprice
             }
         };
         res.status(200).send(response);
