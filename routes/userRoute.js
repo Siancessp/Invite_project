@@ -47,8 +47,8 @@ user_route.post('/login', userController.user_login);
 user_route.get('/getprofile/:user_id', userController.getprofile);
 // user_route.post('/updateprofile',upload.single('profile_image'), userController.updateprofileById);
 user_route.post('/updateprofile', upload.fields([
-    { name: 'profile_image', maxCount: 1 },
-    { name: 'background_image', maxCount: 1 }
+    { name: 'profile_image'},
+    { name: 'background_image'}
 ]), userController.updateprofileById);
 
 user_route.get('/eventtemplate/:categoryid', eventController.eventtemplate);
