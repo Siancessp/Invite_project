@@ -140,7 +140,7 @@ const getAllEventBookings = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            msg: "Event Booking found",
+            msg: "Booking found",
             data: formattedEventBooking
         });
     } catch (error) {
