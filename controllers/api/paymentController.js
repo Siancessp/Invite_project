@@ -63,7 +63,7 @@ const payment = async (req, res) =>
     let error = "Payment Failed";
 
     try {
-        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature,status_code } = req.body;
 
         const update = await Payment.updateOne(
             { razorpay_order_id, user_id },
