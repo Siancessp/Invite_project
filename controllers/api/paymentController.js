@@ -64,44 +64,51 @@ const payment = async (req, res) => {
     try {
         const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature, status_code } = req.body;
 
-        const update = await Payment.updateOne(
+        // Update payment details
+        const updatePaymentResult = await Payment.updateOne(
             { razorpay_order_id, user_id },
             { $set: { razorpay_payment_id, razorpay_signature } }
         );
-        const attributes = {
+
+        // Verify payment signature
+        await razorpayInstance.utility.verifyPaymentSignature({
             razorpay_order_id,
             razorpay_payment_id,
             razorpay_signature,
-        };
-        await razorpayInstance.utility.verifyPaymentSignature(attributes);
+        });
 
-    } catch (err) {
-        console.error(err);
-        success = false;
-        error = 'Payment Error';
-    }
-
-    if (success) {
-        try {
-            const update_transaction = await Payment.updateOne(
+        // If verification is successful, update transaction status
+        if (updatePaymentResult.nModified > 0) {
+            const updateTransactionResult = await Payment.updateOne(
                 { razorpay_order_id, user_id },
                 { $set: { status: "capture" } }
             );
 
-            // Check if update was successful
-            if (update_transaction.ok === 1) {
-                return res.status(200).json({ success: true, message: 'Payment Successful' });
+            if (updateTransactionResult.nModified > 0) {
+                // Payment status updated successfully
+                return res.status(200).json({ success: true, message: 'Payment captured successfully' });
             } else {
-                return res.status(500).json({ success: false, message: 'Failed to update payment status' });
+                success = false;
+                error = 'Failed to update transaction status';
             }
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ success: false, message: 'Server Error' });
+        } else {
+            success = false;
+            error = 'Failed to update payment details';
         }
-    } else {
+    } catch (error) {
+        console.error(error);
+        success = false;
+        error = 'Payment Error';
+    }
+
+    // Handle errors
+    if (success === false) {
         return res.status(400).json({ success: false, message: error });
     }
-}
+};
+
+// Example usage:
+// app.post('/process-payment', payment);
 
 
 module.exports ={
