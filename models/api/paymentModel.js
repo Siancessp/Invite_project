@@ -22,7 +22,7 @@ const paymentSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        required: false
+        default: null // Default value is null
     },
     created_date: {
         type: Date,
