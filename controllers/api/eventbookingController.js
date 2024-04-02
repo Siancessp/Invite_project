@@ -46,7 +46,6 @@ const calculateGrandTotalPrice = async (eventid, nummberofDays, numberofadult, n
 const cleanDates = (datesObject) => {
     return Object.keys(datesObject);
   };
-  const datesOnly = cleanDates(eventBookingDates);
 const eventbooking = async (req, res) => {
     const { user_id, eventBookingDates, nummberofDays, numberofadult, numberofchild, eventid } = req.body;
     try {
