@@ -119,16 +119,10 @@ const getprofile = async (req, res) => {
 
 const updateprofileById = async (req, res) => {
     const { fullname, mobile, email, user_bio, user_id } = req.body;
-    
-    // Check if profile_image and background_image are included in the request
-    if (!req.files || !req.files.profile_image || !req.files.background_image) {
-        return res.status(400).json({ error: 'Profile image and background image are required' });
-    }
 
-    const { profile_image, background_image } = req.files;
+    console.log("Incoming request body:", req.body);
 
     try {
-        // Update the user's profile with the new information
         const updatedRegister = await userRegister.findOneAndUpdate(
             { _id: user_id },
             {
@@ -144,28 +138,26 @@ const updateprofileById = async (req, res) => {
             { new: true } // Return the updated document
         );
 
-        // Check if the user was found and updated successfully
+        console.log("Updated user:", updatedRegister);
+
         if (!updatedRegister) {
             return res.status(404).json({ success: false, msg: "User not found" });
         }
 
-        // Send a success response with the updated user data
-        return res.status(200).json({
+        const response = {
             success: true,
             msg: "User updated successfully",
             data: { updatedRegister }
-        });
+        };
+
+        res.status(200).json(response);
 
     } catch (error) {
-        // Handle any errors that occur during the update process
         console.error(error);
-        return res.status(500).json({
-            success: false,
-            msg: "Error updating user data",
-            error: error.message
-        });
+        res.status(500).json({ success: false, msg: "Error updating user data", error: error.message });
     }
 };
+
 
 
 
