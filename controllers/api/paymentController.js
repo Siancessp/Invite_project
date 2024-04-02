@@ -57,13 +57,16 @@ const checkout = async (req, res) => {
     }
 };
 
+
 const payment = async (req, res) => 
 {
-    let status = true;
+    let success = true;
     let error = "Payment Failed";
 
     try {
-        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature,status_code } = req.body;
+        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+        console.log(req.body);
 
         const update = await Payment.updateOne(
             { razorpay_order_id, user_id },
@@ -74,23 +77,53 @@ const payment = async (req, res) =>
             razorpay_payment_id,
             razorpay_signature,
         };
-        const xyz = await razorpayInstance.utility.verifyPaymentSignature(attributes);
-        console.log(xyz);
+        
 
     } catch (error) {
         console.error(error);
-        status = false;
+        success = false;
         error = 'Payment Error';
     }
 
-    if (status === true) {
+    if (success === true) {
         try {
+            const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
             const update_transaction = await Payment.updateOne(
                 { razorpay_order_id, user_id },
                 { $set: { status: "capture" } }
             );
+    
+            if (update_transaction) {
+                const eventData = await eventBooking.findOne({ user_id });
+            
+                const newBooking = await Booking.create({
+                    user_id: user_id,
+                    status_code: req.body.status_code,
+                    bookedevent_id: eventData._id.toString(), // Convert ObjectId to string
+                    nummberofDays: eventData.nummberofDays.toString(), // Convert to string
+                    BookingDates: eventData.eventBookingDates.flat(), // Store all event booking dates
+                    numberofadult: eventData.numberofadult.toString(), // Convert to string
+                    numberofchild: eventData.numberofchild.toString(), // Convert to string
+                    grandtotalprice: eventData.grandtotalprice.toString() // Convert to string
+                });
 
-           
+                console.log("New Booking:", newBooking);
+            
+                // Make the eventBookingDates empty for the user
+                if (newBooking) {
+                    const result = await eventBooking.deleteOne({ user_id });
+                    if (result.deletedCount === 1) {
+                        return res.status(200).json({ success: true, message: 'Payment captured successfully and booking created. User data deleted.' });
+                    } else {
+                        return res.status(500).json({ success: false, message: 'Failed to delete user data' });
+                    }
+                } else {
+                    return res.status(500).json({ success: false, message: 'Failed to create booking' });
+                }
+            } else {
+                return res.status(400).json({ success: false, message: 'Failed to capture payment' });
+            }
+            
         } catch (error) {
             console.error(error);
             return res.status(500).json({ success: false, message: 'Server Error' });
@@ -98,7 +131,11 @@ const payment = async (req, res) =>
     } else {
         return res.status(400).json({ success: false, message: error });
     }
-}
+    
+};
+
+
+
 
 module.exports ={
     checkout,
