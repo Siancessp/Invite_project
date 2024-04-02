@@ -84,5 +84,6 @@ user_route.post('/payment', paymentController.payment);
 
 user_route.get('/calculateGrandTotalPrice', eventBookingController.calculateGrandTotalPrice);
 user_route.post('/eventbooking', eventBookingController.eventbooking);
+user_route.get('/getalleventBookings', eventBookingController.getAllEventBookings);
 
 module.exports = user_route;

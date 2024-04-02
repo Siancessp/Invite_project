@@ -116,9 +116,25 @@ const eventbooking = async (req, res) => {
 };
 
 
-
+const getAllEventBookings = async (req, res) => {
+    try {
+        const eventBookings = await EventBooking.find();
+        res.status(200).json({
+            success: true,
+            msg: "All Event Bookings",
+            data: eventBookings
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            msg: "Failed to fetch event bookings",
+            error: error.message
+        });
+    }
+};
 
 module.exports = {
     calculateGrandTotalPrice,
-    eventbooking
+    eventbooking,
+    getAllEventBookings
 }
