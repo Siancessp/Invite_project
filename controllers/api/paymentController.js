@@ -57,13 +57,12 @@ const checkout = async (req, res) => {
     }
 };
 
-const payment = async (req, res) => 
-{
+const payment = async (req, res) => {
     let status = true;
     let error = "Payment Failed";
 
     try {
-        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature,status_code } = req.body;
+        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature, status_code } = req.body;
 
         const update = await Payment.updateOne(
             { razorpay_order_id, user_id },
@@ -76,9 +75,9 @@ const payment = async (req, res) =>
         };
         await razorpayInstance.utility.verifyPaymentSignature(attributes);
 
-    } catch (error) {
-        console.error(error);
-        success = false;
+    } catch (err) {
+        console.error(err);
+        status = false;
         error = 'Payment Error';
     }
 
@@ -89,15 +88,21 @@ const payment = async (req, res) =>
                 { $set: { status: "capture" } }
             );
 
-           
-        } catch (error) {
-            console.error(error);
+            // Check if update was successful
+            if (update_transaction.ok === 1) {
+                return res.status(200).json({ success: true, message: 'Payment Successful' });
+            } else {
+                return res.status(500).json({ success: false, message: 'Failed to update payment status' });
+            }
+        } catch (err) {
+            console.error(err);
             return res.status(500).json({ success: false, message: 'Server Error' });
         }
     } else {
         return res.status(400).json({ success: false, message: error });
     }
 }
+
 
 module.exports ={
     checkout,
