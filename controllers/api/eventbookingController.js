@@ -70,7 +70,7 @@ const eventbooking = async (req, res) => {
                     success: true,
                     msg: "Event Booking Updated Successfully!",
                     data: {
-                        eventBookingDates: formattedEventBookingDates,
+                        eventBookingDates: datesOnly,
                         BookingDetails: existingBooking,
                         grandTotal: grandTotal
                     }
@@ -82,12 +82,12 @@ const eventbooking = async (req, res) => {
                 const grandTotalResponse = await calculateGrandTotalPrice(eventid, nummberofDays, numberofadult, numberofchild);
                 const grandTotal = grandTotalResponse.data;
 
-                const formattedEventBookingDates = eventBookingDates.map(date => new Date(date));
+                const datesOnly = cleanDates(eventBookingDates);
 
                 const createdEventBooking = await EventBooking.create({
                     user_id: user_id,
                     eventid: eventid,
-                    eventBookingDates: formattedEventBookingDates,
+                    eventBookingDates: datesOnly,
                     nummberofDays: nummberofDays,
                     numberofadult: numberofadult,
                     numberofchild: numberofchild,
@@ -98,7 +98,7 @@ const eventbooking = async (req, res) => {
                     success: true,
                     msg: "Event Booking Successful!",
                     data: {
-                        eventBookingDates: formattedEventBookingDates,
+                        eventBookingDates: datesOnly,
                         BookingDetails: createdEventBooking,
                         grandTotal: grandTotal
                     }
