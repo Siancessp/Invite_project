@@ -23,10 +23,15 @@ const checkout = async (req, res) => {
     try {
         const { user_id, amount } = req.body;
         console.log(req.body);
+        
+        // Create a receipt ID that is within 40 characters
+        const receiptId = `order_${user_id}_${Date.now()}`;
+        const truncatedReceiptId = receiptId.substring(0, 40); // Truncate if necessary
+
         const orderOptions = {
             amount: amount * 100,
             currency: "INR",
-            receipt: `order_${user_id}_${Date.now()}`
+            receipt: truncatedReceiptId
         };
 
         const order = await razorpayInstance.orders.create(orderOptions);
