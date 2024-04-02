@@ -57,7 +57,7 @@ const eventbook_adult = async (req, res) => {
             nummberofDays: nummberofDays, // Use as it is if nummberofDays is a String
             numberofadult: numberofadult, // Use as it is if numberofadult is a String
             numberofchild: numberofchild, // Use as it is if numberofchild is a String
-            grandtotalprice: 2500 // Use the exact field name from the schema
+            grandtotalprice: grandTotal // Use the exact field name from the schema
         });
 
         const response = {
