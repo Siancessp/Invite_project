@@ -9,6 +9,10 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    status_code: {
+        type: String,
+        required: true
+    },
     nummberofDays: {
         type: String,
         required: true
