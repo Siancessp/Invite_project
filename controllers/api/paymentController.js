@@ -78,7 +78,7 @@ const payment = async (req, res) =>
 
     } catch (error) {
         console.error(error);
-        success = false;
+        status = false;
         error = 'Payment Error';
     }
 
