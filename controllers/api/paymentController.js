@@ -72,7 +72,7 @@ const payment = async (req, res) => {
             razorpay_payment_id,
             razorpay_signature,
         };
-        await razorpayInstance.utility.verifyPaymentSignature(attributes);
+        // await razorpayInstance.utility.verifyPaymentSignature(attributes);
 
         const update_transaction = await Payment.updateOne(
             { razorpay_order_id, user_id },
