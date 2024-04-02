@@ -64,10 +64,14 @@ const payment = async (req, res) => {
     try {
         const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature, status_code } = req.body;
 
-        const update = await Payment.updateOne(
+        // Update razorpay payment details
+        const updatePaymentResult = await Payment.updateOne(
             { razorpay_order_id, user_id },
             { $set: { razorpay_payment_id, razorpay_signature } }
         );
+
+        console.log("Update Payment Result:", updatePaymentResult);
+
         const attributes = {
             razorpay_order_id,
             razorpay_payment_id,
@@ -75,7 +79,7 @@ const payment = async (req, res) => {
         };
         await razorpayInstance.utility.verifyPaymentSignature(attributes);
 
-    } catch (catchError) { // Renamed the catch error variable
+    } catch (catchError) {
         console.error(catchError);
         success = false;
         error = 'Payment Error';
@@ -108,6 +112,7 @@ const payment = async (req, res) => {
         return res.status(400).json({ success: false, message: error });
     }
 }
+
 
 
 module.exports ={
