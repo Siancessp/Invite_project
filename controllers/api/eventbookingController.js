@@ -44,78 +44,68 @@ const calculateGrandTotalPrice = async (eventid, nummberofDays, numberofadult, n
 }
 
 const eventbook_adult = async (req, res) => {
-    const { user_id, eventBookingDates, nummberofDays, numberofadult, numberofchild, eventid } = req.body;
+    const { user_id, eventBookingDates, nummberofDays, numberofadult, numberofchild, eventid, buttonClicked } = req.body;
     try {
         let existingBooking = await EventBooking.findOne({ user_id: user_id, eventid: eventid });
-
-if (existingBooking) {
-    // If booking exists, update the existing booking data
-    const grandTotalResponse = await calculateGrandTotalPrice(eventid, nummberofDays, numberofadult, numberofchild);
-    const grandTotal = grandTotalResponse.data;
-
-    const formattedEventBookingDates = eventBookingDates.map(date => new Date(date));
-
-    existingBooking.eventBookingDates = formattedEventBookingDates;
-    existingBooking.nummberofDays = nummberofDays;
-    existingBooking.numberofadult = numberofadult;
-    existingBooking.numberofchild = numberofchild;
-    existingBooking.grandtotalprice = grandTotal;
-
-    await existingBooking.save();
-
-    const response = {
-        success: true,
-        msg: "Event Booking Updated Successfully!",
-        data: {
-            eventBookingDates: formattedEventBookingDates,
-            BookingDetails: existingBooking,
-            grandTotal: grandTotal
-        }
-    };
-
-    // Send the response
-    res.status(200).send(response);
-} else {
-    // If no existing booking found, create a new one
-    const grandTotalResponse = await calculateGrandTotalPrice(eventid, nummberofDays, numberofadult, numberofchild);
-    const grandTotal = grandTotalResponse.data;
-
-    const formattedEventBookingDates = eventBookingDates.map(date => new Date(date));
-
-    const createdEventBooking = await EventBooking.create({
-        user_id: user_id,
-        eventid: eventid,
-        eventBookingDates: formattedEventBookingDates,
-        nummberofDays: nummberofDays,
-        numberofadult: numberofadult,
-        numberofchild: numberofchild,
-        grandtotalprice: grandTotal
-    });
-
-    const response = {
-        success: true,
-        msg: "Event Booking Successful!",
-        data: {
-            eventBookingDates: formattedEventBookingDates,
-            BookingDetails: createdEventBooking,
-            grandTotal: grandTotal
-        }
-    };
-
-    // Send the response
-    res.status(200).send(response);
-}
-
-            // Send the response
         
+        if (existingBooking) {
+            const grandTotalResponse = await calculateGrandTotalPrice(eventid, nummberofDays, numberofadult, numberofchild);
+            const grandTotal = grandTotalResponse.data;
+
+            const formattedEventBookingDates = eventBookingDates.map(date => new Date(date));
+
+            existingBooking.eventBookingDates = formattedEventBookingDates;
+            existingBooking.nummberofDays = nummberofDays;
+            existingBooking.numberofadult = buttonClicked === 1 ? numberofadult : existingBooking.numberofadult;
+            existingBooking.numberofchild = buttonClicked === 2 ? numberofchild : existingBooking.numberofchild;
+            existingBooking.grandtotalprice = grandTotal;
+
+            await existingBooking.save();
+
+            const response = {
+                success: true,
+                msg: "Event Booking Updated Successfully!",
+                data: {
+                    eventBookingDates: formattedEventBookingDates,
+                    BookingDetails: existingBooking,
+                    grandTotal: grandTotal
+                }
+            };
+            res.status(200).send(response);
+        } else {
+            const grandTotalResponse = await calculateGrandTotalPrice(eventid, nummberofDays, numberofadult, numberofchild);
+            const grandTotal = grandTotalResponse.data;
+
+            const formattedEventBookingDates = eventBookingDates.map(date => new Date(date));
+
+            const createdEventBooking = await EventBooking.create({
+                user_id: user_id,
+                eventid: eventid,
+                eventBookingDates: formattedEventBookingDates,
+                nummberofDays: nummberofDays,
+                numberofadult: buttonClicked === 1 ? numberofadult : 0,
+                numberofchild: buttonClicked === 2 ? numberofchild : 0,
+                grandtotalprice: grandTotal
+            });
+
+            const response = {
+                success: true,
+                msg: "Event Booking Successful!",
+                data: {
+                    eventBookingDates: formattedEventBookingDates,
+                    BookingDetails: createdEventBooking,
+                    grandTotal: grandTotal
+                }
+            };
+            res.status(200).send(response);
+        }
     } catch (error) {
-        res.status(500).send({
-            success: false,
-            msg: "Failed to book event",
-            error: error.message
-        });
+        // Handle error
+        console.error(error);
+        res.status(500).send("Internal Server Error");
     }
 };
+
 
 
 
