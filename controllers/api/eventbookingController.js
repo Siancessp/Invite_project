@@ -119,31 +119,39 @@ const eventbooking = async (req, res) => {
 const getAllEventBookings = async (req, res) => {
     const { user_id } = req.params;
     try {
-        const eventBookings = await EventBooking.find({ user_id: user_id });
-        const formattedEventBookings = eventBookings.map(booking => {
-            const formattedDates = booking.eventBookingDates.map(date => {
-                const formattedDate = new Date(date).toLocaleDateString('en-GB');
-                return formattedDate;
+        const eventBooking = await EventBooking.findOne({ user_id: user_id });
+
+        if (!eventBooking) {
+            return res.status(404).json({
+                success: false,
+                msg: "Event Booking not found for the user",
             });
-            return {
-                ...booking._doc,
-                eventBookingDates: formattedDates
-            };
+        }
+
+        const formattedDates = eventBooking.eventBookingDates.map(date => {
+            const formattedDate = new Date(date).toLocaleDateString('en-GB');
+            return formattedDate;
         });
+
+        const formattedEventBooking = {
+            ...eventBooking._doc,
+            eventBookingDates: formattedDates
+        };
 
         res.status(200).json({
             success: true,
-            msg: "All Event Bookings",
-            data: formattedEventBookings
+            msg: "Event Booking found",
+            data: formattedEventBooking
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            msg: "Failed to fetch event bookings",
+            msg: "Failed to fetch event booking",
             error: error.message
         });
     }
 };
+
 
 module.exports = {
     calculateGrandTotalPrice,
