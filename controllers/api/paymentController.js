@@ -38,6 +38,7 @@ const checkout = async (req, res) => {
 
         const paymentData = {
             user_id: user_id,
+            amount: amount,
             razorpay_order_id: order.id
         };
         const newPayment = new Payment(paymentData);
