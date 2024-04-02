@@ -29,7 +29,7 @@ const checkout = async (req, res) => {
         const truncatedReceiptId = receiptId.substring(0, 40); // Truncate if necessary
 
         const orderOptions = {
-            amount: amount * 100,
+            amount: amount,
             currency: "INR",
             receipt: truncatedReceiptId
         };
