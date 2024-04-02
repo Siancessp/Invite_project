@@ -32,8 +32,7 @@ const checkout = async (req, res) => {
 
         const paymentData = {
             user_id: user_id,
-            razorpay_order_id: order.id,
-            status_code: status_code
+            razorpay_order_id: order.id
         };
         const newPayment = new Payment(paymentData);
         const savedPayment = await newPayment.save();
