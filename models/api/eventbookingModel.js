@@ -30,6 +30,8 @@ const eventbookingSchema = new mongoose.Schema({
     }
 });
 
+eventbookingSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 });
+
 const eventbookingdetails = mongoose.model("EventBooking", eventbookingSchema);
 
 module.exports = eventbookingdetails;

@@ -21,7 +21,7 @@ const razorpayInstance = new Razorpay({
 
 const checkout = async (req, res) => {
     try {
-        const { user_id, amount, status_code } = req.body;
+        const { user_id, amount } = req.body;
         const orderOptions = {
             amount: amount * 100,
             currency: "INR",
@@ -57,7 +57,7 @@ const payment = async (req, res) =>
     let error = "Payment Failed";
 
     try {
-        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature,status_code } = req.body;
 
         const update = await Payment.updateOne(
             { razorpay_order_id, user_id },
@@ -88,6 +88,7 @@ const payment = async (req, res) =>
 
                 const newBooking = await Booking.create({
                     user_id: user_id,
+                    status_code:status_code,
                     bookedevent_id: eventData.map(event => event._id), // Store the event IDs in bookedevent_id
                     nummberofDays: eventData.map(event => event.nummberofDays), // Store the number of days from events
                     BookingDates: eventData.map(event => event.eventBookingDates).flat(), // Store all event booking dates
