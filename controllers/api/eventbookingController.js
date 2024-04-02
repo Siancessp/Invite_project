@@ -48,7 +48,7 @@ const eventbook_adult = async (req, res) => {
     try {
         const grandTotalResponse = await calculateGrandTotalPrice(eventid, nummberofDays, numberofadult, numberofchild);
 
-        const grandTotal = grandTotalResponse.data.grandtotalprice;
+        const grandTotal = grandTotalResponse.data.grandTotals;
         console.log(grandTotal);
 
         const formattedEventBookingDates = eventBookingDates.map(date => new Date(date))
