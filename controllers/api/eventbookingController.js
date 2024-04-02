@@ -43,7 +43,7 @@ const calculateGrandTotalPrice = async (eventid, nummberofDays, numberofadult, n
     }
 }
 
-const eventbook_adult = async (req, res) => {
+const eventbooking = async (req, res) => {
     const { user_id, eventBookingDates, nummberofDays, numberofadult, numberofchild, eventid, buttonClicked } = req.body;
     try {
         let existingBooking = await EventBooking.findOne({ user_id: user_id, eventid: eventid });
@@ -118,5 +118,5 @@ const eventbook_adult = async (req, res) => {
 
 module.exports = {
     calculateGrandTotalPrice,
-    eventbook_adult
+    eventbooking
 }
