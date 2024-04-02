@@ -120,7 +120,6 @@ const getAllEventBookings = async (req, res) => {
     const { user_id } = req.params;
     try {
         const eventBooking = await EventBooking.findOne({ user_id: user_id });
-        
 
         if (!eventBooking) {
             return res.status(404).json({
@@ -139,6 +138,24 @@ const getAllEventBookings = async (req, res) => {
             eventBookingDates: formattedDates
         };
 
+        // Get event name using eventid
+        const event = await Event.findOne({ _id: eventBooking.eventid });
+
+        if (!event) {
+            return res.status(404).json({
+                success: false,
+                msg: "Event not found for the eventid",
+            });
+        }
+
+        const eventDetails = {
+            eventId: event._id,
+            eventName: event.eventName,
+            // Add other event details as needed
+        };
+
+        formattedEventBooking.event = eventDetails;
+
         res.status(200).json({
             success: true,
             msg: "Booking found",
@@ -152,6 +169,7 @@ const getAllEventBookings = async (req, res) => {
         });
     }
 };
+
 
 
 module.exports = {
