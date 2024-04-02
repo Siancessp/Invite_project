@@ -6,12 +6,11 @@ const paymentSchema = new mongoose.Schema({
         required: true
     },
     razorpay_payment_id: {
-        type: String,
-        required: true
+        type: String
     },
     razorpay_order_id: {
         type: String,
-        required: false
+        required: true
     },
     razorpay_signature: {
         type: String,
