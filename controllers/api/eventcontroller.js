@@ -221,6 +221,12 @@ const geteventDetails = async (req, res) => {
     }
 };
 
+const getReadableDate = (date) => {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+};
 
 const getalleventdetailsbyid = async (req, res) => {
     try {
@@ -243,7 +249,7 @@ const getalleventdetailsbyid = async (req, res) => {
             event_id: existedEventDetails._id,
             eventname: existedEventDetails.eventname,
             eventdescription: existedEventDetails.eventdescription,
-            eventstartdate: getHumanReadableDate(new Date(existedEventDetails.event_start_date)),
+            eventstartdate: getReadableDate(new Date(existedEventDetails.event_start_date)),
             eventenddate: getHumanReadableDate(new Date(existedEventDetails.event_end_date)),
             eventstarttime: formatTime(existedEventDetails.event_start_time),
             eventendtime: formatTime(existedEventDetails.event_end_time),
