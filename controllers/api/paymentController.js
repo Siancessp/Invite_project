@@ -83,16 +83,22 @@ const payment = async (req, res) => {
 
     if (success === true) {
         try {
-            const update_transaction = await Payment.updateOne(
+            // Update the status to "capture" after successful payment
+            const updateTransactionResult = await Payment.updateOne(
                 { razorpay_order_id, user_id },
                 { $set: { status: "capture" } }
             );
+
+            if (updateTransactionResult.nModified === 0) {
+                // If no documents were modified, handle it as an error
+                throw new Error("Status not updated to 'capture'");
+            }
 
             // Return success response if update is successful
             return res.status(200).json({ success: true, message: 'Payment successful' });
 
         } catch (updateError) {
-            console.error(updateError);
+            console.error("Status update error:", updateError);
             return res.status(500).json({ success: false, message: 'Server Error' });
         }
     } else {
