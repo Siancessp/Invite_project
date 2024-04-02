@@ -58,11 +58,10 @@ const checkout = async (req, res) => {
 };
 
 const payment = async (req, res) => {
-    let status = true;
     let error = "Payment Failed";
 
     try {
-        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature, status_code } = req.body;
+        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
         const update = await Payment.updateOne(
             { razorpay_order_id, user_id },
@@ -75,31 +74,39 @@ const payment = async (req, res) => {
         };
         await razorpayInstance.utility.verifyPaymentSignature(attributes);
 
-    } catch (err) {
-        console.error(err);
-        status = false;
-        error = 'Payment Error';
-    }
+        const update_transaction = await Payment.updateOne(
+            { razorpay_order_id, user_id },
+            { $set: { status: "capture" } }
+        );
 
-    if (status === true) {
-        try {
-            const update_transaction = await Payment.updateOne(
-                { razorpay_order_id, user_id },
-                { $set: { status: "capture" } }
-            );
+        if (update_transaction) {
+            const eventData = await eventBooking.find({ user_id });
 
-            // Check if update was successful
-            if (update_transaction.ok === 1) {
-                return res.status(200).json({ success: true, message: 'Payment Successful' });
+            const newBooking = await Booking.create({
+                user_id: user_id,
+                status_code: req.body.status_code,
+                bookedevent_id: eventData.map(event => event._id), // Store the event IDs in bookedevent_id
+                nummberofDays: eventData.map(event => event.nummberofDays), // Store the number of days from events
+                BookingDates: eventData.map(event => event.eventBookingDates).flat(), // Store all event booking dates
+                numberofadult: eventData.map(event => event.numberofadult), // Store the number of adults from events
+                numberofchild: eventData.map(event => event.numberofchild), // Store the number of children from events
+                grandtotalprice: eventData.map(event => event.grandtotalprice) // Store the total price from events
+            });
+
+            // Make the eventBookingDates empty for the user
+            if (newBooking) {
+                await eventBooking.updateMany({ user_id }, { $unset: { eventBookingDates: "" } });
+                return res.status(200).json({ success: true, message: 'Payment captured successfully and booking created. Event table emptied.' });
             } else {
-                return res.status(500).json({ success: false, message: 'Failed to update payment status' });
+                return res.status(500).json({ success: false, message: 'Failed to create booking' });
             }
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ success: false, message: 'Server Error' });
+        } else {
+            return res.status(400).json({ success: false, message: 'Failed to capture payment' });
         }
-    } else {
-        return res.status(400).json({ success: false, message: error });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Server Error' });
     }
 }
 
