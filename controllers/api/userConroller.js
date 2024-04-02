@@ -99,8 +99,8 @@ const getprofile = async (req, res) => {
             user_name: existedUserDetails.fullname,
             email: existedUserDetails.email, 
             user_bio:existedUserDetails.user_bio,
-            profile_image:baseImageUrlP.existedUserDetails.profile_image,
-            background_image:baseImageUrlB.existedUserDetails.background_image,
+            profile_image:baseImageUrlP + '/' + existedUserDetails.profile_image,
+            background_image:baseImageUrlB + '/' + existedUserDetails.background_image,
             mobile:existedUserDetails.mobile
         };
 
