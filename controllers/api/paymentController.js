@@ -84,15 +84,23 @@ const payment = async (req, res) => {
         if (update_transaction) {
             const eventData = await eventBooking.find({ user_id });
 
+            // Extracting required data from eventData
+            const bookedevent_ids = eventData.map(event => event._id);
+            const nummberofDays = eventData.map(event => event.nummberofDays);
+            const BookingDates = eventData.map(event => event.eventBookingDates).flat();
+            const numberofadult = eventData.map(event => event.numberofadult);
+            const numberofchild = eventData.map(event => event.numberofchild);
+            const grandtotalprice = eventData.map(event => event.grandtotalprice);
+
             const newBooking = await Booking.create({
                 user_id: user_id,
-                status_code: req.body.status_code,
-                bookedevent_id: eventData.map(event => event._id), // Store the event IDs in bookedevent_id
-                nummberofDays: eventData.map(event => event.nummberofDays), // Store the number of days from events
-                BookingDates: eventData.map(event => event.eventBookingDates).flat(), // Store all event booking dates
-                numberofadult: eventData.map(event => event.numberofadult), // Store the number of adults from events
-                numberofchild: eventData.map(event => event.numberofchild), // Store the number of children from events
-                grandtotalprice: eventData.map(event => event.grandtotalprice) // Store the total price from events
+                status_code: req.body.status_code, // Make sure this is passed correctly in the request body
+                bookedevent_id: bookedevent_ids,
+                nummberofDays: nummberofDays,
+                BookingDates: BookingDates,
+                numberofadult: numberofadult,
+                numberofchild: numberofchild,
+                grandtotalprice: grandtotalprice
             });
 
             // Make the eventBookingDates empty for the user
@@ -111,6 +119,7 @@ const payment = async (req, res) => {
         return res.status(500).json({ success: false, message: 'Server Error' });
     }
 }
+
 
 
 
