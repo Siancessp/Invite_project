@@ -119,10 +119,25 @@ const eventbooking = async (req, res) => {
 const getAllEventBookings = async (req, res) => {
     try {
         const eventBookings = await EventBooking.find();
+
+        // Format eventBookingDates to dd-mm-yy format
+        const formattedEventBookings = eventBookings.map(booking => {
+            const formattedDates = booking.eventBookingDates.map(date => {
+                const d = new Date(date);
+                const formattedDate = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear() % 100}`;
+                return formattedDate;
+            });
+
+            return {
+                ...booking._doc,
+                eventBookingDates: formattedDates
+            };
+        });
+
         res.status(200).json({
             success: true,
             msg: "All Event Bookings",
-            data: eventBookings
+            data: formattedEventBookings
         });
     } catch (error) {
         res.status(500).json({
