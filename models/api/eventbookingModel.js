@@ -20,8 +20,8 @@ const eventbookingSchema = new mongoose.Schema({
     numberofchild: {
         type: String
     },
-    grandTotal: {  // Updated field name to grandTotal
-        type: String,  // You can adjust the type as needed
+    grandtotalprice: {
+        type: String,
         required: true
     }
 });
