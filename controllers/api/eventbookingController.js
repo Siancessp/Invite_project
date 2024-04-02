@@ -120,14 +120,15 @@ const getAllEventBookings = async (req, res) => {
     try {
         const eventBookings = await EventBooking.find();
 
-        // Format eventBookingDates to dd-mm-yy format
+        // Map through event bookings to format dates
         const formattedEventBookings = eventBookings.map(booking => {
+            // Format the date objects in eventBookingDates array
             const formattedDates = booking.eventBookingDates.map(date => {
-                const d = new Date(date);
-                const formattedDate = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear() % 100}`;
+                const formattedDate = new Date(date).toLocaleDateString('en-GB');
                 return formattedDate;
             });
 
+            // Return the booking object with formatted dates
             return {
                 ...booking._doc,
                 eventBookingDates: formattedDates
