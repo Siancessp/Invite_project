@@ -117,16 +117,17 @@ const eventbooking = async (req, res) => {
 
 
 const getAllEventBookings = async (req, res) => {
+    const { user_id } = req.params;
     try {
-        const eventBookings = await EventBooking.find();
-
+        const eventBookings = await EventBooking.find({ user_id: user_id });
         const formattedEventBookings = eventBookings.map(booking => {
-            // Format the single event booking date
-            const formattedDate = new Date(booking.eventBookingDate).toLocaleDateString('en-GB');
-
+            const formattedDates = booking.eventBookingDates.map(date => {
+                const formattedDate = new Date(date).toLocaleDateString('en-GB');
+                return formattedDate;
+            });
             return {
                 ...booking._doc,
-                eventBookingDate: formattedDate
+                eventBookingDates: formattedDates
             };
         });
 
@@ -143,7 +144,6 @@ const getAllEventBookings = async (req, res) => {
         });
     }
 };
-
 
 module.exports = {
     calculateGrandTotalPrice,
