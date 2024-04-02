@@ -10,6 +10,7 @@ const WeakendDetails = require("../../models/api/weakendModel");
 const calculateGrandTotalPrice = async (weekendid, nummberofDays, numberofadult, numberofchild) => {
     try {
         const storedweekendData = await WeakendDetails.findById(weekendid);
+        console.log(storedweekendData);
         if (!storedweekendData) {
             return {
                 success: false,
@@ -17,8 +18,10 @@ const calculateGrandTotalPrice = async (weekendid, nummberofDays, numberofadult,
                 data: null
             };
         }
-        const adult_price = storedweekendData.event_price_adult;
-        const child_price = storedweekendData.event_price_child;
+        const adult_price = storedweekendData.weakend_price_adult;
+        console.log(adult_price);
+        const child_price = storedweekendData.weakend_price_child;
+        console.log(child_price);
         let grandTotalAdults = 0;
         if (numberofadult) {
             grandTotalAdults = numberofadult * adult_price * nummberofDays;
@@ -47,8 +50,9 @@ const cleanDates = (datesObject) => {
     return Object.keys(datesObject);
   };
 const weekendbooking = async (req, res) => {
-    const { user_id, weekendBookingDates, nummberofDays, numberofadult, numberofchild, weekendid } = req.body;
-    try {   
+    try {
+        const { user_id, weekendBookingDates, nummberofDays, numberofadult, numberofchild, weekendid } = req.body;
+        console.log(req.body);
             let existingBooking = await WeekendBooking.findOne({ user_id: user_id, eventid: weekendid });
 
             if (existingBooking) {
@@ -83,10 +87,10 @@ const weekendbooking = async (req, res) => {
 
                 const datesOnly = cleanDates(weekendBookingDates);
 
-                const createdWeekendBooking = await WeekendBooking.create({
+                const createdEventBooking = await WeakendDetails.create({
                     user_id: user_id,
                     eventid: weekendid,
-                    weekendBookingDates: datesOnly,
+                    eventBookingDates: datesOnly,
                     nummberofDays: nummberofDays,
                     numberofadult: numberofadult,
                     numberofchild: numberofchild,
@@ -97,7 +101,7 @@ const weekendbooking = async (req, res) => {
                     success: true,
                     msg: "Weekend Booking Successful!",
                     data: {
-                        BookingDetails: createdWeekendBooking,
+                        BookingDetails: createdEventBooking,
                         grandTotal: grandTotal
                     }
                 };

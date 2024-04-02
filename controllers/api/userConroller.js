@@ -87,6 +87,8 @@ const getprofile = async (req, res) => {
     try {
         const user_id = req.params.user_id;
         const existedUserDetails = await userRegister.findOne({ _id: user_id });
+        const baseImageUrlP = "/uploads/profile_image";
+        const baseImageUrlB = "/uploads/background_image";
 
         if (!existedUserDetails) {
             return res.status(404).json({ success: false, msg: 'User Details not found' });
@@ -97,8 +99,8 @@ const getprofile = async (req, res) => {
             user_name: existedUserDetails.fullname,
             email: existedUserDetails.email, 
             user_bio:existedUserDetails.user_bio,
-            profile_image:existedUserDetails.profile_image,
-            background_image:existedUserDetails.background_image,
+            profile_image:baseImageUrlP.existedUserDetails.profile_image,
+            background_image:baseImageUrlB.existedUserDetails.background_image,
             mobile:existedUserDetails.mobile
         };
 

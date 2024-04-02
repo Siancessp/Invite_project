@@ -34,6 +34,7 @@ const paymentController = require("../controllers/api/paymentController");
 const tourController = require("../controllers/api/tourcontroller");
 
 const eventBookingController = require("../controllers/api/eventbookingController");
+const weakendBookingController = require("../controllers/api/weekendbookingController");
 
 const likeController = require("../controllers/api/likecontroller");
 const commentController = require("../controllers/api/commentcontroller");
@@ -82,8 +83,8 @@ user_route.get('/getlikedetails/:post_id', likeController.getLikeDetails);
 user_route.post('/bookingconfirmation', paymentController.checkout);
 user_route.post('/payment', paymentController.payment);
 
-user_route.get('/calculateGrandTotalPrice', eventBookingController.calculateGrandTotalPrice);
 user_route.post('/eventbooking', eventBookingController.eventbooking);
+user_route.post('/weekendbooking', weakendBookingController.weekendbooking);
 user_route.get('/getalleventBookings/:user_id', eventBookingController.getAllEventBookings);
 
 module.exports = user_route;
