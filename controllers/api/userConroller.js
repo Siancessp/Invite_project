@@ -128,6 +128,7 @@ const updateprofileById = async (req, res) => {
     }
 
     const { profile_image, background_image } = req.files;
+    console.log("Incoming request body:", req.files);
 
     try {
         // Update the user's profile with the new information
