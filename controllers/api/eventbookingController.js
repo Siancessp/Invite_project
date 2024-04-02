@@ -46,16 +46,12 @@ const calculateGrandTotalPrice = async (eventid, nummberofDays, numberofadult, n
 const eventbook_adult = async (req, res) => {
     const { user_id, eventBookingDates, nummberofDays, numberofadult, numberofchild, eventid } = req.body;
     try {
-        // Call calculateGrandTotalPrice function
         const grandTotalResponse = await calculateGrandTotalPrice(eventid, nummberofDays, numberofadult, numberofchild);
 
-        // Now you can use grand total response data for further processing
         const grandTotal = grandTotalResponse.data;
 
-        // Convert eventBookingDates array to a single string
         const formattedEventBookingDates = eventBookingDates.map(date => new Date(date))
 
-        // Assuming EventBooking is your mongoose model
         const createdEventBooking = await EventBooking.create({
             user_id: user_id,
             eventBookingDates: formattedEventBookingDates,
