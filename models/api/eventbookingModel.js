@@ -5,6 +5,10 @@ const eventbookingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    eventid: {
+        type: String,
+        required: true
+    },
     nummberofDays: {
         type: String,
         required: true
