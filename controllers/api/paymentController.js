@@ -57,59 +57,47 @@ const checkout = async (req, res) => {
     }
 };
 
-const payment = async (req, res) => {
-    let success = true;
+const payment = async (req, res) => 
+{
+    let status = true;
     let error = "Payment Failed";
 
     try {
-        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature, status_code } = req.body;
+        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature,status_code } = req.body;
 
-        // Update payment details
-        const updatePaymentResult = await Payment.updateOne(
+        const update = await Payment.updateOne(
             { razorpay_order_id, user_id },
             { $set: { razorpay_payment_id, razorpay_signature } }
         );
-
-        // Verify payment signature
-        await razorpayInstance.utility.verifyPaymentSignature({
+        const attributes = {
             razorpay_order_id,
             razorpay_payment_id,
             razorpay_signature,
-        });
+        };
+        await razorpayInstance.utility.verifyPaymentSignature(attributes);
 
-        // If verification is successful, update transaction status
-        if (updatePaymentResult.nModified > 0) {
-            const updateTransactionResult = await Payment.updateOne(
-                { razorpay_order_id, user_id },
-                { $set: { status: "capture" } }
-            );
-
-            if (updateTransactionResult.nModified > 0) {
-                // Payment status updated successfully
-                return res.status(200).json({ success: true, message: 'Payment captured successfully' });
-            } else {
-                success = false;
-                error = 'Failed to update transaction status';
-            }
-        } else {
-            success = false;
-            error = 'Failed to update payment details';
-        }
     } catch (error) {
         console.error(error);
         success = false;
         error = 'Payment Error';
     }
 
-    // Handle errors
-    if (success === false) {
+    if (status === true) {
+        try {
+            const update_transaction = await Payment.updateOne(
+                { razorpay_order_id, user_id },
+                { $set: { status: "capture" } }
+            );
+
+           
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ success: false, message: 'Server Error' });
+        }
+    } else {
         return res.status(400).json({ success: false, message: error });
     }
-};
-
-// Example usage:
-// app.post('/process-payment', payment);
-
+}
 
 module.exports ={
     checkout,
