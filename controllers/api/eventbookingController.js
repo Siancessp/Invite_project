@@ -70,7 +70,6 @@ const eventbooking = async (req, res) => {
                     success: true,
                     msg: "Event Booking Updated Successfully!",
                     data: {
-                        eventBookingDates: datesOnly,
                         BookingDetails: existingBooking,
                         grandTotal: grandTotal
                     }
@@ -98,7 +97,6 @@ const eventbooking = async (req, res) => {
                     success: true,
                     msg: "Event Booking Successful!",
                     data: {
-                        eventBookingDates: datesOnly,
                         BookingDetails: createdEventBooking,
                         grandTotal: grandTotal
                     }
