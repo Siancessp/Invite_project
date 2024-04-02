@@ -74,17 +74,17 @@ const payment = async (req, res) => {
         };
         await razorpayInstance.utility.verifyPaymentSignature(attributes);
 
-        const update_transaction = await Payment.updateOne(
-            { razorpay_order_id, user_id },
-            { $set: { status: "capture" } }
-        );
+        // const update_transaction = await Payment.updateOne(
+        //     { razorpay_order_id, user_id },
+        //     { $set: { status: "capture" } }
+        // );
 
-        if (update_transaction) {
+        if (attributes) {
             const eventData = await eventBooking.find({ user_id });
 
             const newBooking = await Booking.create({
                 user_id: user_id,
-                status_code: req.body.status_code,
+                status_code: 1,
                 bookedevent_id: eventData.map(event => event._id), // Store the event IDs in bookedevent_id
                 nummberofDays: eventData.map(event => event.nummberofDays), // Store the number of days from events
                 BookingDates: eventData.map(event => event.eventBookingDates).flat(), // Store all event booking dates
