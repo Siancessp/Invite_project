@@ -119,6 +119,9 @@ const getprofile = async (req, res) => {
 
 const updateprofileById = async (req, res) => {
     const { fullname, mobile, email, user_bio, user_id } = req.body;
+    if (!req.files || !req.files.profile_image || !req.files.background_image) {
+        return res.status(400).json({ error: 'Profile image and background image are required' });
+      }
     const { profile_image, background_image } = req.files;
 
     try {
