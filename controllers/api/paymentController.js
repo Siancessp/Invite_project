@@ -74,7 +74,8 @@ const payment = async (req, res) =>
             razorpay_payment_id,
             razorpay_signature,
         };
-        await razorpayInstance.utility.verifyPaymentSignature(attributes);
+        const xyz = await razorpayInstance.utility.verifyPaymentSignature(attributes);
+        console.log(xyz);
 
     } catch (error) {
         console.error(error);
