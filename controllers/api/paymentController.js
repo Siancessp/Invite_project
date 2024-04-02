@@ -57,11 +57,13 @@ const checkout = async (req, res) => {
     }
 };
 
-const payment = async (req, res) => {
+const payment = async (req, res) => 
+{
+    let status = true;
     let error = "Payment Failed";
 
     try {
-        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+        const { user_id, razorpay_order_id, razorpay_payment_id, razorpay_signature,status_code } = req.body;
 
         const update = await Payment.updateOne(
             { razorpay_order_id, user_id },
@@ -72,56 +74,30 @@ const payment = async (req, res) => {
             razorpay_payment_id,
             razorpay_signature,
         };
-        // await razorpayInstance.utility.verifyPaymentSignature(attributes);
-
-        const update_transaction = await Payment.updateOne(
-            { razorpay_order_id, user_id },
-            { $set: { status: "capture" } }
-        );
-
-        console.log("Update Transaction:", update_transaction);
-
-        if (update_transaction) {
-            const eventData = await eventBooking.find({ user_id });
-
-            // Extracting required data from eventData
-            const bookedevent_ids = eventData.map(event => event._id);
-            const nummberofDays = eventData.map(event => event.nummberofDays);
-            const BookingDates = eventData.map(event => event.eventBookingDates).flat();
-            const numberofadult = eventData.map(event => event.numberofadult);
-            const numberofchild = eventData.map(event => event.numberofchild);
-            const grandtotalprice = eventData.map(event => event.grandtotalprice);
-
-            const newBooking = await Booking.create({
-                user_id: user_id,
-                status_code: req.body.status_code, // Make sure this is passed correctly in the request body
-                bookedevent_id: bookedevent_ids,
-                nummberofDays: nummberofDays,
-                BookingDates: BookingDates,
-                numberofadult: numberofadult,
-                numberofchild: numberofchild,
-                grandtotalprice: grandtotalprice
-            });
-
-            // Make the eventBookingDates empty for the user
-            if (newBooking) {
-                await eventBooking.updateMany({ user_id }, { $unset: { eventBookingDates: "" } });
-                return res.status(200).json({ success: true, message: 'Payment captured successfully and booking created. Event table emptied.' });
-            } else {
-                return res.status(500).json({ success: false, message: 'Failed to create booking' });
-            }
-        } else {
-            return res.status(400).json({ success: false, message: 'Failed to capture payment' });
-        }
+        await razorpayInstance.utility.verifyPaymentSignature(attributes);
 
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ success: false, message: 'Server Error' });
+        success = false;
+        error = 'Payment Error';
+    }
+
+    if (status === true) {
+        try {
+            const update_transaction = await Payment.updateOne(
+                { razorpay_order_id, user_id },
+                { $set: { status: "capture" } }
+            );
+
+           
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ success: false, message: 'Server Error' });
+        }
+    } else {
+        return res.status(400).json({ success: false, message: error });
     }
 }
-
-
-
 
 module.exports ={
     checkout,
