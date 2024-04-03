@@ -4,4 +4,39 @@ const bcryptjs = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const config = require("../../config/config");
 
-const eventBooking = require("../../models/api/eventbookingModel");
+const EventDetails = require("../../models/api/eventModel");
+const userRegister = require("../../models/api/userregisterModel");
+
+const Booking = require("../../models/api/bookingModel");
+
+const bookingHistory = async (req,res) =>
+{
+   try {
+    const booking_id = req.params.booking_id;
+    const existedBookingDetails = await Booking.findOne({ _id: booking_id });
+    const status_code = existedBookingDetails.status_code;
+    const existedUserDetails = await userRegister.findOne({ _id: existedBookingDetails.user_id });
+
+    if (status_code == 1) {
+        eventData = await EventDetails.findOne({ _id: { $in: existedBookingDetails.bookedevent_id } });
+    }
+    
+    const response = {
+        success: true,
+        msg: "Data fetched successfully",
+        bookingDetails: existedBookingDetails,
+        userDetails: existedUserDetails,
+        eventData: eventData
+    };
+
+    res.status(200).json(response);
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, msg: 'Failed to fetch data', error: error.message });
+}
+
+};
+
+module.exports = {
+    bookingHistory
+}

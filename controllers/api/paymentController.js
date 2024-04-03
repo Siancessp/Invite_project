@@ -99,7 +99,7 @@ const payment = async (req, res) =>
                 const newBooking = await Booking.create({
                     user_id: user_id,
                     status_code: req.body.status_code,
-                    bookedevent_id: eventData._id.toString(), // Convert ObjectId to string
+                    bookedevent_id: eventData.eventid.toString(), // Convert ObjectId to string
                     nummberofDays: eventData.nummberofDays.toString(), // Convert to string
                     BookingDates: eventData.eventBookingDates.flat(), // Store all event booking dates
                     numberofadult: eventData.numberofadult.toString(), // Convert to string

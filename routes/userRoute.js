@@ -36,6 +36,8 @@ const tourController = require("../controllers/api/tourcontroller");
 const eventBookingController = require("../controllers/api/eventbookingController");
 const weakendBookingController = require("../controllers/api/weekendbookingController");
 
+const BookingController = require("../controllers/api/bookingController");
+
 const likeController = require("../controllers/api/likecontroller");
 const commentController = require("../controllers/api/commentcontroller");
 
@@ -86,5 +88,8 @@ user_route.post('/payment', paymentController.payment);
 user_route.post('/eventbooking', eventBookingController.eventbooking);
 user_route.post('/weekendbooking', weakendBookingController.weekendbooking);
 user_route.get('/getalleventBookings/:user_id', eventBookingController.getAllEventBookings);
+
+user_route.get('/bookingHistory/:booking_id', BookingController.bookingHistory);
+
 
 module.exports = user_route;
