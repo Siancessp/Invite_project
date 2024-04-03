@@ -86,8 +86,12 @@ user_route.post('/bookingconfirmation', paymentController.checkout);
 user_route.post('/payment', paymentController.payment);
 
 user_route.post('/eventbooking', eventBookingController.eventbooking);
-user_route.post('/weekendbooking', weakendBookingController.weekendbooking);
 user_route.get('/getalleventBookings/:user_id', eventBookingController.getAllEventBookings);
+
+user_route.get('/calculateGrandTotalPrice', weakendBookingController.calculateGrandTotalPrice);
+user_route.post('/weekendbooking', weakendBookingController.weekendbooking);
+user_route.get('/getallweekendbookings/:user_id', weakendBookingController.getAllWeekendBookings);
+
 
 user_route.get('/bookingHistory/:booking_id', BookingController.bookingHistory);
 
