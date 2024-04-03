@@ -31,5 +31,6 @@ const getallUsers = async (req, res) => {
 
 
 module.exports = {
-    User
+    User,
+    getallUsers
 }
