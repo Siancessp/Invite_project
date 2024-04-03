@@ -7,6 +7,7 @@ const config = require("../config/config");
 
 const Event = require("../models/addeventcategoryModels");
 const Category = require("../models/addcategoryModel");
+const EventDetails = require("../models/api/eventModel");
 
 const fetchCategories = async () => {
     try {
@@ -52,10 +53,14 @@ const inserteventcategory = async (req, res) => {
     }
 }
 
-
-const eventcategorylist = async (req, res) => {
+//This is for admin panel to display the list of the event
+const getallevent = async (req, res) => {
     try {
-        res.render('eventcategorylist'); // Make sure you have a 'login.hbs' file in your 'views' directory
+        const existedeventDetails = await EventDetails.find();
+        if (!existedeventDetails || existedeventDetails.length === 0) {
+            return res.status(404).json({ success: false, msg: 'Event Details not found' });
+        }
+        res.render('eventlist', { existedeventDetails });
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
@@ -64,6 +69,6 @@ const eventcategorylist = async (req, res) => {
 module.exports = {
     addeventcategory,
     inserteventcategory,
-    eventcategorylist,
+    getallevent,
     fetchCategories
 }
