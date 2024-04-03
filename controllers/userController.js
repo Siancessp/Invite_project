@@ -2,12 +2,14 @@ const express = require('express');
 const hbs  = require('hbs');
 const app = express();
 const bcryptjs = require('bcryptjs');
+const jwt = require("jsonwebtoken");
+const config = require("../config/config");
 
 const userRegister = require("../../models/api/userregisterModel");
 
 const User = async (req, res) => {
     try {
-        res.render('userlist'); // Make sure you have a 'login.hbs' file in your 'views' directory
+        res.render('userlist');
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
