@@ -27,7 +27,7 @@ const upload = multer({storage:storage});
 
 const loginController = require("../controllers/loginController");
 const registerController = require("../controllers/registerController");
-const userController = require('../controllers/userController');
+// const userController = require('../controllers/userController');
 
 const categoryController = require("../controllers/categoryController");
 const weakendcategoryController = require("../controllers/weekendcategoryController");
