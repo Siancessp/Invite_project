@@ -98,6 +98,7 @@ user_route.post('/tourbooking', tourBookingController.tourbooking);
 user_route.get('/getalltourbookings/:user_id', tourBookingController.getAllTourBookings);
 
 user_route.get('/bookingHistory/:booking_id', BookingController.bookingHistory);
+user_route.get('/bookingHistoryByUserId/:user_id', BookingController.bookingHistoryByUserId);
 
 
 module.exports = user_route;

@@ -50,6 +50,27 @@ const bookingHistory = async (req,res) =>
 
 };
 
+
+const bookingHistoryByUserId = async (req,res) =>
+{
+   try {
+    const user_id = req.params.user_id;
+    const existBookingDetails = await Booking.find({ user_id: user_id }); 
+    const response = {
+        success: true,
+        msg: "Data fetched successfully",
+        bookingDetails: existBookingDetails
+    };
+
+    res.status(200).json(response);
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, msg: 'Failed to fetch data', error: error.message });
+}
+
+};
+
 module.exports = {
-    bookingHistory
+    bookingHistory,
+    bookingHistoryByUserId
 }
