@@ -138,7 +138,7 @@ const getAllWeekendBookings = async (req, res) => {
 
         const formattedWekendBooking = {
             ...weekendBooking._doc,
-            eventBookingDates: formattedDates,
+            weekendBookingDates: formattedDates,
             weakendname:weekend.weakendname
         };
 

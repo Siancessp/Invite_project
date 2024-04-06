@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const config = require("../../config/config");
 
 const EventDetails = require("../../models/api/eventModel");
+const TourDetails = require("../../models/api/tourModel");
+const WeekendDetails = require("../../models/api/weakendModel");
 const userRegister = require("../../models/api/userregisterModel");
 
 const Booking = require("../../models/api/bookingModel");
@@ -16,9 +18,18 @@ const bookingHistory = async (req,res) =>
     const existedBookingDetails = await Booking.findOne({ _id: booking_id });
     const status_code = existedBookingDetails.status_code;
     const existedUserDetails = await userRegister.findOne({ _id: existedBookingDetails.user_id });
+    let eventData, wekendData, tourData;
 
     if (status_code == 1) {
         eventData = await EventDetails.findOne({ _id: { $in: existedBookingDetails.bookedevent_id } });
+    }
+    else if(status_code == 2)
+    {
+        wekendData = await WeekendDetails.findOne({ _id: { $in: existedBookingDetails.bookedevent_id } });
+    }
+    else if(status_code == 3)
+    {
+        tourData = await TourDetails.findOne({ _id: { $in: existedBookingDetails.bookedevent_id } });
     }
     
     const response = {
@@ -26,7 +37,9 @@ const bookingHistory = async (req,res) =>
         msg: "Data fetched successfully",
         bookingDetails: existedBookingDetails,
         userDetails: existedUserDetails,
-        eventData: eventData
+        eventData: eventData,
+        wekendData: wekendData,
+        tourData: tourData
     };
 
     res.status(200).json(response);

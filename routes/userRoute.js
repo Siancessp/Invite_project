@@ -35,6 +35,7 @@ const tourController = require("../controllers/api/tourcontroller");
 
 const eventBookingController = require("../controllers/api/eventbookingController");
 const weakendBookingController = require("../controllers/api/weekendbookingController");
+const tourBookingController = require("../controllers/api/tourbookingController");
 
 const BookingController = require("../controllers/api/bookingController");
 
@@ -92,6 +93,9 @@ user_route.get('/calculateGrandTotalPrice', weakendBookingController.calculateGr
 user_route.post('/weekendbooking', weakendBookingController.weekendbooking);
 user_route.get('/getallweekendbookings/:user_id', weakendBookingController.getAllWeekendBookings);
 
+
+user_route.post('/tourbooking', tourBookingController.tourbooking);
+user_route.get('/getalltourbookings/:user_id', tourBookingController.getAllTourBookings);
 
 user_route.get('/bookingHistory/:booking_id', BookingController.bookingHistory);
 
