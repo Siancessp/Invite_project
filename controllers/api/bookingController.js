@@ -55,30 +55,23 @@ const bookingHistory = async (req, res) => {
             __v: existedBookingDetails.__v
         };
 
-        let eventDetailWithUser, weekendData, tourData;
+        let eventDetailWithUser, weekendData, tourData, eventData;
 
         if (status_code == 1) {
             eventData = await EventDetails.findOne({ _id: { $in: existedBookingDetails.bookedevent_id } });
-            if (eventData) {
-                eventDetailWithUser = {
-                    event_id: eventData._id,
-                    eventstartdate: getHumanReadableDate(new Date(eventData.event_start_date)),
-                    eventenddate: getHumanReadableDate(new Date(eventData.event_end_date)),
-                    eventname: eventData.eventname,
-                    eventlocation: eventData.event_location,
-                    eventdescription: eventData.eventdescription
-                };
-            }
+            eventDetailWithUser = {
+                event_id: eventData._id,
+                eventstartdate: getHumanReadableDate(new Date(eventData.event_start_date)),
+                eventenddate: getHumanReadableDate(new Date(eventData.event_end_date)),
+                eventname: eventData.eventname,
+                eventlocation: eventData.event_location,
+                eventdescription: eventData.eventdescription
+            };
+            console.log(eventDetailWithUser);
         } else if (status_code == 2) {
             weekendData = await WeekendDetails.findOne({ _id: { $in: existedBookingDetails.bookedevent_id } });
-            if (weekendData) {
-                // Handle weekendData
-            }
         } else if (status_code == 3) {
             tourData = await TourDetails.findOne({ _id: { $in: existedBookingDetails.bookedevent_id } });
-            if (tourData) {
-                // Handle tourData
-            }
         }
 
         const response = {
@@ -97,7 +90,6 @@ const bookingHistory = async (req, res) => {
         res.status(500).json({ success: false, msg: 'Failed to fetch data', error: error.message });
     }
 };
-
 
 
 
