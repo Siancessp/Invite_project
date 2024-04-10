@@ -38,6 +38,7 @@ const weakendBookingController = require("../controllers/api/weekendbookingContr
 const tourBookingController = require("../controllers/api/tourbookingController");
 
 const BookingController = require("../controllers/api/bookingController");
+const newsfeedController = require("../controllers/api/newsfeedController");
 
 const likeController = require("../controllers/api/likecontroller");
 const commentController = require("../controllers/api/commentcontroller");
@@ -50,7 +51,6 @@ user_route.get('/', function(req, res) {
 user_route.post('/register', userController.insertuserData);
 user_route.post('/login', userController.user_login);
 user_route.get('/getprofile/:user_id', userController.getprofile);
-// user_route.post('/updateprofile',upload.single('profile_image'), userController.updateprofileById);
 user_route.post('/updateprofile', upload.fields([
     { name: 'profile_image'},
     { name: 'background_image'}
@@ -99,6 +99,8 @@ user_route.get('/getalltourbookings/:user_id', tourBookingController.getAllTourB
 
 user_route.get('/bookingHistory/:booking_id', BookingController.bookingHistory);
 user_route.get('/bookingHistoryByUserId/:user_id', BookingController.bookingHistoryByUserId);
+
+user_route.get('/newsFeeds', newsfeedController.newsFeeds);
 
 
 module.exports = user_route;
