@@ -86,16 +86,16 @@ user_route.get('/getlikedetails/:post_id', likeController.getLikeDetails);
 // user_route.post('/bookingconfirmation', paymentController.checkout);
 // user_route.post('/payment', paymentController.payment);
 
-user_route.post('/eventbooking', eventBookingController.eventbooking);
-user_route.get('/getalleventBookings/:user_id', eventBookingController.getAllEventBookings);
+// user_route.post('/eventbooking', eventBookingController.eventbooking);
+// user_route.get('/getalleventBookings/:user_id', eventBookingController.getAllEventBookings);
 
-user_route.get('/calculateGrandTotalPrice', weakendBookingController.calculateGrandTotalPrice);
-user_route.post('/weekendbooking', weakendBookingController.weekendbooking);
-user_route.get('/getallweekendbookings/:user_id', weakendBookingController.getAllWeekendBookings);
+// user_route.get('/calculateGrandTotalPrice', weakendBookingController.calculateGrandTotalPrice);
+// user_route.post('/weekendbooking', weakendBookingController.weekendbooking);
+// user_route.get('/getallweekendbookings/:user_id', weakendBookingController.getAllWeekendBookings);
 
 
-user_route.post('/tourbooking', tourBookingController.tourbooking);
-user_route.get('/getalltourbookings/:user_id', tourBookingController.getAllTourBookings);
+// user_route.post('/tourbooking', tourBookingController.tourbooking);
+// user_route.get('/getalltourbookings/:user_id', tourBookingController.getAllTourBookings);
 
 // user_route.get('/bookingHistory/:booking_id', BookingController.bookingHistory);
 // user_route.get('/bookingHistoryByUserId/:user_id', BookingController.bookingHistoryByUserId);
