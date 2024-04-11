@@ -16,19 +16,19 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 hbs.registerPartials(path.join(__dirname, 'views/common'));
 
-// // CORS middleware setup
-// app.use((req, res, next) => {
-//     res.setHeader("Access-Control-Allow-Origin", "*");
-//     res.setHeader(
-//         "Access-Control-Allow-Headers",
-//         "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-//     );
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-//     if (req.method === 'OPTIONS') {
-//         return res.sendStatus(200);
-//     }
-//     next();
-// });
+// CORS middleware setup
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
 
 // Use middleware
 app.use('/', admin_route);
