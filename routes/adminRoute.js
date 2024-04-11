@@ -52,9 +52,9 @@ admin_route.get('/',loginController.login);
 admin_route.get('/login',loginController.login);
 admin_route.post('/verifylogin',loginController.verifylogin);
 
-// admin_route.get('/addeventcategory',addeventController.addeventcategory);
-// admin_route.get('/getallevent',addeventController.getallevent);
-// admin_route.post('/eventcategory',upload.single('eventtemplate'),addeventController.inserteventcategory);
+admin_route.get('/addeventcategory',addeventController.addeventcategory);
+admin_route.get('/getallevent',addeventController.getallevent);
+admin_route.post('/eventcategory',upload.single('eventtemplate'),addeventController.inserteventcategory);
 // admin_route.get('/eventcategorylist',addeventController.eventcategorylist);
 
 admin_route.get('/addweakendcategory',weakendcategoryController.addweakendcategory);
