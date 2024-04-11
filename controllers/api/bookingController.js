@@ -97,16 +97,13 @@ const bookingHistory = async (req, res) => {
 const bookingHistoryByUserId = async (req, res) => {
     try {
         const user_id = req.params.user_id;
-        
-        // Fetch booking details for the user_id
+
         const existBookingDetails = await Booking.find({ user_id: user_id }); 
-        
-        // Extract and format dates to "DD Month YYYY" format
         const updatedBookingDetails = existBookingDetails.map(booking => {
             const formattedDates = booking.BookingDates.map(date => {
                 const d = new Date(date);
-                const day = d.getDate().toString().padStart(2, '0'); // Get day with leading zero if needed
-                const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(d); // Get full month name
+                const day = d.getDate().toString().padStart(2, '0'); 
+                const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(d); 
                 const year = d.getFullYear(); // Get full year
                 return `${day} ${month} ${year}`;
             });

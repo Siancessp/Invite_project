@@ -174,8 +174,6 @@ const gettourDetails = async (req, res) => {
                     tour_id: tourDetail._id,
                     tourstartdate: getHumanReadableDate(new Date(tourDetail.tour_start_date)),
                     tourenddate: getHumanReadableDate(new Date(tourDetail.tour_end_date)),
-                    tourstarttime: formatTime(tourDetail.tour_start_time),
-                    tourendtime: formatTime(tourDetail.tour_end_time),
                     tourlocation: tourDetail.tour_location,
                     tourtemplate: {
                         tourtemplate_id: tourtemplate._id,
