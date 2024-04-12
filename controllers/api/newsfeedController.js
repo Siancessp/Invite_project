@@ -171,15 +171,15 @@ const generateShareableLink = (post, type) => {
   
   const shareEventsToursWeekends = async (req, res) => {
     try {
-        const { eventIds, tourIds, weekendIds, type } = req.body;
+        const { postId, type } = req.body;
         console.log("Received request with body:", req.body);
 
         let sharedDetails;
 
         if (type === 'event') {
-            const event = await EventDetails.findById(eventIds);
+            const event = await EventDetails.findById(postId);
             if (!event) {
-                throw new Error(`Event with ID ${eventIds} not found`);
+                throw new Error(`Event with ID ${postId} not found`);
             }
             sharedDetails = {
                 id: event._id,
@@ -189,9 +189,9 @@ const generateShareableLink = (post, type) => {
                 shareableLink: generateShareableLink(event, 'event'),
             };
         } else if (type === 'tour') {
-            const tour = await TourDetails.findById(tourIds);
+            const tour = await TourDetails.findById(postId);
             if (!tour) {
-                throw new Error(`Tour with ID ${tourIds} not found`);
+                throw new Error(`Tour with ID ${postId} not found`);
             }
             sharedDetails = {
                 id: tour._id,
@@ -201,9 +201,9 @@ const generateShareableLink = (post, type) => {
                 shareableLink: generateShareableLink(tour, 'tour'),
             };
         } else if (type === 'weekend') {
-            const weekend = await WeekendDetails.findById(weekendIds);
+            const weekend = await WeekendDetails.findById(postId);
             if (!weekend) {
-                throw new Error(`Weekend with ID ${weekendIds} not found`);
+                throw new Error(`Weekend with ID ${postId} not found`);
             }
             sharedDetails = {
                 id: weekend._id,
