@@ -101,9 +101,9 @@ const newsFeeds = async (req, res) => {
                       username: user.fullname,
                       // Add other user details you want to include
                   } : null,
-                  weekendtemplate: weekendtemplate ? {
+                  templateimage: weekendtemplate ? {
                       _id: weekendtemplate._id,
-                      weekendtemplate: baseImageUrl + '/' + weekendtemplate.weakendtemplate
+                      templateimage: baseImageUrl + '/' + weekendtemplate.weakendtemplate
                   } : null
               };
           }),
