@@ -81,7 +81,7 @@ const newsFeeds = async (req, res) => {
                       username: user.fullname,
                       // Add other user details you want to include
                   } : null,
-                  eventtemplate: eventtemplate ? {
+                  templateimage: eventtemplate ? {
                       _id: eventtemplate._id,
                       eventtemplate: baseImageUrl + '/' + eventtemplate.eventtemplate
                       // Add other template details you want to include
@@ -113,6 +113,8 @@ const newsFeeds = async (req, res) => {
               return {
                   type: 'tour', // Assigning type 'tour' for tour details
                   ...tour.toObject(),
+                  tour_start_date: getHumanReadableDate(tour.tour_start_date),
+                  tour_start_time: formatTime(tour.tour_start_time),
                   user: user ? {
                       _id: user._id,
                       username: user.fullname,
@@ -135,9 +137,9 @@ const newsFeeds = async (req, res) => {
 
       // Custom sorting function to sort events by date and time
       allEvents.sort((a, b) => {
-          const dateA = new Date(a.event_start_date + " " + a.event_start_time);
-          const dateB = new Date(b.event_start_date + " " + b.event_start_time);
-          return dateA - dateB;
+        const dateA = new Date(a.event_start_date + " " + a.event_start_time);
+        const dateB = new Date(b.event_start_date + " " + b.event_start_time);
+        return dateA - dateB;
       });
 
       // Send the object as JSON response
