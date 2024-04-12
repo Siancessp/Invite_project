@@ -73,9 +73,11 @@ const newsFeeds = async (req, res) => {
               const eventtemplate = EventtemplateDetails.find(eventtemplate => eventtemplate._id.toString() === event.eventtemplateid.toString());
               return {
                   type: 'event', // Assigning type 'event' for event details
-                  ...event.toObject(),
-                  event_start_date: getHumanReadableDate(event.event_start_date),
-                  event_start_time: formatTime(event.event_start_time),
+                  postId: event._id,
+                  description: event.eventdescription,
+                  location: event.event_location,
+                  startdate: getHumanReadableDate(event.event_start_date),
+                  starttime: formatTime(event.event_start_time),
                   user: user ? {
                       _id: user._id,
                       username: user.fullname,
@@ -93,9 +95,12 @@ const newsFeeds = async (req, res) => {
               const weekendtemplate = WeekendtemplateDetails.find(weekendtemplate => weekendtemplate._id.toString() === weekend.weakendtemplateid.toString());
               return {
                   type: 'weekend', // Assigning type 'weekend' for weekend details
-                  ...weekend.toObject(),
-                  weakend_start_date: getHumanReadableDate(weekend.weakend_start_date),
-                  weakend_start_time: formatTime(weekend.weakend_start_time),
+                //   ...weekend.toObject(),
+                  postId: weekend._id,
+                  description: weekend.weakenddescription,
+                  location: weekend.weakend_location,
+                  startdate: getHumanReadableDate(weekend.weakend_start_date),
+                  starttime: formatTime(weekend.weakend_start_time),
                   user: user ? {
                       _id: user._id,
                       username: user.fullname,
@@ -112,17 +117,19 @@ const newsFeeds = async (req, res) => {
               const tourtemplate = TourtemplateDetails.find(tourtemplate => tourtemplate._id.toString() === tour.tourtemplateid.toString());
               return {
                   type: 'tour', // Assigning type 'tour' for tour details
-                  ...tour.toObject(),
-                  tour_start_date: getHumanReadableDate(tour.tour_start_date),
-                  tour_start_time: formatTime(tour.tour_start_time),
+                  postId: tour._id,
+                  description: tour.tourdescription,
+                  location: tour.tour_location,
+                  startdate: getHumanReadableDate(tour.tour_start_date),
+                  starttime: formatTime(tour.tour_start_time),
                   user: user ? {
                       _id: user._id,
                       username: user.fullname,
                       // Add other user details you want to include
                   } : null,
-                  tourtemplate: tourtemplate ? {
+                  templateimage: tourtemplate ? {
                       _id: tourtemplate._id,
-                      tourtemplate: baseImageUrl + '/' + tourtemplate.tourtemplate
+                      templateimage: baseImageUrl + '/' + tourtemplate.tourtemplate
                   } : null
               };
           }),
