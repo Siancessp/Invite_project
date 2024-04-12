@@ -44,6 +44,10 @@ const eventregisterSchema = new mongoose.Schema({
     event_price_child: {
         type: String,
         required: true
+    },
+    created_date: {
+        type: Date,
+        default: Date.now
     }
 });
 

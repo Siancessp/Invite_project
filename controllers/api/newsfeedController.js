@@ -75,6 +75,7 @@ const newsFeeds = async (req, res) => {
                   type: 'event', // Assigning type 'event' for event details
                   postId: event._id,
                   description: event.eventdescription,
+                  createddate: getHumanReadableDate(event.created_date),
                   location: event.event_location,
                   startdate: getHumanReadableDate(event.event_start_date),
                   starttime: formatTime(event.event_start_time),
@@ -99,6 +100,7 @@ const newsFeeds = async (req, res) => {
                   postId: weekend._id,
                   description: weekend.weakenddescription,
                   location: weekend.weakend_location,
+                  createddate: getHumanReadableDate(weekend.created_date),
                   startdate: getHumanReadableDate(weekend.weakend_start_date),
                   starttime: formatTime(weekend.weakend_start_time),
                   user: user ? {
@@ -120,6 +122,7 @@ const newsFeeds = async (req, res) => {
                   postId: tour._id,
                   description: tour.tourdescription,
                   location: tour.tour_location,
+                  createddate: getHumanReadableDate(tour.created_date),
                   startdate: getHumanReadableDate(tour.tour_start_date),
                   starttime: formatTime(tour.tour_start_time),
                   user: user ? {

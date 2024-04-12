@@ -47,6 +47,10 @@ const tourregisterSchema = new mongoose.Schema({
     },
     tour_price_infant: {
         type: String
+    },
+    created_date: {
+        type: Date,
+        default: Date.now
     }
 });
 

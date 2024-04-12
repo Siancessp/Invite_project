@@ -47,6 +47,10 @@ const weakendregisterSchema = new mongoose.Schema({
     },
     weakend_price_infant: {
         type: String
+    },
+    created_date: {
+        type: Date,
+        default: Date.now
     }
 });
 
