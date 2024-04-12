@@ -78,7 +78,7 @@ user_route.post('/storelikedetails', likeController.storelikeDetails);
 user_route.get('/getlikedetails/:post_id', likeController.getLikeDetails);
 
 user_route.post('/storecommentdetails', commentController.storecommentDetails);
-// user_route.get('/getcommentdetails', commentController.getcommentDetails);
+user_route.get('/getcommentdetails/:post_id', commentController.getcommentDetails);
 // user_route.get('/addreplytocomment/:commentId', commentController.addReplyToComment);
 // user_route.get('/addreplytocomment/:commentId', commentController.addReplyToComment);
 
