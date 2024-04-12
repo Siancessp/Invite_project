@@ -135,6 +135,81 @@ const newsFeeds = async (req, res) => {
     }
 };
 
+const generateShareableLink = (post, type) => {
+    let link;
+    if (type === 'event') {
+      link = `http://20.163.173.61/api/getselectedeventdetails/${post._id}`;
+    } else if (type === 'tour') {
+      link = `http://20.163.173.61/api/getalltourdetailsbyid/${post._id}`;
+    } else if (type === 'weekend') {
+      link = `http://20.163.173.61/api/getallweekenddetails/${post._id}`;
+    }
+    return link;
+  };
+  
+  const shareEventsToursWeekends = async (req, res) => {
+    try {
+        const { eventIds, tourIds, weekendIds, type } = req.body;
+        console.log("Received request with body:", req.body);
+
+        let sharedDetails;
+
+        if (type === 'event') {
+            const event = await EventDetails.findById(eventIds);
+            if (!event) {
+                throw new Error(`Event with ID ${eventIds} not found`);
+            }
+            sharedDetails = {
+                id: event._id,
+                type: 'event',
+                title: event.title,
+                description: event.description,
+                shareableLink: generateShareableLink(event, 'event'),
+            };
+        } else if (type === 'tour') {
+            const tour = await TourDetails.findById(tourIds);
+            if (!tour) {
+                throw new Error(`Tour with ID ${tourIds} not found`);
+            }
+            sharedDetails = {
+                id: tour._id,
+                type: 'tour',
+                title: tour.title,
+                description: tour.description,
+                shareableLink: generateShareableLink(tour, 'tour'),
+            };
+        } else if (type === 'weekend') {
+            const weekend = await WeekendDetails.findById(weekendIds);
+            if (!weekend) {
+                throw new Error(`Weekend with ID ${weekendIds} not found`);
+            }
+            sharedDetails = {
+                id: weekend._id,
+                type: 'weekend',
+                title: weekend.title,
+                description: weekend.description,
+                shareableLink: generateShareableLink(weekend, 'weekend'),
+            };
+        } else {
+            return res.status(400).json({ error: 'Invalid type specified' });
+        }
+
+        const response = {
+            success: true,
+            msg: "Shareable link generated successfully",
+            sharedDetails,
+        };
+
+        res.json(response);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+
 module.exports = {
-    newsFeeds
+    newsFeeds,
+    shareEventsToursWeekends
 }
