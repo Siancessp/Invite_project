@@ -68,6 +68,7 @@ const newsFeeds = async (req, res) => {
                 const user = userEventDetails.find(user => user._id.toString() === event.user_id.toString());
                 const eventtemplate = EventtemplateDetails.find(eventtemplate => eventtemplate._id.toString() === event.eventtemplateid.toString());
                 return {
+                    type: 'event',
                     ...event.toObject(),
                     event_start_date: getHumanReadableDate(event.event_start_date),
                     event_start_time: formatTime(event.event_start_time),
@@ -87,6 +88,7 @@ const newsFeeds = async (req, res) => {
                 const user = userWeekendDetails.find(user => user._id.toString() === weekend.user_id.toString());
                 const weekendtemplate = WeekendtemplateDetails.find(weekendtemplate => weekendtemplate._id.toString() === weekend.weakendtemplateid.toString());
                 return {
+                    type: 'weekend',
                     ...weekend.toObject(),
                     weakend_start_date: getHumanReadableDate(weekend.weakend_start_date),
                     weakend_start_time: formatTime(weekend.weakend_start_time),
@@ -106,6 +108,7 @@ const newsFeeds = async (req, res) => {
                 const user = userTourDetails.find(user => user._id.toString() === tour.user_id.toString());
                 const tourtemplate = TourtemplateDetails.find(tourtemplate => tourtemplate._id.toString() === tour.tourtemplateid.toString());
                 return {
+                    type: 'tour',
                     ...tour.toObject(),
                     user: user ? {
                         _id: user._id,

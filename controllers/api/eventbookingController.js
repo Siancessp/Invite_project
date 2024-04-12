@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
 const bcryptjs = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const config = require("../../config/config");
