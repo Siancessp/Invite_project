@@ -38,101 +38,114 @@ const formatTime = (time) => {
 };
 
 const newsFeeds = async (req, res) => {
-    try {
-        const existedeventDetails = await EventDetails.find();
-        const existedweekendDetails = await WeekendDetails.find();
-        const existedtourDetails = await TourDetails.find();
-        
-        // Get unique user IDs for each type of detail
-        const eventUserIds = existedeventDetails.map(event => event.user_id);
-        const weekendUserIds = existedweekendDetails.map(weekend => weekend.user_id);
-        const tourUserIds = existedtourDetails.map(tour => tour.user_id);
-        
-        // Find user details for each type of detail
-        const userEventDetails = await userRegister.find({ _id: { $in: eventUserIds } });
-        const userWeekendDetails = await userRegister.find({ _id: { $in: weekendUserIds } });
-        const userTourDetails = await userRegister.find({ _id: { $in: tourUserIds } });
+  try {
+      const baseImageUrl = "/uploads/event_template";
 
-        const eventtemplateIds = existedeventDetails.map(eventtemplate => eventtemplate.eventtemplateid);
-        const weekendtemplateIds = existedweekendDetails.map(weekendtemplate => weekendtemplate.weakendtemplateid);
-        const tourtemplateIds = existedtourDetails.map(tourtempalte => tourtempalte.tourtemplateid);
+      // Get all event details
+      const existedeventDetails = await EventDetails.find();
+      const existedweekendDetails = await WeekendDetails.find();
+      const existedtourDetails = await TourDetails.find();
 
-        const EventtemplateDetails = await EventTemaplte.find({ _id: { $in: eventtemplateIds } });
-        const WeekendtemplateDetails = await WeekendTemaplte.find({ _id: { $in: weekendtemplateIds } });
-        const TourtemplateDetails = await TourTemplate.find({ _id: { $in: tourtemplateIds}});
+      // Get unique user IDs for each type of detail
+      const eventUserIds = existedeventDetails.map(event => event.user_id);
+      const weekendUserIds = existedweekendDetails.map(weekend => weekend.user_id);
+      const tourUserIds = existedtourDetails.map(tour => tour.user_id);
 
-        const baseImageUrl = "/uploads/event_template";
-        // Create an object with the results
-        const newsData = {
-            eventDetails: existedeventDetails.map(event => {
-                const user = userEventDetails.find(user => user._id.toString() === event.user_id.toString());
-                const eventtemplate = EventtemplateDetails.find(eventtemplate => eventtemplate._id.toString() === event.eventtemplateid.toString());
-                return {
-                    type: 'event',
-                    ...event.toObject(),
-                    event_start_date: getHumanReadableDate(event.event_start_date),
-                    event_start_time: formatTime(event.event_start_time),
-                    user: user ? {
-                        _id: user._id,
-                        username: user.fullname,
-                        // Add other user details you want to include
-                    } : null,
-                    eventtemplate: eventtemplate ? {
-                        _id: eventtemplate._id,
-                        eventtemplate : baseImageUrl + '/' + eventtemplate.eventtemplate
-                        // Add other template details you want to include
-                    } : null
-                };
-            }),
-            weekendDetails: existedweekendDetails.map(weekend => {
-                const user = userWeekendDetails.find(user => user._id.toString() === weekend.user_id.toString());
-                const weekendtemplate = WeekendtemplateDetails.find(weekendtemplate => weekendtemplate._id.toString() === weekend.weakendtemplateid.toString());
-                return {
-                    type: 'weekend',
-                    ...weekend.toObject(),
-                    weakend_start_date: getHumanReadableDate(weekend.weakend_start_date),
-                    weakend_start_time: formatTime(weekend.weakend_start_time),
-                    user: user ? {
-                        _id: user._id,
-                        username: user.fullname,
-                        // Add other user details you want to include
-                    } : null,
-                    weekendtemplate: weekendtemplate ?
-                    {
-                        _id: weekendtemplate._id,
-                        weekendtemplate: baseImageUrl + '/' + weekendtemplate.weakendtemplate
-                    }: null
-                };
-            }),
-            tourDetails: existedtourDetails.map(tour => {
-                const user = userTourDetails.find(user => user._id.toString() === tour.user_id.toString());
-                const tourtemplate = TourtemplateDetails.find(tourtemplate => tourtemplate._id.toString() === tour.tourtemplateid.toString());
-                return {
-                    type: 'tour',
-                    ...tour.toObject(),
-                    user: user ? {
-                        _id: user._id,
-                        username: user.fullname,
-                        // Add other user details you want to include
-                    } : null,
-                    tourtemplate: tourtemplate ?
-                    {
-                        _id: tourtemplate._id,
-                        tourtemplate: baseImageUrl + '/' + tourtemplate.tourtemplate
-                    }: null
-                };
-            }),
-            userEventDetails,
-            userWeekendDetails,
-            userTourDetails
-        };
+      // Find user details for each type of detail
+      const userEventDetails = await userRegister.find({ _id: { $in: eventUserIds } });
+      const userWeekendDetails = await userRegister.find({ _id: { $in: weekendUserIds } });
+      const userTourDetails = await userRegister.find({ _id: { $in: tourUserIds } });
 
-        // Send the object as JSON response
-        res.status(200).json(newsData);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+      // Get template IDs for each type of detail
+      const eventtemplateIds = existedeventDetails.map(eventtemplate => eventtemplate.eventtemplateid);
+      const weekendtemplateIds = existedweekendDetails.map(weekendtemplate => weekendtemplate.weakendtemplateid);
+      const tourtemplateIds = existedtourDetails.map(tourtempalte => tourtempalte.tourtemplateid);
+
+      // Find template details for each type of detail
+      const EventtemplateDetails = await EventTemaplte.find({ _id: { $in: eventtemplateIds } });
+      const WeekendtemplateDetails = await WeekendTemaplte.find({ _id: { $in: weekendtemplateIds } });
+      const TourtemplateDetails = await TourTemplate.find({ _id: { $in: tourtemplateIds } });
+
+      // Create an object to store the sorted and formatted data
+      const newsData = {
+          eventDetails: existedeventDetails.map(event => {
+              const user = userEventDetails.find(user => user._id.toString() === event.user_id.toString());
+              const eventtemplate = EventtemplateDetails.find(eventtemplate => eventtemplate._id.toString() === event.eventtemplateid.toString());
+              return {
+                  type: 'event', // Assigning type 'event' for event details
+                  ...event.toObject(),
+                  event_start_date: getHumanReadableDate(event.event_start_date),
+                  event_start_time: formatTime(event.event_start_time),
+                  user: user ? {
+                      _id: user._id,
+                      username: user.fullname,
+                      // Add other user details you want to include
+                  } : null,
+                  eventtemplate: eventtemplate ? {
+                      _id: eventtemplate._id,
+                      eventtemplate: baseImageUrl + '/' + eventtemplate.eventtemplate
+                      // Add other template details you want to include
+                  } : null
+              };
+          }),
+          weekendDetails: existedweekendDetails.map(weekend => {
+              const user = userWeekendDetails.find(user => user._id.toString() === weekend.user_id.toString());
+              const weekendtemplate = WeekendtemplateDetails.find(weekendtemplate => weekendtemplate._id.toString() === weekend.weakendtemplateid.toString());
+              return {
+                  type: 'weekend', // Assigning type 'weekend' for weekend details
+                  ...weekend.toObject(),
+                  weakend_start_date: getHumanReadableDate(weekend.weakend_start_date),
+                  weakend_start_time: formatTime(weekend.weakend_start_time),
+                  user: user ? {
+                      _id: user._id,
+                      username: user.fullname,
+                      // Add other user details you want to include
+                  } : null,
+                  weekendtemplate: weekendtemplate ? {
+                      _id: weekendtemplate._id,
+                      weekendtemplate: baseImageUrl + '/' + weekendtemplate.weakendtemplate
+                  } : null
+              };
+          }),
+          tourDetails: existedtourDetails.map(tour => {
+              const user = userTourDetails.find(user => user._id.toString() === tour.user_id.toString());
+              const tourtemplate = TourtemplateDetails.find(tourtemplate => tourtemplate._id.toString() === tour.tourtemplateid.toString());
+              return {
+                  type: 'tour', // Assigning type 'tour' for tour details
+                  ...tour.toObject(),
+                  user: user ? {
+                      _id: user._id,
+                      username: user.fullname,
+                      // Add other user details you want to include
+                  } : null,
+                  tourtemplate: tourtemplate ? {
+                      _id: tourtemplate._id,
+                      tourtemplate: baseImageUrl + '/' + tourtemplate.tourtemplate
+                  } : null
+              };
+          }),
+      };
+
+      // Combine all events into one array
+      const allEvents = [
+          ...newsData.eventDetails,
+          ...newsData.weekendDetails,
+          ...newsData.tourDetails
+      ];
+
+      // Custom sorting function to sort events by date and time
+      allEvents.sort((a, b) => {
+          const dateA = new Date(a.event_start_date + " " + a.event_start_time);
+          const dateB = new Date(b.event_start_date + " " + b.event_start_time);
+          return dateA - dateB;
+      });
+
+      // Send the object as JSON response
+      res.status(200).json({ allEvents });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 const generateShareableLink = (post, type) => {
