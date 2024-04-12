@@ -83,7 +83,7 @@ const newsFeeds = async (req, res) => {
                   } : null,
                   templateimage: eventtemplate ? {
                       _id: eventtemplate._id,
-                      eventtemplate: baseImageUrl + '/' + eventtemplate.eventtemplate
+                      templateimage: baseImageUrl + '/' + eventtemplate.eventtemplate
                       // Add other template details you want to include
                   } : null
               };
