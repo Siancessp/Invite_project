@@ -74,8 +74,8 @@ user_route.post('/addtourdetails', tourController.addtourDetails);
 user_route.get('/gettourdetails', tourController.gettourDetails);
 user_route.get('/getalltourdetailsbyid/:tourid', tourController.getalltourdetailsbyid);
 
-// user_route.post('/storelikedetails', likeController.storelikeDetails);
-// user_route.get('/getlikedetails/:post_id', likeController.getLikeDetails);
+user_route.post('/storelikedetails', likeController.storelikeDetails);
+user_route.get('/getlikedetails/:post_id', likeController.getLikeDetails);
 
 // user_route.post('/storecommentdetails', commentController.storecommentDetails);
 // user_route.get('/getcommentdetails', commentController.getcommentDetails);
