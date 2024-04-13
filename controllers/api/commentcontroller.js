@@ -106,7 +106,7 @@ const getcommentDetails = async (req, res) => {
 
 const deleteComment = async (req,res) =>
 {
-    const { commentId } = req.body;
+    const { commentId } = req.params;
 
     try{
         const deletedComment = await Comment.findByIdAndDelete(commentId);
@@ -230,7 +230,7 @@ const getCommentWithReplies = async (req, res) => {
 };
 
 const deleteReply = async (req, res) => {
-    const { replyId } = req.body;
+    const { replyId } = req.params;
 
     try {
         // Find the comment containing the reply and remove the reply
