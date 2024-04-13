@@ -10,9 +10,9 @@ const User = require("../../models/api/userregisterModel");
 
 const storelikeDetails = async (req, res) => {
     const { user_id, post_id, user_sharedBy } = req.body;
-    
+
     try {
-        if (!mongoose.Types.ObjectId.isValid(user_id) || 
+        if (!mongoose.Types.ObjectId.isValid(user_id) ||
             !mongoose.Types.ObjectId.isValid(post_id) ||
             (user_sharedBy && !mongoose.Types.ObjectId.isValid(user_sharedBy))) {
             return res.status(400).json({ success: false, message: 'Invalid IDs' });
@@ -22,7 +22,7 @@ const storelikeDetails = async (req, res) => {
         const existingLike = await Like.findOne({ post_id, liked_By: user_id });
 
         if (existingLike) {
-            // If the like exists, remove it (unlike)
+            // If the user has already liked the post, remove the like
             await Like.findOneAndUpdate(
                 { _id: existingLike._id },
                 { $pull: { liked_By: user_id }, $inc: { likes: -1 } }
@@ -31,15 +31,32 @@ const storelikeDetails = async (req, res) => {
             return res.status(200).json({ success: true, message: 'Like removed successfully' });
         }
 
-        // If the like does not exist, add it and increment likes count
-        await Like.findOneAndUpdate(
-            { post_id },
-            { $addToSet: { liked_By: user_id }, $inc: { likes: 1 } },
-            { upsert: true }
-        );
+        // Check if any other user has liked the post
+        const otherLike = await Like.findOne({ post_id, liked_By: { $ne: user_id } });
 
-        return res.status(201).json({ success: true, message: 'Like added successfully' });
-    } catch(error) {
+        if (otherLike) {
+            // If other users have liked the post, add the like and increment the likes count
+            await Like.findOneAndUpdate(
+                { _id: otherLike._id },
+                { $addToSet: { liked_By: user_id }, $inc: { likes: 1 } }
+            );
+
+            return res.status(200).json({ success: true, message: 'Like added successfully' });
+        }
+
+        // If no likes exist for the post, add the like and set likes count to 1
+        const newLike = new Like({
+            liked_By: [user_id],
+            post_id,
+            likes: 1,
+            user_sharedBy
+        });
+
+        const savedLike = await newLike.save();
+
+        return res.status(201).json({ success: true, message: 'Like added successfully', data: savedLike });
+
+    } catch (error) {
         console.error(error);
         return res.status(500).send({ success: false, msg: "Internal Server Error" });
     }
