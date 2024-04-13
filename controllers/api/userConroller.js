@@ -122,6 +122,8 @@ const getprofile = async (req, res) => {
 const updateprofileById = async (req, res) => {
     const { fullname, mobile, email, user_bio, user_id } = req.body;
     // Check if profile_image and background_image are included in the request
+    const baseImageUrlP = "/uploads/profile_image";
+    const baseImageUrlB = "/uploads/background_image";
     
     const { profile_image, background_image } = req.files;
 
@@ -135,8 +137,8 @@ const updateprofileById = async (req, res) => {
                     mobile,
                     email,
                     user_bio,
-                    profile_image: profile_image ? profile_image[0].filename : null,
-                    background_image: background_image ? background_image[0].filename : null
+                    profile_image: baseImageUrlP + '/' + profile_image ? profile_image[0].filename : null,
+                    background_image: baseImageUrlB + '/' + background_image ? background_image[0].filename : null
                 }
             },
             { new: true } // Return the updated document
