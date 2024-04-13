@@ -42,7 +42,27 @@ const storecommentDetails = async (req, res) => {
     }
 };
 
+const getCommentCount = async (req, res) => {
+    const { post_id } = req.params;
+    try {
+        // Ensure post_id is valid
+        if (!post_id) {
+            return res.status(400).json({ success: false, message: 'Invalid post_id' });
+        }
 
+        // Find the count of comments for the specified post
+        const commentCount = await Comment.countDocuments({ post_id });
+
+        res.status(200).json({
+            success: true,
+            post_id:post_id, 
+            commentCount: commentCount,
+         });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+};
 
 const getcommentDetails = async (req, res) => {
     const { post_id } = req.params;
@@ -145,5 +165,6 @@ module.exports = {
     storecommentDetails,
     getcommentDetails,
     addReplyToComment,
-    getCommentWithReplies
+    getCommentWithReplies,
+    getCommentCount
 }
