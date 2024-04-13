@@ -107,6 +107,14 @@ const addReplyToComment = async (req, res) => {
     const { replied_By, reply, commentId } = req.body;
 
     try {
+        // Check if commentId is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(commentId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid commentId'
+            });
+        }
+
         // Find the comment by its ID
         const comment = await Comment.findById(commentId);
 
@@ -119,23 +127,24 @@ const addReplyToComment = async (req, res) => {
 
         // Add the new reply to the replies array
         comment.replies.push({
-            replied_By: replied_By, // The ID of the user who replied
+            replied_By: replied_By,
             reply: reply
         });
 
         // Save the updated comment
-        await comment.save();
+        const updatedComment = await comment.save();
 
         res.status(201).json({
             success: true,
             message: 'Reply added successfully',
-            data: comment
+            data: updatedComment
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
+
 
 const getCommentWithReplies = async (req, res) => {
     const { commentId } = req.params;
