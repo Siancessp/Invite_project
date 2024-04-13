@@ -79,8 +79,8 @@ user_route.get('/getlikedetails/:post_id', likeController.getLikeDetails);
 
 user_route.post('/storecommentdetails', commentController.storecommentDetails);
 user_route.get('/getcommentdetails/:post_id', commentController.getcommentDetails);
-// user_route.get('/addreplytocomment/:commentId', commentController.addReplyToComment);
-// user_route.get('/addreplytocomment/:commentId', commentController.addReplyToComment);
+user_route.post('/addreplytocomment', commentController.addReplyToComment);
+user_route.get('/getCommentWithReplies/:commentId', commentController.getCommentWithReplies);
 
 user_route.post('/bookingconfirmation', paymentController.checkout);
 user_route.post('/payment', paymentController.payment);

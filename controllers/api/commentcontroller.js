@@ -18,14 +18,11 @@ const storecommentDetails = async (req, res) => {
         ) {
             return res.status(400).json({ success: false, message: 'Invalid data provided' });
         }
-
         // Create a new comment object
         const newComment = new Comment({ commented_By, comment, post_id, post_sharedBy });
-
         // Save the new comment to the database
         const savedComment = await newComment.save();
         const commentsCount = await Comment.countDocuments({ post_id });
-
         // Return success response with essential comment details
         res.status(201).json({
             success: true,
@@ -33,10 +30,10 @@ const storecommentDetails = async (req, res) => {
             data: {
                 _id: savedComment._id,
                 comment: savedComment.comment,
+                post_sharedBy: savedComment.post_sharedBy,
                 post_id: savedComment.post_id,
                 createdAt: savedComment.createdAt,
-                totalComments:commentsCount
-                // Add other necessary fields to include in the response
+                totalComments: commentsCount
             }
         });
     } catch(error) {
@@ -85,8 +82,7 @@ const getcommentDetails = async (req, res) => {
 };
 
 const addReplyToComment = async (req, res) => {
-    const { commentId } = req.params;
-    const { replied_By, reply } = req.body;
+    const { replied_By, reply, commentId } = req.body;
 
     try {
         // Find the comment by its ID
