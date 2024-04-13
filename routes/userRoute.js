@@ -81,6 +81,8 @@ user_route.post('/storecommentdetails', commentController.storecommentDetails);
 user_route.get('/getcommentdetails/:post_id', commentController.getcommentDetails);
 user_route.post('/addreplytocomment', commentController.addReplyToComment);
 user_route.get('/getCommentWithReplies/:commentId', commentController.getCommentWithReplies);
+user_route.post('/deletecomment', commentController.deleteComment);
+user_route.post('/deletereply', commentController.deleteReply);
 user_route.get('/getCommentCount/:post_id', commentController.getCommentCount);
 
 user_route.post('/bookingconfirmation', paymentController.checkout);

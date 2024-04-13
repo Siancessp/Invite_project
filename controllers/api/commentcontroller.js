@@ -67,10 +67,10 @@ const getCommentCount = async (req, res) => {
 
 const getcommentDetails = async (req, res) => {
     const { post_id } = req.params;
-
+    const baseImageUrlP = "/uploads/profile_image";
     try {
         // Find all comments for the specified post and populate the commented_By field with user details
-        const comments = await Comment.find({ post_id }).populate('commented_By', '_id fullname');
+        const comments = await Comment.find({ post_id }).populate('commented_By', '_id fullname profile_image');
 
         // If there are no comments for the post
         if (comments.length === 0) {
@@ -87,7 +87,8 @@ const getcommentDetails = async (req, res) => {
             comment: comment.comment,
             commented_By: {
                 _id: comment.commented_By._id,
-                username: comment.commented_By.fullname
+                username: comment.commented_By.fullname,
+                profile_image: baseImageUrlP + '/' + comment.commented_By.profile_image,
             }
         }));
 
@@ -103,6 +104,32 @@ const getcommentDetails = async (req, res) => {
 };
 
 
+const deleteComment = async (req,res) =>
+{
+    const { commentId } = req.body;
+
+    try{
+        const deletedComment = await Comment.findByIdAndDelete(commentId);
+
+        if (!deletedComment) {
+            // If comment is not found
+            return res.status(404).json({
+                success: false,
+                message: 'Comment not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Comment deleted successfully'
+        });
+    }
+    catch(error)
+    {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });   
+    }
+}
 
 const addReplyToComment = async (req, res) => {
     const { replied_By, reply, commentId } = req.body;
@@ -202,11 +229,44 @@ const getCommentWithReplies = async (req, res) => {
     }
 };
 
+const deleteReply = async (req, res) => {
+    const { replyId } = req.body;
+
+    try {
+        // Find the comment containing the reply and remove the reply
+        const updatedComment = await Comment.findOneAndUpdate(
+            { "replies._id": replyId },
+            { $pull: { replies: { _id: replyId } } },
+            { new: true }
+        );
+
+        if (!updatedComment) {
+            // If comment or reply is not found
+            return res.status(404).json({
+                success: false,
+                message: 'Comment or Reply not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Reply deleted successfully'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error'
+        });
+    }
+};
 
 module.exports = {
     storecommentDetails,
     getcommentDetails,
     addReplyToComment,
     getCommentWithReplies,
-    getCommentCount
+    getCommentCount,
+    deleteComment,
+    deleteReply
 }
