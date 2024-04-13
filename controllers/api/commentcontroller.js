@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../../config/config");
 
 const Comment = require("../../models/api/commentModel");
+const User = require("../../models/api/userregisterModel");
 
 const storecommentDetails = async (req, res) => {
     const { commented_By, comment, post_id, post_sharedBy } = req.body;
@@ -148,6 +149,7 @@ const addReplyToComment = async (req, res) => {
 
 const getCommentWithReplies = async (req, res) => {
     const { commentId } = req.params;
+    const baseImageUrlP = "/uploads/profile_image";
 
     try {
         // Find the comment by its ID
@@ -160,10 +162,39 @@ const getCommentWithReplies = async (req, res) => {
             });
         }
 
+        // Fetch user details for each replied_By ID
+        const populatedReplies = await Promise.all(comment.replies.map(async (reply) => {
+            // Fetch user details using replied_By ID
+            const user = await User.findById(reply.replied_By);
+            if (!user) {
+                // Handle if user is not found
+                return {
+                    ...reply.toObject(),
+                    user: null
+                };
+            }
+
+            // Add user's name to the reply object
+            const { profile_image, fullname } = user;
+            return {
+                ...reply.toObject(),
+                user: {
+                    fullname,
+                    profile_image: baseImageUrlP + '/' + profile_image,
+                }
+            };
+        }));
+
+        // Update the comment with populated replies
+        const commentWithReplies = {
+            ...comment.toObject(),
+            replies: populatedReplies
+        };
+
         res.status(200).json({
             success: true,
             message: 'Comment retrieved successfully',
-            data: comment
+            data: commentWithReplies
         });
     } catch (error) {
         console.error(error);
