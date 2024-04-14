@@ -8,6 +8,12 @@ const config = require("../../config/config");
 const Comment = require("../../models/api/commentModel");
 const User = require("../../models/api/userregisterModel");
 const savePost = require("../../models/api/savepostModel");
+const EventDetails = require("../../models/api/eventModel");
+const EventTemaplte = require("../../models/addeventcategoryModels");
+const WeekendTemaplte = require("../../models/addweakendcategoryModel");
+const TourDetails = require("../../models/api/tourModel");
+const TourTemplate = require("../../models/addtourcategoryModel");
+const WeekendDetails = require("../../models/api/weakendModel");
 
 const storecommentDetails = async (req, res) => {
     const { commented_By, comment, post_id, post_sharedBy } = req.body;
@@ -291,29 +297,148 @@ const SavePost = async (req,res) =>
     }
 };
 
+
+const getHumanReadableDate = (date) => {
+    if (date instanceof Date) {
+        const options = { day: '2-digit', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-GB', options);
+    } else if (typeof date === 'string') {
+        const formattedDate = new Date(date);
+        if (!isNaN(formattedDate.getTime())) {
+            const options = { day: '2-digit', month: 'short', year: 'numeric' };
+            return formattedDate.toLocaleDateString('en-GB', options);
+        }
+    }
+    return null;
+};
+
+const formatTime = (time) => {
+    const [hours, minutes] = time.split(':');
+    const formattedHours = parseInt(hours, 10) % 12 || 12; // Convert to 12-hour format
+    const ampm = parseInt(hours, 10) >= 12 ? 'PM' : 'AM';
+    return `${formattedHours}:${minutes} ${ampm}`;
+};
+
+
 const savedpostDetails = async (req, res) => {
-    const userId = req.params.userId; 
+    const userId = req.params.userId;
+    const baseImageUrl = "/uploads/event_template";
+
     try {
         if (!mongoose.Types.ObjectId.isValid(userId)) {
             return res.status(400).json({ success: false, message: 'Invalid data provided' });
         }
-        
-        const savedPostDetails = await savePost.find({ userId: userId });
-        // console.log(savedPostDetails);
-        // const data1 = savedPostDetails[0].postId;
 
-        // console.log(data1);
+        const savedPostDetails = await savePost.find({ userId: userId });
+        const allEvents = [];
+
+        for (const postDetail of savedPostDetails) {
+            const postId = postDetail.postId;
+            const type = postDetail.type;
+
+            if (type === 'event') {
+                const eventData = await EventDetails.findOne({ _id: postId });
+                const eventtemplateId = eventData.eventtemplateid;
+                const user_id = eventData.user_id;
+                const userData = await User.findOne({ _id: user_id });
+                const eventtemplateData = await EventTemaplte.findOne({ _id: eventtemplateId });
+
+                const eventDetailsObject = {
+                    type,
+                    postId: eventData._id,
+                    description: eventData.eventdescription,
+                    createddate: getHumanReadableDate(eventData.created_date),
+                    location: eventData.event_location,
+                    startdate: getHumanReadableDate(eventData.event_start_date),
+                    starttime: formatTime(eventData.event_start_time),
+                    user: userData ? {
+                        _id: userData._id,
+                        username: userData.fullname
+                        // Add other user details you want to include
+                    } : null,
+                    templateimage: eventtemplateData ? {
+                        _id: eventtemplateData._id,
+                        templateimage: baseImageUrl + '/' + eventtemplateData.eventtemplate
+                        // Add other template details you want to include
+                    } : null
+                };
+
+                allEvents.push(eventDetailsObject);
+            } else if (type === 'tour') {
+                const tourData = await TourDetails.findOne({ _id: postId });
+                const tourtemplateId = tourData.tourtemplateid;
+                const user_id = tourData.user_id;
+                const userData = await User.findOne({ _id: user_id });
+                const tourtemplateData = await TourTemplate.findOne({ _id: tourtemplateId });
+
+                const tourDetailsObject = {
+                    type,
+                    postId: tourData._id,
+                    description: tourData.tourdescription,
+                    createddate: getHumanReadableDate(tourData.created_date),
+                    location: tourData.tour_location,
+                    startdate: getHumanReadableDate(tourData.tour_start_date),
+                    starttime: formatTime(tourData.tour_start_time),
+                    user: userData ? {
+                        _id: userData._id,
+                        username: userData.fullname
+                        // Add other user details you want to include
+                    } : null,
+                    templateimage: tourtemplateData ? {
+                        _id: tourtemplateData._id,
+                        templateimage: baseImageUrl + '/' + tourtemplateData.tourtemplate
+                    } : null
+                };
+
+                allEvents.push(tourDetailsObject);
+            } else if (type === 'weekend') {
+                const weekendData = await WeekendDetails.findOne({ _id: postId });
+                const weekendtemplateId = weekendData.weakendtemplateid;
+                const user_id = weekendData.user_id;
+                const userData = await User.findOne({ _id: user_id });
+                const weekendtemplateData = await WeekendTemaplte.findOne({ _id: weekendtemplateId });
+
+                const weekendDetailsObject = {
+                    type,
+                    postId: weekendData._id,
+                    description: weekendData.weakenddescription,
+                    createddate: getHumanReadableDate(weekendData.created_date),
+                    location: weekendData.weakend_location,
+                    startdate: getHumanReadableDate(weekendData.weakend_start_date),
+                    starttime: formatTime(weekendData.weakend_start_time),
+                    user: userData ? {
+                        _id: userData._id,
+                        username: userData.fullname
+                        // Add other user details you want to include
+                    } : null,
+                    templateimage: weekendtemplateData ? {
+                        _id: weekendtemplateData._id,
+                        templateimage: baseImageUrl + '/' + weekendtemplateData.weakendtemplate
+                    } : null
+                };
+
+                allEvents.push(weekendDetailsObject);
+            }
+        }
+
+        // Custom sorting function to sort events by date and time
+        allEvents.sort((a, b) => {
+            const dateA = new Date(a.startdate + " " + a.starttime);
+            const dateB = new Date(b.startdate + " " + b.starttime);
+            return dateA - dateB;
+        });
 
         res.status(200).json({
             success: true,
             message: 'Saved Post Details Retrieved Successfully',
-            data: savedPostDetails
+            details: allEvents
         });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ success: false, msg: "Internal Server Error" });
     }
 };
+
 
 
 module.exports = {
