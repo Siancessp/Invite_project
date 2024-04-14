@@ -271,12 +271,9 @@ const SavePost = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(postId) || !mongoose.Types.ObjectId.isValid(userId)) {
             return res.status(400).json({ success: false, message: 'Invalid data provided' });
         }
-
-        // Check if the post is already saved by the user
         const existingSavedPost = await savePost.findOne({ postId, userId, type });
 
         if (existingSavedPost) {
-            // Post is already saved, so we want to unsave it
             await savePost.deleteOne({ postId, userId, type });
             res.status(200).json({
                 success: true,
@@ -284,7 +281,6 @@ const SavePost = async (req, res) => {
                 data: { postId, userId, type }
             });
         } else {
-            // Post is not saved, so we want to save it
             const newPost = new savePost({
                 postId,
                 userId,

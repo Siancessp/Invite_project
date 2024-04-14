@@ -104,6 +104,7 @@ user_route.get('/getalltourbookings/:user_id', tourBookingController.getAllTourB
 user_route.get('/bookingHistory/:booking_id', BookingController.bookingHistory);
 user_route.get('/bookingHistoryByUserId/:user_id', BookingController.bookingHistoryByUserId);
 
+user_route.get('/newsFeedsbyuserId/:userId', newsfeedController.newsFeedsbyuserId);
 user_route.get('/newsFeeds', newsfeedController.newsFeeds);
 user_route.post('/share', newsfeedController.shareEventsToursWeekends);
 
