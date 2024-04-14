@@ -290,6 +290,31 @@ const SavePost = async (req,res) =>
     }
 };
 
+const savedpostDetails = async (req, res) => {
+    const userId = req.params.userId; 
+    try {
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ success: false, message: 'Invalid data provided' });
+        }
+        
+        const savedPostDetails = await savePost.find({ userId: userId });
+        // console.log(savedPostDetails);
+        // const data1 = savedPostDetails[0].postId;
+
+        // console.log(data1);
+
+        res.status(200).json({
+            success: true,
+            message: 'Saved Post Details Retrieved Successfully',
+            data: savedPostDetails
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, msg: "Internal Server Error" });
+    }
+};
+
+
 module.exports = {
     storecommentDetails,
     getcommentDetails,
@@ -298,5 +323,6 @@ module.exports = {
     getCommentCount,
     deleteComment,
     deleteReply,
-    SavePost
+    SavePost,
+    savedpostDetails
 }
