@@ -7,16 +7,14 @@ const config = require("../../config/config");
 
 const Comment = require("../../models/api/commentModel");
 const User = require("../../models/api/userregisterModel");
+const savePost = require("../../models/api/savepostModel");
 
 const storecommentDetails = async (req, res) => {
     const { commented_By, comment, post_id, post_sharedBy } = req.body;
     try {
         // Validate the provided user IDs and comment
-        if (
-            !mongoose.Types.ObjectId.isValid(commented_By) ||
-            typeof comment !== 'string' ||
-            (post_sharedBy && !mongoose.Types.ObjectId.isValid(post_sharedBy))
-        ) {
+        if (!mongoose.Types.ObjectId.isValid(commented_By) || typeof comment !== 'string' || (post_sharedBy && !mongoose.Types.ObjectId.isValid(post_sharedBy))) 
+        {
             return res.status(400).json({ success: false, message: 'Invalid data provided' });
         }
         // Create a new comment object
@@ -261,6 +259,37 @@ const deleteReply = async (req, res) => {
     }
 };
 
+const SavePost = async (req,res) =>
+{
+    const { postId, userId } = req.body;
+    try
+    {
+        if (!mongoose.Types.ObjectId.isValid(postId) || (userId && !mongoose.Types.ObjectId.isValid(userId))) 
+        {
+            return res.status(400).json({ success: false, message: 'Invalid data provided' });
+        }
+
+        const newPost = new savePost({
+             postId: postId, 
+             userId: userId 
+            });
+        const savedPost = await newPost.save();
+        res.status(200).json({
+            success: true,
+            message: 'Post Saved successfully',
+            data: savedPost
+        });
+    }
+    catch(error)
+    {
+        console.error(error);
+        res.status.json({
+            status: false,
+            message: 'Internal Server Error'
+        });
+    }
+};
+
 module.exports = {
     storecommentDetails,
     getcommentDetails,
@@ -268,5 +297,6 @@ module.exports = {
     getCommentWithReplies,
     getCommentCount,
     deleteComment,
-    deleteReply
+    deleteReply,
+    SavePost
 }
