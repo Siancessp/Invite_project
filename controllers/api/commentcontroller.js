@@ -265,37 +265,47 @@ const deleteReply = async (req, res) => {
     }
 };
 
-const SavePost = async (req,res) =>
-{
+const SavePost = async (req, res) => {
     const { postId, userId, type } = req.body;
-    try
-    {
-        if (!mongoose.Types.ObjectId.isValid(postId) || (!mongoose.Types.ObjectId.isValid(userId))) 
-        {
+    try {
+        if (!mongoose.Types.ObjectId.isValid(postId) || !mongoose.Types.ObjectId.isValid(userId)) {
             return res.status(400).json({ success: false, message: 'Invalid data provided' });
         }
 
-        const newPost = new savePost({
-             postId: postId, 
-             userId: userId,
-             type:type 
+        // Check if the post is already saved by the user
+        const existingSavedPost = await savePost.findOne({ postId, userId, type });
+
+        if (existingSavedPost) {
+            // Post is already saved, so we want to unsave it
+            await savePost.deleteOne({ postId, userId, type });
+            res.status(200).json({
+                success: true,
+                message: 'Post Unsaved successfully',
+                data: { postId, userId, type }
             });
-        const savedPost = await newPost.save();
-        res.status(200).json({
-            success: true,
-            message: 'Post Saved successfully',
-            data: savedPost
-        });
-    }
-    catch(error)
-    {
+        } else {
+            // Post is not saved, so we want to save it
+            const newPost = new savePost({
+                postId,
+                userId,
+                type
+            });
+            const savedPost = await newPost.save();
+            res.status(200).json({
+                success: true,
+                message: 'Post Saved successfully',
+                data: savedPost
+            });
+        }
+    } catch (error) {
         console.error(error);
-        res.status.json({
-            status: false,
+        res.status(500).json({
+            success: false,
             message: 'Internal Server Error'
         });
     }
 };
+
 
 
 const getHumanReadableDate = (date) => {
