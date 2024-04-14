@@ -14,6 +14,7 @@ const WeekendTemaplte = require("../../models/addweakendcategoryModel");
 const TourDetails = require("../../models/api/tourModel");
 const TourTemplate = require("../../models/addtourcategoryModel");
 const WeekendDetails = require("../../models/api/weakendModel");
+const Wishlist = require("../../models/api/wishlistModel");
 
 const storecommentDetails = async (req, res) => {
     const { commented_By, comment, post_id, post_sharedBy } = req.body;
@@ -446,7 +447,67 @@ const savedpostDetails = async (req, res) => {
     }
 };
 
+const saveWishlist = async (req,res) =>
+{
+    const { postId, userId, type } = req.body;
+    try{
+        if(!mongoose.Types.ObjectId(postId) || !mongoose.Types.ObjectId(userId))
+        {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid data provided'
+            });
+        }
+        
+        const existingWishlist = await Wishlist.findOne({ userId, postId, type });
 
+        if(existingWishlist)
+        {
+            await Wishlist.deleteOne({ userId, postId, type });
+
+            res.status(200).json({
+                success: true,
+                message: 'WishList Unsaved Successfully!'
+            });
+        }
+        else
+        {
+            const newWishlist = await Wishlist({
+                postId,
+                userId,
+                type
+            });
+
+            const savedWishlist = await newWishlist.save();
+
+            res.status(200).json({
+                success: true,
+                message: 'Wishlist Saved Successfully!',
+                data: savedWishlist 
+            });
+        }
+    }
+    catch(error)
+    {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            msg: 'Internal Server Error'
+        });
+    }
+};
+
+const savedWishlistDetails = async (req,res) =>
+{
+    const userId = req.params.userId;
+    try{
+
+    }
+    catch(error)
+    {
+        
+    }
+};
 
 module.exports = {
     storecommentDetails,
@@ -457,5 +518,6 @@ module.exports = {
     deleteComment,
     deleteReply,
     SavePost,
-    savedpostDetails
+    savedpostDetails,
+    saveWishlist
 }
