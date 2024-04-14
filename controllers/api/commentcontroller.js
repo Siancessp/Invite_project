@@ -270,7 +270,7 @@ const SavePost = async (req,res) =>
     const { postId, userId, type } = req.body;
     try
     {
-        if (!mongoose.Types.ObjectId.isValid(postId) || (userId && !mongoose.Types.ObjectId.isValid(userId))) 
+        if (!mongoose.Types.ObjectId.isValid(postId) || (!mongoose.Types.ObjectId.isValid(userId))) 
         {
             return res.status(400).json({ success: false, message: 'Invalid data provided' });
         }
@@ -323,6 +323,7 @@ const formatTime = (time) => {
 const savedpostDetails = async (req, res) => {
     const userId = req.params.userId;
     const baseImageUrl = "/uploads/event_template";
+    const baseImageUrlP = "/uploads/profile_image";
 
     try {
         if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -353,8 +354,8 @@ const savedpostDetails = async (req, res) => {
                     starttime: formatTime(eventData.event_start_time),
                     user: userData ? {
                         _id: userData._id,
-                        username: userData.fullname
-                        // Add other user details you want to include
+                        username: userData.fullname,
+                        profile_image: baseImageUrlP + '/' + userData.profile_image
                     } : null,
                     templateimage: eventtemplateData ? {
                         _id: eventtemplateData._id,
@@ -381,8 +382,8 @@ const savedpostDetails = async (req, res) => {
                     starttime: formatTime(tourData.tour_start_time),
                     user: userData ? {
                         _id: userData._id,
-                        username: userData.fullname
-                        // Add other user details you want to include
+                        username: userData.fullname,
+                        profile_image: baseImageUrlP + '/' + userData.profile_image
                     } : null,
                     templateimage: tourtemplateData ? {
                         _id: tourtemplateData._id,
@@ -408,8 +409,8 @@ const savedpostDetails = async (req, res) => {
                     starttime: formatTime(weekendData.weakend_start_time),
                     user: userData ? {
                         _id: userData._id,
-                        username: userData.fullname
-                        // Add other user details you want to include
+                        username: userData.fullname,
+                        profile_image: baseImageUrlP + '/' + userData.profile_image
                     } : null,
                     templateimage: weekendtemplateData ? {
                         _id: weekendtemplateData._id,
