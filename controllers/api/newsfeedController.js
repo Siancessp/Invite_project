@@ -40,6 +40,7 @@ const formatTime = (time) => {
 const newsFeeds = async (req, res) => {
   try {
       const baseImageUrl = "/uploads/event_template";
+      const baseImageUrlP = "/uploads/profile_image";
 
       // Get all event details
       const existedeventDetails = await EventDetails.find();
@@ -82,7 +83,7 @@ const newsFeeds = async (req, res) => {
                   user: user ? {
                       _id: user._id,
                       username: user.fullname,
-                      // Add other user details you want to include
+                      profile_image: baseImageUrlP + '/' + user.profile_image
                   } : null,
                   templateimage: eventtemplate ? {
                       _id: eventtemplate._id,
@@ -106,7 +107,7 @@ const newsFeeds = async (req, res) => {
                   user: user ? {
                       _id: user._id,
                       username: user.fullname,
-                      // Add other user details you want to include
+                      profile_image: baseImageUrlP + '/' + user.profile_image
                   } : null,
                   templateimage: weekendtemplate ? {
                       _id: weekendtemplate._id,
@@ -128,7 +129,7 @@ const newsFeeds = async (req, res) => {
                   user: user ? {
                       _id: user._id,
                       username: user.fullname,
-                      // Add other user details you want to include
+                      profile_image: baseImageUrlP + '/' + user.profile_image
                   } : null,
                   templateimage: tourtemplate ? {
                       _id: tourtemplate._id,
