@@ -261,7 +261,7 @@ const deleteReply = async (req, res) => {
 
 const SavePost = async (req,res) =>
 {
-    const { postId, userId } = req.body;
+    const { postId, userId, type } = req.body;
     try
     {
         if (!mongoose.Types.ObjectId.isValid(postId) || (userId && !mongoose.Types.ObjectId.isValid(userId))) 
@@ -271,7 +271,8 @@ const SavePost = async (req,res) =>
 
         const newPost = new savePost({
              postId: postId, 
-             userId: userId 
+             userId: userId,
+             type:type 
             });
         const savedPost = await newPost.save();
         res.status(200).json({

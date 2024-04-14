@@ -10,6 +10,10 @@ const savepostSchema = new Schema({
         type: Schema.Types.ObjectId,
         require: true
     },
+    type: {
+        type: String,
+        require: true
+    }
 });
 
 const savepostdetails = mongoose.model("Savepost",savepostSchema);
