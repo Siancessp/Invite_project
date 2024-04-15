@@ -92,7 +92,7 @@ const insertuserData = async (req,res)=>
     }
 }
 
-const getreferalLink = async () =>
+const getreferalLink = async (req,res) =>
 {
     const user_id = req.params.user_id;
     try{
