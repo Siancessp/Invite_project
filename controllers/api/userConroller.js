@@ -161,7 +161,7 @@ const updateprofileById = async (req, res) => {
         return res.status(200).json({
             success: true,
             msg: "User updated successfully",
-            data: { updatedRegister }
+            data: updatedRegister 
         });
 
     } catch (error) {
