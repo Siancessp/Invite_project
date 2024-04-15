@@ -61,6 +61,8 @@ user_route.get('/geteventcategory', eventController.geteventcategory);
 user_route.get('/getselectedtemplate', eventController.getselectedtemplate);
 user_route.post('/addeventdetails', eventController.addeventDetails);
 user_route.get('/getalleventdetails', eventController.geteventDetails);
+user_route.get('/getweeklyeventdetails', eventController.getweeklyeventDetails);
+user_route.get('/getmonthlyeventdetails', eventController.getMonthlyEventDetails);
 user_route.get('/getselectedeventdetails/:eventid', eventController.getalleventdetailsbyid);
 
 user_route.get('/weakendtemplate/:weakendcategoryid', weakendController.weakendtemplate);
