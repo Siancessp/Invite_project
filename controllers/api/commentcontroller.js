@@ -500,12 +500,126 @@ const saveWishlist = async (req,res) =>
 const savedWishlistDetails = async (req,res) =>
 {
     const userId = req.params.userId;
+    const baseImageUrl = "/uploads/event_template";
+    const baseImageUrlP = "/uploads/profile_image";
     try{
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ success: false, message: 'Invalid data provided' });
+        }
 
+        const savedWishlistDetails = await savePost.find({ userId: userId });
+        const allWishlists = [];
+
+        for(const wishlistDetail of savedWishlistDetails)
+        {
+            const postId = wishlistDetail.postId;
+            const type = wishlistDetail.type;
+
+            if (type === 'event')
+            {
+                const eventwishlistData = await EventDetails.findOne({ _id: postId });
+                const eventwishlisttemplateId = eventwishlistData.eventtemplateid;
+                const eventwishlisttemplateData = await EventTemaplte.findOne({ _id: eventwishlisttemplateId });
+                const user_id = eventwishlistData.user_id;
+                const userwishlistData = await User.findOne({ _id: user_id });
+
+                const eventwishlistDetailsObject = {
+                    type,
+                    postId: eventwishlistData._id,
+                    description: eventwishlistData.eventdescription,
+                    createddate: getHumanReadableDate(eventwishlistData.created_date),
+                    location: eventwishlistData.event_location,
+                    startdate: getHumanReadableDate(eventwishlistData.event_start_date),
+                    starttime: formatTime(eventwishlistData.event_start_time),
+                    user: userwishlistData ? {
+                        _id: userwishlistData._id,
+                        username: userwishlistData.fullname,
+                        profile_image: baseImageUrlP + '/' + userwishlistData.profile_image
+                    }:null,
+                    templateimage: eventwishlisttemplateData ? {
+                        _id: eventwishlisttemplateData._id,
+                        templateimage: baseImageUrl + '/' + eventwishlisttemplateData.eventtemplate
+                    }:null
+                }
+                allWishlists.push(eventwishlistDetailsObject);
+            }
+            else if (type === 'weekend')
+            {
+                const weekendwishlistData = await WeekendDetails.findOne({ _id: postId });
+                const weekendwishlisttemplateId = weekendwishlistData.weakendtemplateid;
+                const weekendwishlisttemplateData = await WeekendTemaplte.findOne({ _id: weekendwishlisttemplateId });
+                const user_id = weekendwishlistData.user_id;
+                const userwishlistData = await User.findOne({ _id: user_id });
+
+                const weekendwishlistDetailsObject = {
+                    type,
+                    postId: weekendwishlistData._id,
+                    description: weekendwishlistData.weakenddescription,
+                    createddate: getHumanReadableDate(weekendwishlistData.created_date),
+                    location: weekendwishlistData.weakend_location,
+                    startdate: getHumanReadableDate(weekendwishlistData.weakend_start_date),
+                    starttime: formatTime(weekendwishlistData.weakend_start_time),
+                    user: userwishlistData ? {
+                        _id: userwishlistData._id,
+                        username: userwishlistData.fullname,
+                        profile_image: baseImageUrlP + '/' + userwishlistData.profile_image
+                    }:null,
+                    templateimage: weekendwishlisttemplateData ? {
+                        _id: weekendwishlisttemplateData._id,
+                        templateimage: baseImageUrl + '/' + weekendwishlisttemplateData.weakendtemplate
+                    }:null
+                }
+                allWishlists.push(weekendwishlistDetailsObject);
+            }
+            else if (type === 'tour')
+            { 
+                const tourwishlistData = await TourDetails.findOne({ _id: postId });
+                const tourwishlisttemplateId = tourwishlistData.tourtemplateid;
+                const tourwishlisttemplateData = await TourTemplate.findOne({ _id: tourwishlisttemplateId });
+                const user_id = eventwishlistData.user_id;
+                const userwishlistData = await User.findOne({ _id: user_id });
+
+                const tourwishlistDetailsObject = {
+                    type,
+                    postId: tourwishlistData._id,
+                    description: tourwishlistData.tourdescription,
+                    createddate: getHumanReadableDate(tourwishlistData.created_date),
+                    location: tourwishlistData.tour_location,
+                    startdate: getHumanReadableDate(tourwishlistData.tour_start_date),
+                    starttime: formatTime(tourwishlistData.tour_start_time),
+                    user: userwishlistData ? {
+                        _id: userwishlistData._id,
+                        username: userwishlistData.fullname,
+                        profile_image: baseImageUrlP + '/' + userwishlistData.profile_image
+                    }:null,
+                    templateimage: tourwishlisttemplateData ? {
+                        _id: tourwishlisttemplateData._id,
+                        templateimage: baseImageUrl + '/' + tourwishlisttemplateData.tourtemplate
+                    }:null
+                }
+                allWishlists.push(tourwishlistDetailsObject);
+            }
+        }
+
+        allWishlists.sort((a, b) => {
+            const dateA = new Date(a.startdate + " " + a.starttime);
+            const dateB = new Date(b.startdate + " " + b.starttime);
+            return dateA - dateB;
+        });
+
+        res.status(200).json({
+            success: true,
+            message: 'Saved wishlist Details Retrieved Successfully',
+            details: allWishlists
+        });
     }
     catch(error)
     {
-        
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            msg: 'Internal Server Error'
+        });
     }
 };
 
@@ -519,5 +633,6 @@ module.exports = {
     deleteReply,
     SavePost,
     savedpostDetails,
-    saveWishlist
+    saveWishlist,
+    savedWishlistDetails
 }

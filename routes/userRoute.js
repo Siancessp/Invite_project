@@ -87,6 +87,7 @@ user_route.get('/getCommentCount/:post_id', commentController.getCommentCount);
 user_route.post('/savepost', commentController.SavePost);
 user_route.post('/savewishlist', commentController.saveWishlist);
 user_route.get('/savedpostdetails/:userId', commentController.savedpostDetails);
+user_route.get('/savedwishlistdetails/:userId', commentController.savedWishlistDetails);
 
 user_route.post('/bookingconfirmation', paymentController.checkout);
 user_route.post('/payment', paymentController.payment);
