@@ -24,9 +24,13 @@ const create_token = async (id) => {
     }
 }
 
+function generateReferralCode() {
+    return Math.random().toString(36).substring(2, 8).toUpperCase();
+  }
+
 const insertuserData = async (req,res)=>
 {
-    const { fullname, mobile, email, password, confirmpassword } = req.body;
+    const { fullname, mobile, email, password, confirmpassword, referralCode } = req.body;
     try{
         const existingUser = await userRegister.findOne({ email: email });
         if (existingUser) {
@@ -56,17 +60,22 @@ const insertuserData = async (req,res)=>
                 created_date : createddate,
                 profile_image: null,
                 background_image:null,
-                user_bio:null
+                user_bio:null,
+                referal_code:generateReferralCode()
             });
 
             const savedUser = await newUser.save();
             const token = await create_token(savedUser._id);
+
+            const referralLink = `http://20.163.173.61/api/register?ref=${newUser.referal_code}`;
+
 
             const response = {
                 success: true,
                 msg: "User registered successfully",
                 data: {
                     user: savedUser,
+                    referralLink:referralLink,
                     token: token
                 }
             }

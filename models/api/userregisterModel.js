@@ -34,6 +34,14 @@ const userregisterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    referal_code: {
+        type: String,
+        required: true
+    },
+    referral_points: {
+        type: Number, // Assuming referral points are numeric
+        default: 0
+      },
     created_date: {
         type: String,
         required: true
