@@ -110,6 +110,7 @@ user_route.get('/bookingHistoryByUserId/:user_id', BookingController.bookingHist
 user_route.get('/newsFeedsbyuserId/:userId', newsfeedController.newsFeedsbyuserId);
 user_route.get('/newsFeeds', newsfeedController.newsFeeds);
 user_route.post('/share', newsfeedController.shareEventsToursWeekends);
+user_route.get('/fetchpostbycategoryId/:categoryId', newsfeedController.fetchpostbycategoryId);
 
 
 module.exports = user_route;

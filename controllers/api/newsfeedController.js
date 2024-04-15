@@ -353,10 +353,54 @@ const generateShareableLink = (post, type) => {
     }
 };
 
+const fetchpostbycategoryId = async (req, res) => {
+    const categoryId = req.params.categoryId;
+    try {
+        const baseImageUrl = "/uploads/event_template";
+
+        // Find all event templates that belong to the given categoryId
+        const eventTemplates = await EventTemaplte.find({ categoryid: categoryId });
+
+        // Create an array to store event template information
+        const templateInfoArray = [];
+
+        // Process event templates
+        for (const template of eventTemplates) {
+            const templateimgUrl = baseImageUrl + '/' + template.eventtemplate;
+            const templateId = template._id;
+
+            // Find details for the current event template from EventDetails table
+            const eventDetails = await EventDetails.find({ eventtemplateid: templateId });
+
+            templateInfoArray.push({
+                templateimgUrl: templateimgUrl,
+                details: eventDetails
+            });
+        }
+
+        // Now you have an array of objects with event template IDs, image URLs, and details
+        console.log("Event Template Info Array:");
+        console.log(templateInfoArray);
+
+        // Send JSON response
+        res.status(200).json({
+            success: true,
+            data: templateInfoArray
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            error: "Failed to fetch event template data"
+        });
+    }
+};
 
 
 module.exports = {
     newsFeeds,
     shareEventsToursWeekends,
-    newsFeedsbyuserId
+    newsFeedsbyuserId,
+    fetchpostbycategoryId
 }
