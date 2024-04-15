@@ -47,7 +47,7 @@ user_route.get('/', function(req, res) {
 });
 
 
-user_route.get('/register', userController.insertuserData);
+user_route.post('/register', userController.insertuserData);
 user_route.get('/getreferalLink/:user_id', userController.getreferalLink);
 user_route.post('/login', userController.user_login);
 user_route.get('/getprofile/:user_id', userController.getprofile);

@@ -107,6 +107,7 @@ const getreferalLink = async (req, res) => {
     try {
         // Validate if the user_id is a valid ObjectId
         if (!ObjectId.isValid(user_id)) {
+            console.log("Invalid user ID:", user_id);
             return res.status(400).json({ success: false, msg: 'Invalid user ID' });
         }
 
@@ -117,11 +118,14 @@ const getreferalLink = async (req, res) => {
         const existedUserDetails = await userRegister.findOne({ _id: userIdObject });
 
         if (!existedUserDetails) {
+            console.log("User not found for ID:", user_id);
             return res.status(404).json({ success: false, msg: 'User not found' });
         }
 
         const referal_code = existedUserDetails.referal_code;
         const referralLink = `http://20.163.173.61/api/register?ref=${referal_code}`;
+
+        console.log("Referral Link:", referralLink);
 
         const response = {
             success: true,
