@@ -28,69 +28,74 @@ function generateReferralCode() {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
   }
 
-const insertuserData = async (req,res)=>
-{
-    const { fullname, mobile, email, password, confirmpassword, referralCode } = req.body;
-    try{
+  const insertuserData = async (req, res) => {
+    const { fullname, mobile, email, password, confirmPassword } = req.body;
+    try {
+        // Check if the user already exists with the given email
         const existingUser = await userRegister.findOne({ email: email });
         if (existingUser) {
             return res.status(400).send({ success: false, msg: "Email already exists" });
         }
 
+        // Check if the user already exists with the given mobile number
         const existingUserMobile = await userRegister.findOne({ mobile: mobile });
         if (existingUserMobile) {
             return res.status(400).send({ success: false, msg: "Mobile Number already exists" });
         }
 
-        if (password !== confirmpassword) {
-            return res.status(400).send({ success: false, msg: "Both Password and Confirm Password are not Same" });
+        // Check if password and confirmPassword match
+        if (password !== confirmPassword) {
+            return res.status(400).send({ success: false, msg: "Both Password and Confirm Password are not the same" });
         }
+
+        // Hash the password using your securePassword function
+        const hashedPassword = await securePassword(password);
+
+        // Generate a referral code for the new user
         const referralCode = generateReferralCode();
-        const createddate = new Date();
-        const spassword = await securePassword(password);
-        const sconfirmpassword = await securePassword(confirmpassword);
 
-        if (password === confirmpassword) {
-            const newUser = new userRegister({
-                fullname: fullname,
-                mobile: mobile,
-                email: email,
-                password: spassword,
-                confirmpassword: sconfirmpassword,
-                created_date : createddate,
-                profile_image: null,
-                background_image:null,
-                user_bio:null,
-                referal_code:generateReferralCode()
-            });
+        // Create a new user object with the provided data
+        const newUser = new userRegister({
+            fullname: fullname,
+            mobile: mobile,
+            email: email,
+            password: hashedPassword,
+            confirmpassword: hashedPassword, // Not sure if you need to hash this too, adjust if needed
+            created_date: new Date(),
+            profile_image: null,
+            background_image: null,
+            user_bio: null,
+            referal_code: referralCode
+        });
 
-            const savedUser = await newUser.save();
-            const token = await create_token(savedUser._id);
+        // Save the new user to the database
+        const savedUser = await newUser.save();
 
-            const referralLink = `http://20.163.173.61/api/register?ref=${newUser.referal_code}`;
+        // Create a token for the new user
+        const token = await createToken(savedUser._id);
 
+        // Construct the referral link with the generated referral code
+        const referralLink = `http://20.163.173.61/api/register?ref=${referralCode}`;
 
-            const response = {
-                success: true,
-                msg: "User registered successfully",
-                data: {
-                    user: savedUser,
-                    referralLink:referralLink,
-                    token: token
-                }
+        // Send success response with user data, referral link, and token
+        const response = {
+            success: true,
+            msg: "User registered successfully",
+            data: {
+                user: savedUser,
+                referralLink: referralLink,
+                token: token
             }
-            res.status(200).send(response);
-        } else {
-            return res.status(400).send({ success: false, msg: "Passwords do not match" });
-        }
+        };
 
-    }
-    catch(error)
-    {
-        console.error(error);
+        res.status(200).send(response);
+    } catch (error) {
+        // Handle any errors that occur during the process
+        console.error("Error saving user data:", error);
         return res.status(500).send({ success: false, msg: "Error saving user data" });
     }
-}
+};
+
 
 const getprofile = async (req, res) => {
     try {
