@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bcryptjs = require('bcryptjs');
 const jwt = require("jsonwebtoken");
+const { ObjectId } = require('mongoose').Types;
 const config = require("../../config/config");
 
 const userRegister = require("../../models/api/userregisterModel");
@@ -92,28 +93,38 @@ const insertuserData = async (req,res)=>
     }
 }
 
-const getreferalLink = async (req,res) =>
-{
+const getreferalLink = async (req, res) => {
     const user_id = req.params.user_id;
-    try{
-        const existedUserDetails = await userRegister.findOne({ _id: user_id });
+    try {
+        // Validate if the user_id is a valid ObjectId
+        if (!ObjectId.isValid(user_id)) {
+            return res.status(400).json({ success: false, msg: 'Invalid user ID' });
+        }
+
+        // Convert user_id to ObjectId
+        const userIdObject = new ObjectId(user_id);
+
+        // Use userIdObject in the query
+        const existedUserDetails = await userRegister.findOne({ _id: userIdObject });
+
+        if (!existedUserDetails) {
+            return res.status(404).json({ success: false, msg: 'User not found' });
+        }
+
         const referal_code = existedUserDetails.referal_code;
-        const referralLink = `http://20.163.173.61/api/register?ref=${newUser.referal_code}`;
+        const referralLink = `http://20.163.173.61/api/register?ref=${referal_code}`;
 
         const response = {
             success: true,
-            msg: "Referal link fetched successfully",
-          
-                referralLink:referralLink,
-        }
-        res.status(200).send(response);
-    }
-    catch(error)
-    {
+            msg: "Referral link fetched successfully",
+            referralLink: referralLink,
+        };
+
+        res.status(200).json(response);
+    } catch (error) {
         console.error(error);
         return res.status(500).json({ success: false, msg: 'Server Error' });
     }
-
 };
 
 const getprofile = async (req, res) => {
