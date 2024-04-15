@@ -31,7 +31,7 @@ function generateReferralCode() {
 
 const insertuserData = async (req,res)=>
 {
-    const { fullname, mobile, email, password, confirmpassword } = req.body;
+    const { fullname, mobile, email, password, confirmpassword, refered_referal_code } = req.body;
     try{
         const existingUser = await userRegister.findOne({ email: email });
         if (existingUser) {
@@ -46,7 +46,7 @@ const insertuserData = async (req,res)=>
         if (password !== confirmpassword) {
             return res.status(400).send({ success: false, msg: "Both Password and Confirm Password are not Same" });
         }
-        const referal_code = generateReferralCode();
+
         const createddate = new Date();
         const spassword = await securePassword(password);
         const sconfirmpassword = await securePassword(confirmpassword);
@@ -64,6 +64,15 @@ const insertuserData = async (req,res)=>
                 user_bio:null,
                 referal_code:generateReferralCode()
             });
+
+            if (refered_referal_code) {
+                const referringUser = await userRegister.findOne({ referal_code: refered_referal_code });
+                if (referringUser) {
+                    // Increase the referral points of the referring user
+                    referringUser.referral_points += 1;
+                    await referringUser.save();
+                }
+            }
 
             const savedUser = await newUser.save();
             const token = await create_token(savedUser._id);
