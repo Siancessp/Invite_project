@@ -122,18 +122,14 @@ const getprofile = async (req, res) => {
 const updateprofileById = async (req, res) => {
     const { user_id } = req.body;
     let { fullname, mobile, email, user_bio } = req.body;
-
-    // Check if profile_image and background_image are included in the request
     const baseImageUrlP = "/uploads/profile_image";
     const baseImageUrlB = "/uploads/background_image";
 
     const { profile_image, background_image } = req.files;
 
     try {
-        // Create an object to store the fields that will be updated
         let updateFields = {};
 
-        // Check if each field exists in the request body, then add to updateFields if it does
         if (fullname) updateFields.fullname = fullname;
         if (mobile) updateFields.mobile = mobile;
         if (email) updateFields.email = email;
@@ -145,19 +141,16 @@ const updateprofileById = async (req, res) => {
             updateFields.background_image = baseImageUrlB + '/' + background_image[0].filename;
         }
 
-        // Update the user's profile with the new information
         const updatedRegister = await userRegister.findOneAndUpdate(
             { _id: user_id },
             { $set: updateFields },
-            { new: true } // Return the updated document
+            { new: true }
         );
 
-        // Check if the user was found and updated successfully
         if (!updatedRegister) {
             return res.status(404).json({ success: false, msg: "User not found" });
         }
 
-        // Send a success response with the updated user data
         return res.status(200).json({
             success: true,
             msg: "User updated successfully",
@@ -165,7 +158,6 @@ const updateprofileById = async (req, res) => {
         });
 
     } catch (error) {
-        // Handle any errors that occur during the update process
         console.error(error);
         return res.status(500).json({
             success: false,
