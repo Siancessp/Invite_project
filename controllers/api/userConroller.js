@@ -92,6 +92,30 @@ const insertuserData = async (req,res)=>
     }
 }
 
+const getreferalLink = async () =>
+{
+    const user_id = req.params.user_id;
+    try{
+        const existedUserDetails = await userRegister.findOne({ _id: user_id });
+        const referal_code = existedUserDetails.referal_code;
+        const referralLink = `http://20.163.173.61/api/register?ref=${newUser.referal_code}`;
+
+        const response = {
+            success: true,
+            msg: "Referal link fetched successfully",
+          
+                referralLink:referralLink,
+        }
+        res.status(200).send(response);
+    }
+    catch(error)
+    {
+        console.error(error);
+        return res.status(500).json({ success: false, msg: 'Server Error' });
+    }
+
+};
+
 const getprofile = async (req, res) => {
     try {
         const user_id = req.params.user_id;
@@ -220,5 +244,6 @@ module.exports = {
     insertuserData,
     user_login,
     getprofile,
-    updateprofileById
+    updateprofileById,
+    getreferalLink
 }
