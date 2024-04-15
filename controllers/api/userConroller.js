@@ -120,27 +120,35 @@ const getprofile = async (req, res) => {
 
 
 const updateprofileById = async (req, res) => {
-    const { fullname, mobile, email, user_bio, user_id } = req.body;
+    const { user_id } = req.body;
+    let { fullname, mobile, email, user_bio } = req.body;
+
     // Check if profile_image and background_image are included in the request
     const baseImageUrlP = "/uploads/profile_image";
     const baseImageUrlB = "/uploads/background_image";
-    
+
     const { profile_image, background_image } = req.files;
 
     try {
+        // Create an object to store the fields that will be updated
+        let updateFields = {};
+
+        // Check if each field exists in the request body, then add to updateFields if it does
+        if (fullname) updateFields.fullname = fullname;
+        if (mobile) updateFields.mobile = mobile;
+        if (email) updateFields.email = email;
+        if (user_bio) updateFields.user_bio = user_bio;
+        if (profile_image && profile_image[0].filename) {
+            updateFields.profile_image = baseImageUrlP + '/' + profile_image[0].filename;
+        }
+        if (background_image && background_image[0].filename) {
+            updateFields.background_image = baseImageUrlB + '/' + background_image[0].filename;
+        }
+
         // Update the user's profile with the new information
         const updatedRegister = await userRegister.findOneAndUpdate(
             { _id: user_id },
-            {
-                $set: {
-                    fullname,
-                    mobile,
-                    email,
-                    user_bio,
-                    profile_image: baseImageUrlP + '/' + profile_image ? profile_image[0].filename : null,
-                    background_image: baseImageUrlB + '/' + background_image ? background_image[0].filename : null
-                }
-            },
+            { $set: updateFields },
             { new: true } // Return the updated document
         );
 
