@@ -45,7 +45,7 @@ const insertuserData = async (req,res)=>
         if (password !== confirmpassword) {
             return res.status(400).send({ success: false, msg: "Both Password and Confirm Password are not Same" });
         }
-
+        const referralCode = generateReferralCode();
         const createddate = new Date();
         const spassword = await securePassword(password);
         const sconfirmpassword = await securePassword(confirmpassword);
