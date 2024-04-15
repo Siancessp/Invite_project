@@ -311,6 +311,7 @@ const generateShareableLink = (post, type) => {
                 description: event.description,
                 shareableLink: generateShareableLink(event, 'event'),
             };
+            console.log(sharedDetails.shareableLink);
         } else if (type === 'tour') {
             const tour = await TourDetails.findById(postId);
             if (!tour) {
