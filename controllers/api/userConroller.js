@@ -28,10 +28,9 @@ function generateReferralCode() {
     return Math.random().toString(36).substring(2, 8).toUpperCase();
   }
 
-const insertuserData = async (req,res)=>
-{
-    const { fullname, mobile, email, password, confirmpassword, referralCode } = req.body;
-    try{
+const insertuserData = async (req, res) => {
+    const { fullname, mobile, email, password, confirmpassword } = req.body;
+    try {
         const existingUser = await userRegister.findOne({ email: email });
         if (existingUser) {
             return res.status(400).send({ success: false, msg: "Email already exists" });
@@ -42,55 +41,48 @@ const insertuserData = async (req,res)=>
             return res.status(400).send({ success: false, msg: "Mobile Number already exists" });
         }
 
-        if (password !== confirmpassword) {
-            return res.status(400).send({ success: false, msg: "Both Password and Confirm Password are not Same" });
-        }
-
         const createddate = new Date();
         const spassword = await securePassword(password);
         const sconfirmpassword = await securePassword(confirmpassword);
 
-        if (password === confirmpassword) {
-            const newUser = new userRegister({
-                fullname: fullname,
-                mobile: mobile,
-                email: email,
-                password: spassword,
-                confirmpassword: sconfirmpassword,
-                created_date : createddate,
-                profile_image: null,
-                background_image:null,
-                user_bio:null,
-                referal_code:generateReferralCode()
-            });
-
-            const savedUser = await newUser.save();
-            const token = await create_token(savedUser._id);
-
-            const referralLink = `http://20.163.173.61/api/register?ref=${newUser.referal_code}`;
-
-
-            const response = {
-                success: true,
-                msg: "User registered successfully",
-                data: {
-                    user: savedUser,
-                    referralLink:referralLink,
-                    token: token
-                }
-            }
-            res.status(200).send(response);
-        } else {
+        if (spassword !== sconfirmpassword) {
             return res.status(400).send({ success: false, msg: "Passwords do not match" });
         }
 
-    }
-    catch(error)
-    {
+        const newUser = new userRegister({
+            fullname: fullname,
+            mobile: mobile,
+            email: email,
+            password: spassword,
+            confirmpassword: sconfirmpassword,
+            created_date : createddate,
+            profile_image: null,
+            background_image: null,
+            user_bio: null,
+            referal_code: generateReferralCode()
+        });
+
+        const savedUser = await newUser.save();
+        const token = await create_token(savedUser._id);
+
+        const referralLink = `http://20.163.173.61/api/register?ref=${newUser.referal_code}`;
+
+        const response = {
+            success: true,
+            msg: "User registered successfully",
+            data: {
+                user: savedUser,
+                referralLink: referralLink,
+                token: token
+            }
+        };
+        res.status(200).send(response);
+    } catch (error) {
         console.error(error);
         return res.status(500).send({ success: false, msg: "Error saving user data" });
     }
-}
+};
+
 
 const getprofile = async (req, res) => {
     try {
