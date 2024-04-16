@@ -246,6 +246,75 @@ const getallweakenddetailsbyid = async (req, res) => {
     }
 };
 
+const getweeklyweekendDetails = async (req, res) => {
+    try {
+        const baseImageUrl = "/uploads/event_template";
+
+        // Get today's date
+        const today = new Date();
+        const currentMonth = today.getMonth();
+        const currentYear = today.getFullYear();
+        
+        // Calculate the date 7 days from today
+        const futureDate = new Date();
+        futureDate.setDate(today.getDate() + 7);
+
+        // Find events with start dates within the next 7 days and in the current month
+        const existingWeekenddetails = await WeakendDetails.find({
+            $expr: {
+                $and: [
+                    { $lte: ["$weakend_start_date", futureDate.toISOString()] },
+                    { $gte: ["$weakend_end_date", today.toISOString()] }
+                ]
+            }
+        });
+
+        if (!existingWeekenddetails || existingWeekenddetails.length === 0) {
+            return res.status(404).json({ success: false, msg: 'No upcoming weekend found' });
+        }
+
+        let weekendDetailsObject = {};
+
+        for (let i = 0; i < existingWeekenddetails.length; i++) {
+            const weekendDetail = existingWeekenddetails[i];
+            const weekendtemplate = await weakEnd.findOne({ _id: weekendDetail.weakendtemplateid });
+
+            const categoryId = eventtemplate.categoryid;
+            const category = await Category.findOne({ _id: categoryId });
+
+            if (eventtemplate) {
+                const eventDetailWithUser = {
+                    eventstartdate: getHumanReadableDate(new Date(eventDetail.event_start_date)),
+                    eventenddate: getHumanReadableDate(new Date(eventDetail.event_end_date)),
+                    eventname: eventDetail.eventname,
+                    eventlocation: eventDetail.event_location,
+                    eventdescription: eventDetail.eventdescription,
+                    eventtemplate: {
+                        eventtemplate_id: eventtemplate._id,
+                        eventtemplate: baseImageUrl + '/' + eventtemplate.eventtemplate
+                    },
+                    category: {
+                        category_id: category._id,
+                        category_name: category.categoryname
+                    }
+                };
+
+                eventDetailsObject[eventDetail._id] = eventDetailWithUser;
+            }
+        }
+
+        const response = {
+            success: true,
+            msg: "Successfully fetched upcoming event details for the current week in the current month",
+            data: eventDetailsObject
+        };
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, msg: "Internal Server Error" });
+    }
+};
 
 module.exports = {
     weakendtemplate,

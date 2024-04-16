@@ -274,7 +274,7 @@ const getweeklyeventDetails = async (req, res) => {
                     }
                 };
 
-                eventDetailsObject[eventDetail._id] = eventDetailWithUser;
+                eventDetailsObject = eventDetailWithUser;
             }
         }
 
@@ -353,7 +353,7 @@ const getMonthlyEventDetails = async (req, res) => {
                     }
                 };
 
-                eventDetailsObject[eventDetail._id] = eventDetailWithUser;
+                eventDetailsObject = eventDetailWithUser;
             }
         }
 
