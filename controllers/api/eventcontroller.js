@@ -262,6 +262,7 @@ const getweeklyeventDetails = async (req, res) => {
                     eventstartdate: getHumanReadableDate(new Date(eventDetail.event_start_date)),
                     eventenddate: getHumanReadableDate(new Date(eventDetail.event_end_date)),
                     eventname: eventDetail.eventname,
+                    event_id: eventDetail._id,
                     eventlocation: eventDetail.event_location,
                     eventdescription: eventDetail.eventdescription,
                     eventtemplate: {
@@ -342,6 +343,7 @@ const getMonthlyEventDetails = async (req, res) => {
                     eventstartdate: getHumanReadableDate(new Date(eventDetail.event_start_date)),
                     eventenddate: getHumanReadableDate(new Date(eventDetail.event_end_date)),
                     eventname: eventDetail.eventname,
+                    event_id: eventDetail._id,
                     eventlocation: eventDetail.event_location,
                     eventdescription: eventDetail.eventdescription,
                     eventtemplate: {
