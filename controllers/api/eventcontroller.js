@@ -306,16 +306,20 @@ const getMonthlyEventDetails = async (req, res) => {
         const futureDate = new Date(today);
         futureDate.setDate(lastDayOfMonth.getDate());
 
+        console.log("Today:", today);
+        console.log("Future Date:", futureDate);
+
         // Find events with start dates within the current month
         const existingEventdetails = await EventDetails.find({
-            event_start_date: { $gte: today, $lte: futureDate },
             $expr: {
                 $and: [
-                    { $eq: [{ $month: "$event_start_date" }, currentMonth + 1] }, // Months are zero-based in JavaScript
-                    { $eq: [{ $year: "$event_start_date" }, currentYear ] }
+                    { $lte: ["$event_start_date", futureDate.toISOString()] },
+                    { $gte: ["$event_end_date", today.toISOString()] }
                 ]
             }
         });
+
+        console.log("Existing Event Details:", existingEventdetails);
 
         if (!existingEventdetails || existingEventdetails.length === 0) {
             return res.status(404).json({ success: false, msg: 'No upcoming events found for the current month' });
@@ -325,8 +329,11 @@ const getMonthlyEventDetails = async (req, res) => {
 
         for (let i = 0; i < existingEventdetails.length; i++) {
             const eventDetail = existingEventdetails[i];
+
+            // Fetch the event template
             const eventtemplate = await Event.findOne({ _id: eventDetail.eventtemplateid });
 
+            // Fetch the category
             const categoryId = eventtemplate.categoryid;
             const category = await Category.findOne({ _id: categoryId });
 
@@ -351,6 +358,8 @@ const getMonthlyEventDetails = async (req, res) => {
             }
         }
 
+        console.log("Event Details Object:", eventDetailsObject);
+
         const response = {
             success: true,
             msg: "Successfully fetched upcoming event details for the current month",
@@ -363,6 +372,10 @@ const getMonthlyEventDetails = async (req, res) => {
         return res.status(500).json({ success: false, msg: "Internal Server Error" });
     }
 };
+
+
+
+
 
 
 const getReadableDate = (date) => {
