@@ -7,7 +7,7 @@ const config = require("../../config/config");
 const WeekendBooking = require("../../models/api/eventbookingModel");
 const WeakendDetails = require("../../models/api/weakendModel");
 
-const calculateGrandTotalPrice = async (weekendid, nummberofDays, numberofadult, numberofchild) => {
+const calculateGrandTotalPrice = async (weekendid, numberofadult, numberofchild) => {
     try {
         const storedweekendData = await WeakendDetails.findById(weekendid);
         if (!storedweekendData) {
@@ -21,11 +21,11 @@ const calculateGrandTotalPrice = async (weekendid, nummberofDays, numberofadult,
         const child_price = storedweekendData.weakend_price_child;
         let grandTotalAdults = 0;
         if (numberofadult) {
-            grandTotalAdults = numberofadult * adult_price * nummberofDays;
+            grandTotalAdults = numberofadult * adult_price;
         }
         let grandTotalChildren = 0;
         if (numberofchild) {
-            grandTotalChildren = numberofchild * child_price * nummberofDays;
+            grandTotalChildren = numberofchild * child_price;
         }
         let grandTotals = grandTotalAdults + grandTotalChildren;
 
@@ -47,44 +47,35 @@ const cleanDates = (datesObject) => {
     return Object.keys(datesObject);
   };
   const weekendbooking = async (req, res) => {
-    const { user_id, weekendBookingDates, numberofDays, numberofadult, numberofchild, weekendid } = req.body;
+    const { user_id, numberofadult, numberofchild, weekendid } = req.body;
     try {
         let existingBooking = await WeekendBooking.findOne({ user_id: user_id, eventid: weekendid });
 
         if (existingBooking) {
-            const grandTotalResponse = await calculateGrandTotalPrice(weekendid, numberofDays, numberofadult, numberofchild);
+            const grandTotalResponse = await calculateGrandTotalPrice(weekendid, numberofadult, numberofchild);
             const grandTotal = grandTotalResponse.data;
-
-            const datesOnly = cleanDates(weekendBookingDates);
-
-            existingBooking.eventBookingDates = datesOnly;
-            existingBooking.nummberofDays = numberofDays;
             existingBooking.numberofadult = numberofadult;
             existingBooking.numberofchild = numberofchild;
             existingBooking.grandtotalprice = grandTotal;
 
             await existingBooking.save();
+            const { nummberofDays, eventBookingDates, ...bookingDetails } = existingBooking.toObject();
 
             const response = {
                 success: true,
                 msg: "Weekend Booking Updated Successfully!",
                 data: {
-                    BookingDetails: existingBooking,
+                    BookingDetails: bookingDetails,
                     grandTotal: grandTotal
                 }
             };
             res.status(200).send(response);
         } else {
-            const grandTotalResponse = await calculateGrandTotalPrice(weekendid, numberofDays, numberofadult, numberofchild);
+            const grandTotalResponse = await calculateGrandTotalPrice(weekendid, numberofadult, numberofchild);
             const grandTotal = grandTotalResponse.data;
-
-            const datesOnly = cleanDates(weekendBookingDates);
-
             const createdWeekendBooking = await WeekendBooking.create({
                 user_id: user_id,
                 eventid: weekendid,
-                eventBookingDates: datesOnly,
-                nummberofDays: numberofDays,
                 numberofadult: numberofadult,
                 numberofchild: numberofchild,
                 grandtotalprice: grandTotal
