@@ -101,25 +101,12 @@ const addtourDetails = async (req, res) => {
             tour_price_child: tour_price_child
         });
 
-        const savedTourDetails = await newTourDetails.save();
-        const tourId = savedTourDetails._id;
-
-        const activityDocs = multiData.map(item => ({
-            tourId: tourId,
-            ...item // Spread operator to include all fields from each item in multiData
-        }));
-
-        // Insert activity data into ActivityTable
-        const insertedData = await ActivityTable.insertMany(activityDocs);
+        const savedTourDetails = await newTourDetails.save();;
         
         const response = {
             success: true,
             msg: "Tour added Successfully!",
-            data1: savedTourDetails,
-            data: {
-                tourId: savedTourDetails._id,
-                insertedData: insertedData  // Get the ID of the saved document
-            }
+            data: savedTourDetails
         }
         res.status(200).send(response);
     } catch (error) {
