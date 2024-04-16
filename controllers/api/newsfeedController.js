@@ -361,8 +361,8 @@ const fetchpostbycategoryId = async (req, res) => {
         // Find all event templates that belong to the given categoryId
         const eventTemplates = await EventTemaplte.find({ categoryid: categoryId });
 
-        // Create an array to store event template information
-        const templateInfoArray = [];
+        // Create an array to store combined data
+        const combinedDataArray = [];
 
         // Process event templates
         for (const template of eventTemplates) {
@@ -372,20 +372,24 @@ const fetchpostbycategoryId = async (req, res) => {
             // Find details for the current event template from EventDetails table
             const eventDetails = await EventDetails.find({ eventtemplateid: templateId });
 
-            templateInfoArray.push({
-                templateimgUrl: templateimgUrl,
-                details: eventDetails
+            // Add templateimgUrl to each detail object and push to combinedDataArray
+            eventDetails.forEach(detail => {
+                const combinedDetail = {
+                    ...detail.toObject(),
+                    templateimgUrl: templateimgUrl
+                };
+                combinedDataArray.push(combinedDetail);
             });
         }
 
-        // Now you have an array of objects with event template IDs, image URLs, and details
-        console.log("Event Template Info Array:");
-        console.log(templateInfoArray);
+        // Now you have a single array with combined data
+        console.log("Combined Data Array:");
+        console.log(combinedDataArray);
 
         // Send JSON response
         res.status(200).json({
             success: true,
-            data: templateInfoArray
+            data: combinedDataArray
         });
 
     } catch (error) {
@@ -396,6 +400,8 @@ const fetchpostbycategoryId = async (req, res) => {
         });
     }
 };
+
+
 
 
 module.exports = {
