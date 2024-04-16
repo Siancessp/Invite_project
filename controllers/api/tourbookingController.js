@@ -141,7 +141,6 @@ const getAllTourBookings = async (req, res) => {
     const { user_id } = req.params;
     try {
         const tourBooking = await TourBooking.findOne({ user_id: user_id });
-        
 
         if (!tourBooking) {
             return res.status(404).json({
@@ -150,39 +149,57 @@ const getAllTourBookings = async (req, res) => {
             });
         }
 
-        const formattedDates = tourBooking.eventBookingDates.map(date => {
-            const formattedDate = new Date(date).toLocaleDateString('en-GB');
-            return formattedDate;
-        });
+        const tourDetails = await TourDetails.findOne({ _id: tourBooking.eventid });
 
-        const tour = await TourDetails.findOne({ _id: tourBooking.eventid });
-
-        if (!tour) {
-            return res.status(404).json({
+        if (!tourDetails) {
+            return res.status(404).send({
                 success: false,
-                msg: "Weekend not found for the weekendid",
+                msg: "Tour details not found",
             });
         }
+
+        const startDate = new Date(tourDetails.tour_start_date);
+        const endDate = new Date(tourDetails.tour_end_date);
+
+        // Calculate the difference in days
+        const timeDifference = endDate - startDate;
+        const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+        // Calculate the difference in hours for the night count
+        const startTime = new Date(`1970-01-01T${tourDetails.tour_start_time}`);
+        const endTime = new Date(`1970-01-01T${tourDetails.tour_end_time}`);
+        const timeDifferenceInHours = (endTime - startTime) / (1000 * 60 * 60);
+
+        // Calculate the number of nights
+        const numberOfNights = daysDifference + (timeDifferenceInHours >= 24 ? 1 : 0);
+
+        const formattedDates = tourBooking.eventBookingDates.map((date) => {
+            const formattedDate = new Date(date).toLocaleDateString("en-GB");
+            return formattedDate;
+        });
 
         const formattedWekendBooking = {
             ...tourBooking._doc,
             eventBookingDates: formattedDates,
-            tourname:tour.tourname
+            tourname: tourDetails.tourname,
+            numberOfDays: daysDifference,
+            numberOfNights: numberOfNights,
         };
 
         res.status(200).json({
             success: true,
             msg: "Booking found",
-            data: formattedWekendBooking
+            data: formattedWekendBooking,
         });
     } catch (error) {
         res.status(500).json({
             success: false,
             msg: "Failed to fetch weekend booking",
-            error: error.message
+            error: error.message,
         });
     }
 };
+
 
 
 module.exports = {
