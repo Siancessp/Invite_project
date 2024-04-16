@@ -131,10 +131,16 @@ const getHumanReadableDate = (date) => {
 };
 
 const formatTime = (time) => {
-    const [hours, minutes] = time.split(':');
-    const formattedHours = parseInt(hours, 10) % 12 || 12; // Convert to 12-hour format
-    const ampm = parseInt(hours, 10) >= 12 ? 'PM' : 'AM';
-    return `${formattedHours}:${minutes} ${ampm}`;
+    // Split the time string into hours, minutes, and AM/PM
+    const [hoursMinutes, ampm] = time.split(' ');
+
+    // Split the hours and minutes
+    const [hours, minutes] = hoursMinutes.split(':');
+
+    // Join hours and minutes together with AM/PM
+    const formattedTime = `${hours}:${minutes} ${ampm}`;
+
+    return formattedTime;
 };
 
 //Fetch all weakend details
@@ -161,6 +167,8 @@ const gettourDetails = async (req, res) => {
                     tour_id: tourDetail._id,
                     tourstartdate: getHumanReadableDate(new Date(tourDetail.tour_start_date)),
                     tourenddate: getHumanReadableDate(new Date(tourDetail.tour_end_date)),
+                    tourstarttime: formatTime(tourDetail.tour_start_time),
+                    tourendtime: formatTime(tourDetail.tour_end_time),
                     tourlocation: tourDetail.tour_location,
                     tourtemplate: {
                         tourtemplate_id: tourtemplate._id,

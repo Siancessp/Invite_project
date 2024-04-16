@@ -30,11 +30,18 @@ const getHumanReadableDate = (date) => {
     return null;
 };
 
+
 const formatTime = (time) => {
-    const [hours, minutes] = time.split(':');
-    const formattedHours = parseInt(hours, 10) % 12 || 12; // Convert to 12-hour format
-    const ampm = parseInt(hours, 10) >= 12 ? 'PM' : 'AM';
-    return `${formattedHours}:${minutes} ${ampm}`;
+    // Split the time string into hours, minutes, and AM/PM
+    const [hoursMinutes, ampm] = time.split(' ');
+
+    // Split the hours and minutes
+    const [hours, minutes] = hoursMinutes.split(':');
+
+    // Join hours and minutes together with AM/PM
+    const formattedTime = `${hours}:${minutes} ${ampm}`;
+
+    return formattedTime;
 };
 
 const newsFeeds = async (req, res) => {
@@ -376,6 +383,10 @@ const fetchpostbycategoryId = async (req, res) => {
             eventDetails.forEach(detail => {
                 const combinedDetail = {
                     ...detail.toObject(),
+                    event_start_date : getHumanReadableDate(detail.event_start_date),
+                    event_end_date : getHumanReadableDate(detail.event_end_date),
+                    event_start_time : formatTime(detail.event_start_time),
+                    event_end_time : formatTime(detail.event_end_time),
                     templateimgUrl: templateimgUrl
                 };
                 combinedDataArray.push(combinedDetail);
