@@ -153,6 +153,7 @@ const getAllWeekendBookings = async (req, res) => {
             });
         }
 
+        
         const formattedDates = weekendBooking.eventBookingDates.map(date => {
             const formattedDate = new Date(date).toLocaleDateString('en-GB');
             return formattedDate;
@@ -167,11 +168,27 @@ const getAllWeekendBookings = async (req, res) => {
             });
         }
 
+        const startDate = new Date(weekend.weakend_start_date);
+        const endDate = new Date(weekend.weakend_end_date);
+
+        // Calculate the difference in days
+        const timeDifference = endDate - startDate;
+        const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+        // Calculate the difference in hours for the night count
+        const startTime = new Date(`1970-01-01T${weekend.weakend_start_time}`);
+        const endTime = new Date(`1970-01-01T${weekend.weakend_end_time}`);
+        const timeDifferenceInHours = (endTime - startTime) / (1000 * 60 * 60);
+
+        // Calculate the number of nights
+        const numberOfNights = daysDifference + (timeDifferenceInHours >= 24 ? 1 : 0);
+
         const formattedWekendBooking = {
             ...weekendBooking._doc,
-            weakendname:weekend.weakendname,
             eventBookingDates: formattedDates,
             weakendname:weekend.weakendname,
+            numberOfDays: daysDifference,
+            numberOfNights: numberOfNights,
         };
 
         res.status(200).json({
