@@ -236,11 +236,10 @@ const getweeklyeventDetails = async (req, res) => {
 
         // Find events with start dates within the next 7 days and in the current month
         const existingEventdetails = await EventDetails.find({
-            event_start_date: { $gte: today, $lte: futureDate },
             $expr: {
                 $and: [
-                    { $eq: [{ $month: "$event_start_date" }, currentMonth + 1] }, // Months are zero-based in JavaScript
-                    { $eq: [{ $year: "$event_start_date" }, currentYear ] }
+                    { $lte: ["$event_start_date", futureDate.toISOString()] },
+                    { $gte: ["$event_end_date", today.toISOString()] }
                 ]
             }
         });
