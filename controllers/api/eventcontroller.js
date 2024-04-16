@@ -248,7 +248,7 @@ const getweeklyeventDetails = async (req, res) => {
             return res.status(404).json({ success: false, msg: 'No upcoming events found' });
         }
 
-        let eventDetailsObject = {};
+        let eventDetailsArray = [];
 
         for (let i = 0; i < existingEventdetails.length; i++) {
             const eventDetail = existingEventdetails[i];
@@ -274,14 +274,14 @@ const getweeklyeventDetails = async (req, res) => {
                     }
                 };
 
-                eventDetailsObject = eventDetailWithUser;
+                eventDetailsArray.push(eventDetailWithUser);
             }
         }
 
         const response = {
             success: true,
             msg: "Successfully fetched upcoming event details for the current week in the current month",
-            data: eventDetailsObject
+            data: eventDetailsArray
         };
 
         res.status(200).json(response);
@@ -290,6 +290,7 @@ const getweeklyeventDetails = async (req, res) => {
         return res.status(500).json({ success: false, msg: "Internal Server Error" });
     }
 };
+
 
 const getMonthlyEventDetails = async (req, res) => {
     try {
@@ -324,7 +325,7 @@ const getMonthlyEventDetails = async (req, res) => {
             return res.status(404).json({ success: false, msg: 'No upcoming events found for the current month' });
         }
 
-        let eventDetailsObject = {};
+        let eventDetailsArray = [];
 
         for (let i = 0; i < existingEventdetails.length; i++) {
             const eventDetail = existingEventdetails[i];
@@ -353,16 +354,16 @@ const getMonthlyEventDetails = async (req, res) => {
                     }
                 };
 
-                eventDetailsObject = eventDetailWithUser;
+                eventDetailsArray.push(eventDetailWithUser);
             }
         }
 
-        console.log("Event Details Object:", eventDetailsObject);
+        console.log("Event Details Array:", eventDetailsArray);
 
         const response = {
             success: true,
             msg: "Successfully fetched upcoming event details for the current month",
-            data: eventDetailsObject
+            data: eventDetailsArray
         };
 
         res.status(200).json(response);
