@@ -41,31 +41,71 @@ const calculateGrandTotalPrice = async (weekendid, numberofadult, numberofchild)
             error: error.message
         };
     }
-}
+};
 
-const cleanDates = (datesObject) => {
-    return Object.keys(datesObject);
-  };
+// Function to calculate the booking dates and number of days
+const calculateWeekendBooking = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Calculate the difference in days
+    const diffInMs = end - start;
+    const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+
+    // Get the booking dates
+    const bookingDates = [];
+    for (let i = 0; i <= diffInDays; i++) {
+        const date = new Date(start);
+        date.setDate(start.getDate() + i);
+        bookingDates.push(date.toISOString().split('T')[0]);
+    }
+
+    return {
+        bookingDates: bookingDates,
+        numDays: diffInDays
+    };
+};
+
   const weekendbooking = async (req, res) => {
     const { user_id, numberofadult, numberofchild, weekendid } = req.body;
     try {
         let existingBooking = await WeekendBooking.findOne({ user_id: user_id, eventid: weekendid });
 
+        const weekendDetails = await WeakendDetails.findOne({ _id: weekendid });
+
+        // Ensure that weekendDetails exist
+        if (!weekendDetails) {
+            return res.status(404).send({
+                success: false,
+                msg: "Weekend details not found"
+            });
+        }
+
+        // Extract necessary details from weekendDetails
+        const { weakend_start_date, weakend_end_date } = weekendDetails;
+        console.log("Start Date:", weakend_start_date);
+        console.log("End Date:", weakend_end_date);
+
+        // Calculate the booking dates and number of days
+        let { bookingDates, numDays } = calculateWeekendBooking(weakend_start_date, weakend_end_date);
+
         if (existingBooking) {
             const grandTotalResponse = await calculateGrandTotalPrice(weekendid, numberofadult, numberofchild);
             const grandTotal = grandTotalResponse.data;
+            existingBooking.nummberofDays = numDays;
+            existingBooking.eventBookingDates = bookingDates;
             existingBooking.numberofadult = numberofadult;
             existingBooking.numberofchild = numberofchild;
             existingBooking.grandtotalprice = grandTotal;
 
             await existingBooking.save();
-            const { nummberofDays, eventBookingDates, ...bookingDetails } = existingBooking.toObject();
+            // const { nummberofDays, eventBookingDates, ...bookingDetails } = existingBooking.toObject();
 
             const response = {
                 success: true,
                 msg: "Weekend Booking Updated Successfully!",
                 data: {
-                    BookingDetails: bookingDetails,
+                    BookingDetails: existingBooking,
                     grandTotal: grandTotal
                 }
             };
@@ -129,8 +169,9 @@ const getAllWeekendBookings = async (req, res) => {
 
         const formattedWekendBooking = {
             ...weekendBooking._doc,
-            weekendBookingDates: formattedDates,
-            weakendname:weekend.weakendname
+            weakendname:weekend.weakendname,
+            eventBookingDates: formattedDates,
+            weakendname:weekend.weakendname,
         };
 
         res.status(200).json({

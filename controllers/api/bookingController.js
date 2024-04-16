@@ -132,9 +132,6 @@ const bookingHistory = async (req, res) => {
     }
 };
 
-
-
-
 const bookingHistoryByUserId = async (req, res) => {
     try {
         const user_id = req.params.user_id;
@@ -177,8 +174,6 @@ const bookingHistoryByUserId = async (req, res) => {
         res.status(500).json({ success: false, msg: 'Failed to fetch data', error: error.message });
     }
 };
-
-
 
 
 module.exports = {

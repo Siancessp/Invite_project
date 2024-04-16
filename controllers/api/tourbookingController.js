@@ -43,9 +43,7 @@ const calculateGrandTotalPrice = async (tourid, nummberofDays, numberofadult, nu
     }
 }
 
-const cleanDates = (datesObject) => {
-    return Object.keys(datesObject);
-  };
+
   const tourbooking = async (req, res) => {
     const { user_id, tourBookingDates, numberofDays, numberofadult, numberofchild, tourid } = req.body;
     try {
