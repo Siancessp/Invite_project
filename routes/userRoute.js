@@ -70,6 +70,7 @@ user_route.get('/getweakendcategory', weakendController.getweakendcategory);
 user_route.post('/addweakenddetails', weakendController.addweakendDetails);
 user_route.get('/getweakenddetails', weakendController.getweakendDetails);
 user_route.get('/getallweekenddetails/:weakendid', weakendController.getallweakenddetailsbyid);
+user_route.get('/getweeklyweekenddetails', weakendController.getweeklyweekendDetails);
 
 user_route.get('/tourtemplate/:tourcategoryid', tourController.tourtemplate);
 user_route.get('/gettourcategory', tourController.gettourcategory);

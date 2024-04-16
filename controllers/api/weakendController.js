@@ -269,44 +269,48 @@ const getweeklyweekendDetails = async (req, res) => {
             }
         });
 
+        console.log("Existing Weekend Details:", existingWeekenddetails);
+
         if (!existingWeekenddetails || existingWeekenddetails.length === 0) {
             return res.status(404).json({ success: false, msg: 'No upcoming weekend found' });
         }
 
-        let weekendDetailsObject = {};
+        let weekendDetailsArray = [];
 
         for (let i = 0; i < existingWeekenddetails.length; i++) {
             const weekendDetail = existingWeekenddetails[i];
             const weekendtemplate = await weakEnd.findOne({ _id: weekendDetail.weakendtemplateid });
 
-            const categoryId = eventtemplate.categoryid;
-            const category = await Category.findOne({ _id: categoryId });
+            const weekendcategoryId = weekendtemplate.weakendcategoryid;
+            const weekendcategory = await weakendCategory.findOne({ _id: weekendcategoryId });
 
-            if (eventtemplate) {
-                const eventDetailWithUser = {
-                    eventstartdate: getHumanReadableDate(new Date(eventDetail.event_start_date)),
-                    eventenddate: getHumanReadableDate(new Date(eventDetail.event_end_date)),
-                    eventname: eventDetail.eventname,
-                    eventlocation: eventDetail.event_location,
-                    eventdescription: eventDetail.eventdescription,
-                    eventtemplate: {
-                        eventtemplate_id: eventtemplate._id,
-                        eventtemplate: baseImageUrl + '/' + eventtemplate.eventtemplate
+            if (weekendtemplate) {
+                const weekendDetailWithUser = {
+                    weekendstartdate: getHumanReadableDate(new Date(weekendDetail.weakend_end_date)),
+                    weekendenddate: getHumanReadableDate(new Date(weekendDetail.weakend_end_date)),
+                    weekendname: weekendDetail.weakendname,
+                    weekendlocation: weekendDetail.weakend_location,
+                    weekenddescription: weekendDetail.weakenddescription,
+                    weekendtemplate: {
+                        weekendtemplate_id: weekendtemplate._id,
+                        weekendtemplate: baseImageUrl + '/' + weekendtemplate.weakendtemplate
                     },
                     category: {
-                        category_id: category._id,
-                        category_name: category.categoryname
+                        category_id: weekendcategory._id,
+                        category_name: weekendcategory.weakendcategoryname
                     }
                 };
 
-                eventDetailsObject[eventDetail._id] = eventDetailWithUser;
+                weekendDetailsArray.push(weekendDetailWithUser);
             }
         }
+
+        console.log("Weekend Details Array:", weekendDetailsArray);
 
         const response = {
             success: true,
             msg: "Successfully fetched upcoming event details for the current week in the current month",
-            data: eventDetailsObject
+            data: weekendDetailsArray
         };
 
         res.status(200).json(response);
@@ -316,10 +320,12 @@ const getweeklyweekendDetails = async (req, res) => {
     }
 };
 
+
 module.exports = {
     weakendtemplate,
     getweakendcategory,
     addweakendDetails,
     getweakendDetails,
-    getallweakenddetailsbyid
+    getallweakenddetailsbyid,
+    getweeklyweekendDetails
 }
