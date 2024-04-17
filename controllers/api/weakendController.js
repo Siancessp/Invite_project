@@ -173,6 +173,7 @@ const getweakendDetails = async (req, res) => {
                 const numberOfNights = daysDifference + (timeDifferenceInHours >= 24 ? 1 : 0);
 
                 const weakendDetailsWithUser = {
+                    type: 'weekend',
                     weakend_id: weakendDetail._id,
                     weakendstartdate: getHumanReadableDate(new Date(weakendDetail.weakend_start_date)),
                     weakendenddate: getHumanReadableDate(new Date(weakendDetail.weakend_end_date)),

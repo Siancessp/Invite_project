@@ -178,6 +178,7 @@ const gettourDetails = async (req, res) => {
                 // Calculate the number of nights
                 const numberOfNights = daysDifference + (timeDifferenceInHours >= 24 ? 1 : 0);
                 const tourDetailsWithUser = {
+                    type: 'tour',
                     tour_id: tourDetail._id,
                     tourstartdate: getHumanReadableDate(new Date(tourDetail.tour_start_date)),
                     tourenddate: getHumanReadableDate(new Date(tourDetail.tour_end_date)),
