@@ -19,6 +19,23 @@ All rights reserved.
 <script src="/backend/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
 <script src="/backend/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 
+<script>
+  // Logout function
+  function logout() {
+    // Clear token from local storage
+    localStorage.removeItem('token');
+
+    // Redirect to the login page or any other desired location
+    window.location.href = '/login';
+  }
+
+  // Add event listener to the logout button
+  document.querySelector('.dropdown-item-logout').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default action
+    logout(); // Call the logout function
+  });
+</script>
+
 <script nonce="fb07df1e-f7ce-4ad1-b302-5b7adf7b1947">
 $(document).ready(function() {
     $('#example1').DataTable({
