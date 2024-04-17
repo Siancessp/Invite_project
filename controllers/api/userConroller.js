@@ -77,6 +77,9 @@ const insertuserData = async (req,res)=>
             const savedUser = await newUser.save();
             const token = await create_token(savedUser._id);
 
+            savedUser.token = token;
+            await savedUser.save();
+
             const referralLink = `http://20.163.173.61/api/register?ref=${newUser.referal_code}`;
 
 
@@ -85,8 +88,7 @@ const insertuserData = async (req,res)=>
                 msg: "User registered successfully",
                 data: {
                     user: savedUser,
-                    referralLink:referralLink,
-                    token: token
+                    referralLink:referralLink
                 }
             }
             res.status(200).send(response);

@@ -38,6 +38,10 @@ const userregisterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    token: {
+        type: String,
+        default: null
+    },
     referral_points: {
         type: Number, // Assuming referral points are numeric
         default: 0

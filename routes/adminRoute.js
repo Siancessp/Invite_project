@@ -1,6 +1,7 @@
 const express = require("express");
 const exphbs  = require('express-handlebars');
 const admin_route = express.Router();
+const authMiddleware = require('../middleware/authMiddleware');
 
 const bodyParser = require('body-parser');
 admin_route.use(bodyParser.json());
@@ -22,6 +23,10 @@ const storage = multer.diskStorage(
         }
     }
 );
+
+admin_route.get('/protected-route', authMiddleware, (req, res) => {
+    res.json({ success: true, message: "Protected route accessed successfully", user: req.user });
+});
 
 const upload = multer({storage:storage});
 

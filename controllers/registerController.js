@@ -2,6 +2,8 @@ const express = require('express');
 const hbs  = require('hbs');
 const app = express();
 const bcryptjs = require('bcryptjs');
+const jwt = require("jsonwebtoken");
+const config = require("../config/config");
 
 const Register = require("../models/adminregisterModels");
 
@@ -59,13 +61,17 @@ const insertuser = async (req, res) => {
             const savedUser = await newUser.save();
 
             // Create JWT token for the newly registered user
-            // const token = await create_token(savedUser._id);
+            const token = await create_token(savedUser._id);
+
+            savedUser.token = token;
+            await savedUser.save();
 
             const response = {
                 success: true,
                 msg: "User registered successfully",
                 data: {
-                    user: savedUser
+                    user: savedUser,
+                    token: token
                 }
             }
             res.status(200).send(response);

@@ -29,6 +29,10 @@ const adminregisterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    token: {
+        type: String,
+        default: null
+    },
     created_date: {
         type: String,
         required: true
