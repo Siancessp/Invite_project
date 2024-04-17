@@ -163,13 +163,30 @@ const gettourDetails = async (req, res) => {
             const tourcategory = await tourCategory.findOne({ _id: tourcategoryId });
 
             if (tourtemplate) {
+                const startDate = new Date(tourDetail.tour_start_date);
+                const endDate = new Date(tourDetail.tour_end_date);
+
+                // Calculate the difference in days
+                const timeDifference = endDate - startDate;
+                const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+                // Calculate the difference in hours for the night count
+                const startTime = new Date(`1970-01-01T${tourDetail.tour_start_time}`);
+                const endTime = new Date(`1970-01-01T${tourDetail.tour_end_time}`);
+                const timeDifferenceInHours = (endTime - startTime) / (1000 * 60 * 60);
+
+                // Calculate the number of nights
+                const numberOfNights = daysDifference + (timeDifferenceInHours >= 24 ? 1 : 0);
                 const tourDetailsWithUser = {
                     tour_id: tourDetail._id,
                     tourstartdate: getHumanReadableDate(new Date(tourDetail.tour_start_date)),
                     tourenddate: getHumanReadableDate(new Date(tourDetail.tour_end_date)),
                     tourstarttime: formatTime(tourDetail.tour_start_time),
+                    tourname: tourDetail.tourname,
                     tourendtime: formatTime(tourDetail.tour_end_time),
                     tourlocation: tourDetail.tour_location,
+                    tourday: daysDifference, // Number of days
+                    tournight: numberOfNights,
                     tourtemplate: {
                         tourtemplate_id: tourtemplate._id,
                         tourtemplate: baseImageUrl + '/' + tourtemplate.tourtemplate

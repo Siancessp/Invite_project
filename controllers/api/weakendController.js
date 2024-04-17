@@ -157,12 +157,29 @@ const getweakendDetails = async (req, res) => {
             const weakendcategory = await weakendCategory.findOne({ _id: weakendcategoryId });
 
             if (weakendtemplate) {
+                const startDate = new Date(weakendDetail.weakend_start_date);
+                const endDate = new Date(weakendDetail.weakend_end_date);
+
+                // Calculate the difference in days
+                const timeDifference = endDate - startDate;
+                const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+                // Calculate the difference in hours for the night count
+                const startTime = new Date(`1970-01-01T${weakendDetail.weakend_start_time}`);
+                const endTime = new Date(`1970-01-01T${weakendDetail.weakend_end_time}`);
+                const timeDifferenceInHours = (endTime - startTime) / (1000 * 60 * 60);
+
+                // Calculate the number of nights
+                const numberOfNights = daysDifference + (timeDifferenceInHours >= 24 ? 1 : 0);
+
                 const weakendDetailsWithUser = {
                     weakend_id: weakendDetail._id,
                     weakendstartdate: getHumanReadableDate(new Date(weakendDetail.weakend_start_date)),
                     weakendenddate: getHumanReadableDate(new Date(weakendDetail.weakend_end_date)),
                     weakendname: weakendDetail.weakendname,
                     weakendlocation: weakendDetail.weakend_location,
+                    weekendday: daysDifference, // Number of days
+                    weekendnight: numberOfNights,
                     weakendtemplate: {
                         weakendtemplate_id: weakendtemplate._id,
                         weakendtemplate: baseImageUrl + '/' + weakendtemplate.weakendtemplate
