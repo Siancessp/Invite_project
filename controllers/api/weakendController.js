@@ -303,9 +303,25 @@ const getweeklyweekendDetails = async (req, res) => {
             const weekendcategory = await weakendCategory.findOne({ _id: weekendcategoryId });
 
             if (weekendtemplate) {
+                const startDate = new Date(weakendDetail.weakend_start_date);
+                const endDate = new Date(weakendDetail.weakend_end_date);
+
+                // Calculate the difference in days
+                const timeDifference = endDate - startDate;
+                const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+                // Calculate the difference in hours for the night count
+                const startTime = new Date(`1970-01-01T${weakendDetail.weakend_start_time}`);
+                const endTime = new Date(`1970-01-01T${weakendDetail.weakend_end_time}`);
+                const timeDifferenceInHours = (endTime - startTime) / (1000 * 60 * 60);
+
+                // Calculate the number of nights
+                const numberOfNights = daysDifference + (timeDifferenceInHours >= 24 ? 1 : 0);
                 const weekendDetailWithUser = {
                     weekendstartdate: getHumanReadableDate(new Date(weekendDetail.weakend_end_date)),
                     weekendenddate: getHumanReadableDate(new Date(weekendDetail.weakend_end_date)),
+                    weekendday: daysDifference, // Number of days
+                    weekendnight: numberOfNights,
                     weekendname: weekendDetail.weakendname,
                     weekendlocation: weekendDetail.weakend_location,
                     weekenddescription: weekendDetail.weakenddescription,

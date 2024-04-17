@@ -259,6 +259,8 @@ const getweeklyeventDetails = async (req, res) => {
 
             if (eventtemplate) {
                 const eventDetailWithUser = {
+                    type: 'event',
+                    event_id: eventDetail._id,
                     eventstartdate: getHumanReadableDate(new Date(eventDetail.event_start_date)),
                     eventenddate: getHumanReadableDate(new Date(eventDetail.event_end_date)),
                     eventname: eventDetail.eventname,
@@ -340,6 +342,8 @@ const getMonthlyEventDetails = async (req, res) => {
 
             if (eventtemplate) {
                 const eventDetailWithUser = {
+                    type: 'event',
+                    event_id: eventDetail._id,
                     eventstartdate: getHumanReadableDate(new Date(eventDetail.event_start_date)),
                     eventenddate: getHumanReadableDate(new Date(eventDetail.event_end_date)),
                     eventname: eventDetail.eventname,
