@@ -42,32 +42,36 @@ const tourcategoryController = require("../controllers/tourcategoryController");
 const addeventController = require("../controllers/eventController");
 
 admin_route.post('/register', registerController.insertuser);
-admin_route.get('/getallUsers', userController.getallUsers);
+admin_route.get('/getallUsers', authMiddleware, userController.getallUsers);
 
-admin_route.post('/insertcategory', categoryController.insertcategory);
-admin_route.get('/category', categoryController.category);
+admin_route.post('/insertcategory', authMiddleware, categoryController.insertcategory);
+admin_route.get('/category', authMiddleware, categoryController.category);
 
-admin_route.get('/wekendcategory', weakendcategoryController.wekendcategory);
-admin_route.post('/insertweakendcategory', weakendcategoryController.insertweakendcategory);
+admin_route.get('/wekendcategory', authMiddleware, weakendcategoryController.wekendcategory);
+admin_route.post('/insertweakendcategory', authMiddleware, weakendcategoryController.insertweakendcategory);
 
-admin_route.get('/tourcategory', tourcategoryController.tourcategory);
-admin_route.post('/inserttourcategory', tourcategoryController.inserttourcategory);
+admin_route.get('/tourcategory', authMiddleware, tourcategoryController.tourcategory);
+admin_route.post('/inserttourcategory', authMiddleware, tourcategoryController.inserttourcategory);
 
 admin_route.get('/',loginController.login);
 admin_route.get('/login',loginController.login);
-admin_route.post('/verifylogin',loginController.verifylogin);
+admin_route.post('/verifylogin', authMiddleware, loginController.verifylogin);
 // admin_route.get('/logout',loginController.logout);
 
-admin_route.get('/addeventcategory',addeventController.addeventcategory);
-admin_route.get('/getallevent',addeventController.getallevent);
-admin_route.post('/eventcategory',upload.single('eventtemplate'),addeventController.inserteventcategory);
+// admin_route.get('/test', authMiddleware, function(req,res){
+//     res.status(200).send({ success:true, msg:"Authentcated" });
+// });
+
+admin_route.get('/addeventcategory',authMiddleware, addeventController.addeventcategory);
+admin_route.get('/getallevent', authMiddleware, addeventController.getallevent);
+admin_route.post('/eventcategory',authMiddleware, upload.single('eventtemplate'),addeventController.inserteventcategory);
 // admin_route.get('/eventcategorylist',addeventController.eventcategorylist);
 
-admin_route.get('/addweakendcategory',weakendcategoryController.addweakendcategory);
-admin_route.post('/insertweakendcategorydata', upload.single('weakendtemplate'), weakendcategoryController.insertweakendcategorydata);
+admin_route.get('/addweakendcategory', authMiddleware, weakendcategoryController.addweakendcategory);
+admin_route.post('/insertweakendcategorydata', authMiddleware, upload.single('weakendtemplate'), weakendcategoryController.insertweakendcategorydata);
 
-admin_route.get('/addtourcategory',tourcategoryController.addtourcategory);
-admin_route.post('/inserttourcategorydata', upload.single('tourtemplate'), tourcategoryController.inserttourcategorydata);
+admin_route.get('/addtourcategory', authMiddleware, tourcategoryController.addtourcategory);
+admin_route.post('/inserttourcategorydata', authMiddleware, upload.single('tourtemplate'), tourcategoryController.inserttourcategorydata);
 
 
 module.exports = admin_route;
