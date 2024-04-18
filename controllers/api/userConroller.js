@@ -232,18 +232,22 @@ const user_login = async (req, res) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
+        const deviceToken = req.body.deviceToken;
 
         const userloginData = await userRegister.findOne({ email: email });
         if (userloginData) {
             const passwordMatch = await bcryptjs.compare(password, userloginData.password);
             if (passwordMatch) {
-                const tokenDta = await create_token(userloginData._id);
+                
+                await userRegister.updateOne({ email: email }, { deviceToken: deviceToken });
+
+                const tokenData = await create_token(userloginData._id);
                 const userResult = {
                     user_id: userloginData._id,
                     user_name: `${userloginData.fullname}`,
                     email: userloginData.email,
                     password: userloginData.password,
-                    token: tokenDta
+                    token: tokenData
                 }
                 const response = {
                     status: true,
