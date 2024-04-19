@@ -239,7 +239,7 @@ const user_login = async (req, res) => {
             const passwordMatch = await bcryptjs.compare(password, userloginData.password);
             if (passwordMatch) {
                 
-                await userRegister.updateOne({ email: email }, { deviceToken: deviceToken });
+                const updateResult = await userRegister.updateOne({ email: email }, { deviceToken: deviceToken });
 
                 const tokenData = await create_token(userloginData._id);
                 const userResult = {
@@ -255,7 +255,8 @@ const user_login = async (req, res) => {
                     user_id: userResult.user_id,
                     user_name: userResult.user_name,
                     email: userResult.email,
-                    token: userResult.token
+                    token: userResult.token,
+                    deviceToken: deviceToken
                 }
                 res.status(200).send(response);
             } else {
@@ -268,7 +269,7 @@ const user_login = async (req, res) => {
         console.error(error);
         res.status(500).send({ success: false, msg: "Internal Server Error" });
     }
-}
+};
 
 module.exports = {
     insertuserData,
