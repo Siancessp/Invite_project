@@ -28,16 +28,7 @@ const create_token = async (id) => {
 
 const verifylogin = async (req, res) => {
     try {
-        // Extract token from request headers
-        const token = req.body.token || req.query.token || req.headers["authorization"];
-        console.log(token);
-        console.log("Hii");
-
-        // Verify token
-        jwt.verify(token, config.secret_jwt, async (err, decoded) => {
-            if (err) {
-                return res.status(403).json({ success: false, message: "Failed to authenticate token" });
-            }
+        
 
             // Token is valid, proceed with login verification
             const email = req.body.email;
@@ -63,7 +54,7 @@ const verifylogin = async (req, res) => {
             } else {
                 res.status(200).send({ success: false, msg: "Login details are incorrect" });
             }
-        });
+        
     } catch (error) {
         console.log(error.message);
         res.status(500).send({ success: false, message: "Internal Server Error" });
