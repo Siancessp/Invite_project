@@ -34,7 +34,6 @@ const verifylogin = async (req,res) => {
                 const userloginData = await Register.findOne({ email: email });
                 if (userloginData) {
                     const passwordMatch = await bcryptjs.compare(password, userloginData.password);
-                    console.log(passwordMatch);
                     if (passwordMatch) {
                         const tokenDta = await create_token(userloginData._id);
                         console.log(tokenDta);

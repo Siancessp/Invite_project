@@ -36,49 +36,7 @@ All rights reserved.
   });
 </script>
 
-<script>
-  // Assume this is your client-side JavaScript code
 
-// Function to handle form submission
-async function submitForm(event) {
-    event.preventDefault(); // Prevent default form submission
-
-    const token = getToken(); // Function to get user's token from storage
-    const form = event.target;
-    const formData = new FormData(form);
-
-    try {
-        const response = await fetch('/insertcategory', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + token
-            },
-            body: formData
-        });
-
-        if (response.ok) {
-            // Form submission successful, handle response
-            console.log('Form submitted successfully');
-        } else {
-            // Handle error response
-            console.error('Form submission failed');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-// Function to get user's token from storage (e.g., local storage)
-function getToken() {
-    // Retrieve the token from storage (e.g., local storage)
-    return localStorage.getItem('token');
-}
-
-// Attach submit event listener to the form
-const form = document.querySelector('form');
-form.addEventListener('submit', submitForm);
-
-</script>
 
 <script nonce="fb07df1e-f7ce-4ad1-b302-5b7adf7b1947">
 $(document).ready(function() {
