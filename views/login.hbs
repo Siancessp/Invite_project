@@ -37,7 +37,7 @@
       <p class="login-box-msg">Sign in to start your session</p>
       <p class="login-box-msg text-red"></p>
 
-      <form id="loginForm" method="post" action="/verifylogin" onsubmit="login(); return false;" target="hidden_iframe">
+      <form id="loginForm" method="post" action="/verifylogin" target="hidden_iframe">
         <div class="input-group mb-3">
           <input type="email" class="form-control" name="email" id="email" placeholder="Email">
           <div class="input-group-append">
@@ -76,21 +76,23 @@ async function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  // Fetch token dynamically here (e.g., from an API endpoint)
   try {
     const response = await fetch('http://20.163.173.61/verifylogin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password, token: document.getElementById("token").value })
     });
     const data = await response.json();
-    const token = data.token; // Assuming the token is returned in the response data
-    document.getElementById("token").value = token; // Set the value of the hidden input field
-    document.getElementById("loginForm").submit(); // Submit the form
+    
+    if (response.ok) {
+      // Handle successful login
+    } else {
+      console.error('Error:', data.message); // Log error message
+    }
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error:', error); // Log network or other errors
   }
 }
 </script>
