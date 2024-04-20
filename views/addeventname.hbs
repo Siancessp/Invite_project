@@ -84,6 +84,8 @@ async function submitForm(event) {
 // Function to retrieve token from storage (e.g., local storage)
 function getToken() {
     // Retrieve the token from storage (e.g., local storage)
+     const token = localStorage.getItem('token');
+    console.log('Retrieved token:', token);
     return localStorage.getItem('token');
 }
 
