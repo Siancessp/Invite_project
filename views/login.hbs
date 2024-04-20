@@ -78,7 +78,7 @@ async function login() {
 
   // Fetch token dynamically here (e.g., from an API endpoint)
   try {
-    const response = await fetch('/verifylogin', {
+    const response = await fetch('http://20.163.173.61/verifylogin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
