@@ -47,7 +47,7 @@ const verifylogin = async (req, res) => {
             if (userloginData) {
                 const passwordMatch = await bcryptjs.compare(password, userloginData.password);
                 if (passwordMatch) {
-                    const tokenDta = await create_token(userloginData._id);
+                    const tokenDta = userloginData.token;
                     console.log(tokenDta);
                     const userResult = {
                         _id: userloginData._id,
