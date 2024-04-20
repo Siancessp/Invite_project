@@ -38,6 +38,7 @@ const inserteventcategory = async (req, res) => {
 
         // Extract token from request headers
         const token = req.headers.authorization;
+        console.log(token);
 
         // Verify token and attach user info to request
         jwt.verify(token, config.secret_jwt, async (err, decoded) => {
