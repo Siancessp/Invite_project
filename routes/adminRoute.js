@@ -55,7 +55,7 @@ admin_route.post('/inserttourcategory', authMiddleware, tourcategoryController.i
 
 admin_route.get('/',loginController.login);
 admin_route.get('/login',loginController.login);
-admin_route.post('/verifylogin',authMiddleware,loginController.verifylogin);
+admin_route.post('/verifylogin',loginController.verifylogin);
 // admin_route.get('/logout',loginController.logout);
 
 // admin_route.get('/test', authMiddleware, function(req,res){
