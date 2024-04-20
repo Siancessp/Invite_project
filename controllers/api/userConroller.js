@@ -102,7 +102,26 @@ const insertuserData = async (req,res)=>
         console.error(error);
         return res.status(500).send({ success: false, msg: "Error saving user data" });
     }
-}
+};
+
+const fetchallUsers = async (req,res) =>
+{
+    try{
+        const getallUser = await userRegister.find();
+
+        const response = {
+            success: true,
+            msg: "User fetched successfully",
+            data: getallUser
+        }
+        res.status(200).send(response);
+    }
+    catch(error)
+    {
+        console.error(error);
+        return res.status(500).send({ success: false, msg: "Error saving user data" });   
+    }
+};
 
 const getreferalLink = async (req, res) => {
     const user_id = req.params.user_id;
@@ -276,5 +295,6 @@ module.exports = {
     user_login,
     getprofile,
     updateprofileById,
-    getreferalLink
+    getreferalLink,
+    fetchallUsers
 }

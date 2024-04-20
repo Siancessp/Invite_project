@@ -3,6 +3,8 @@ const user_route = express.Router();
 const Razorpay = require('razorpay');
 const path = require("path");
 
+const authuserMiddleware = require('../middleware/authuserMiddleware');
+
 const bodyParser = require('body-parser');
 user_route.use(bodyParser.json());
 user_route.use(bodyParser.urlencoded({ extended: true }));
@@ -41,6 +43,8 @@ const newsfeedController = require("../controllers/api/newsfeedController");
 
 const likeController = require("../controllers/api/likecontroller");
 const commentController = require("../controllers/api/commentcontroller");
+const chatController = require("../controllers/api/chatController");
+const messageController = require("../controllers/api/messageController");
 
 user_route.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.js'));
@@ -51,6 +55,7 @@ user_route.post('/register', userController.insertuserData);
 user_route.get('/getreferalLink/:user_id', userController.getreferalLink);
 user_route.post('/login', userController.user_login);
 user_route.get('/getprofile/:user_id', userController.getprofile);
+user_route.get('/fetchallusers', userController.fetchallUsers);
 user_route.post('/updateprofile', upload.fields([
     { name: 'profile_image'},
     { name: 'background_image'}
@@ -115,5 +120,12 @@ user_route.get('/newsFeeds', newsfeedController.newsFeeds);
 user_route.post('/share', newsfeedController.shareEventsToursWeekends);
 user_route.get('/fetchpostbycategoryId/:categoryId', newsfeedController.fetchpostbycategoryId);
 
+
+user_route.post('/createprivatechat', authuserMiddleware, chatController.createprivateChat);
+user_route.post('/creategroupchat', authuserMiddleware, chatController.creategroupChat);
+user_route.get('/myChats', authuserMiddleware, chatController.myChats);
+
+user_route.post('/sendmessage', authuserMiddleware, messageController.sendMessage);
+user_route.get('/mymessages/:chatId', authuserMiddleware, messageController.myMessages);
 
 module.exports = user_route;
