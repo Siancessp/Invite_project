@@ -37,7 +37,7 @@ const inserteventcategory = async (req, res) => {
         const { categoryid } = req.body;
 
         // Extract token from request headers
-        const token = req.headers.authorization;
+        const token = req.body.token || req.query.token || req.headers["authorization"];
         console.log(token);
 
         // Verify token and attach user info to request
