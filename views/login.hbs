@@ -37,7 +37,7 @@
       <p class="login-box-msg">Sign in to start your session</p>
       <p class="login-box-msg text-red"></p>
 
-      <form id="loginForm" method="post" action="/verifylogin" target="hidden_iframe">
+      <form id="loginForm" method="post" action="/verifylogin" onsubmit="login(); return false;" target="hidden_iframe">
         <div class="input-group mb-3">
           <input type="email" class="form-control" name="email" id="email" placeholder="Email">
           <div class="input-group-append">
