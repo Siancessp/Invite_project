@@ -29,29 +29,65 @@ const addeventcategory = async (req, res) => {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
     }
-}
+};
 
 const inserteventcategory = async (req, res) => {
-    const { categoryid } = req.body;
-
     try {
-        const newEvent = new Event({
-            categoryid: categoryid,
-            eventtemplate: req.file.filename
-        });
+        // Extract category id from request body
+        const { categoryid } = req.body;
 
-        const savedEvent = await newEvent.save();
-        if (savedEvent) {
-            const categories = await fetchCategories();
-            res.render('addeventcategory', { message: "Your event has been created successfully!", categories });
-        } else {
-            res.render('addeventcategory', { message: "Failed to create event!" });
-        }
+        // Extract token from request headers
+        const token = req.headers.authorization;
+
+        // Verify token and attach user info to request
+        jwt.verify(token, config.secret_jwt, async (err, decoded) => {
+            if (err) {
+                return res.status(403).json({ success: false, message: "Failed to authenticate token" });
+            }
+
+            // Token is valid, proceed with inserting event category
+            const newEvent = new Event({
+                categoryid: categoryid,
+                eventtemplate: req.file.filename
+            });
+
+            const savedEvent = await newEvent.save();
+            if (savedEvent) {
+                const categories = await fetchCategories();
+                res.render('addeventcategory', { message: "Your event has been created successfully!", categories });
+            } else {
+                res.render('addeventcategory', { message: "Failed to create event!" });
+            }
+        });
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
     }
 }
+
+
+// const inserteventcategory = async (req, res) => {
+//     const { categoryid } = req.body;
+
+//     try {
+        
+//         const newEvent = new Event({
+//             categoryid: categoryid,
+//             eventtemplate: req.file.filename
+//         });
+
+//         const savedEvent = await newEvent.save();
+//         if (savedEvent) {
+//             const categories = await fetchCategories();
+//             res.render('addeventcategory', { message: "Your event has been created successfully!", categories });
+//         } else {
+//             res.render('addeventcategory', { message: "Failed to create event!" });
+//         }
+//     } catch (error) {
+//         console.log(error.message);
+//         res.status(500).send('Internal Server Error');
+//     }
+// }
 
 //This is for admin panel to display the list of the event
 const getallevent = async (req, res) => {
