@@ -56,7 +56,7 @@ const verifylogin = async (req, res) => {
                         password: userloginData.password,
                         token: tokenDta
                     }
-                    res.render(`/dashboard?token=${token}`);
+                    res.render('dashboard');
                 } else {
                     res.status(200).send({ success: false, msg: "Password incorrect" });
                 }
