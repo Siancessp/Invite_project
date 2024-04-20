@@ -31,6 +31,7 @@ const verifylogin = async (req, res) => {
         // Extract token from request headers
         const token = req.body.token || req.query.token || req.headers["authorization"];
         console.log(token);
+        console.log("Hii");
 
         // Verify token
         jwt.verify(token, config.secret_jwt, async (err, decoded) => {
@@ -67,9 +68,7 @@ const verifylogin = async (req, res) => {
         console.log(error.message);
         res.status(500).send({ success: false, message: "Internal Server Error" });
     }
-}
-
-
+};
 
 module.exports = {
     login,
