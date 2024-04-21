@@ -91,9 +91,22 @@ const creategroupChat = async (req, res) => {
     }
 };
 
+function formatDate(date) {
+    if (!date) return null;
+
+    const now = new Date();
+    const diffInMs = Math.abs(now - new Date(date));
+    const diffInHours = diffInMs / (1000 * 60 * 60); // Convert milliseconds to hours
+
+    if (diffInHours >= 24) {
+        return new Date(date).toLocaleDateString('en-GB'); // Display date if more than 24 hours
+    } else {
+        return new Date(date).toLocaleTimeString('en-US', { hourCycle: 'h12', hour: 'numeric', minute: 'numeric' }).toLowerCase(); // Display time in 12-hour format without seconds, with lowercase AM/PM
+    }
+};
+
 const myChats = async (req, res) => {
     const userData = req.user;
-    console.log(userData);
 
     try {
         const Chats = await Chat.find({
@@ -103,9 +116,15 @@ const myChats = async (req, res) => {
             select: "fullname",
             match: { _id: { $ne: userData._id}}
         });
-
+        const formattedChats = Chats.map(chat => {
+            return {
+                ...chat.toJSON(),
+                createdAt: formatDate(chat.createdAt),
+                updatedAt: formatDate(chat.updatedAt)
+            };
+        });
             return res.send({
-                data: Chats,
+                data: formattedChats,
                 status: true
             });
     } catch (error) {
