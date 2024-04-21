@@ -3,6 +3,19 @@ const exphbs  = require('express-handlebars');
 const admin_route = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
 
+const ifEquals = function(arg1, arg2, options) {
+    return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+};
+
+// Set up Handlebars as the view engine
+app.engine('hbs', exphbs({
+    helpers: {
+        // Register the ifEquals helper specifically for this engine
+        ifEquals: ifEquals
+    },
+    extname: '.hbs' // Use '.hbs' as the file extension for Handlebars templates
+}));
+
 const bodyParser = require('body-parser');
 admin_route.use(bodyParser.json());
 admin_route.use(bodyParser.urlencoded({ extended: true}));
