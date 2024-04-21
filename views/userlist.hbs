@@ -48,14 +48,10 @@
             <td>{{this.mobile}}</td>
             <td>{{this.email}}</td>
             <td>
-                {{#if (this.status == 1)}}
-                    <button class="btn btn-primary">
-                        Active
-                    </button>
+                {{#if (eq status 1)}}
+                    <button class="btn btn-primary">Active</button>
                 {{else}}
-                    <button class="btn btn-primary">
-                        Inactive
-                    </button>
+                    <button class="btn btn-secondary">Inactive</button>
                 {{/if}}
             </td>
         </tr>
