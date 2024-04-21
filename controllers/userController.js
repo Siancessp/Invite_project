@@ -33,12 +33,12 @@ const inactiveuser = async (req,res) =>
 {
     try
     {
-        const id = req.params.id;
+        const user_id = req.params.user_id;
 
-        const updatedstatus = await userRegister.findByIdAndUpdate(id, { status: 0 }, { new: true });
+        const updatedstatus = await userRegister.findByIdAndUpdate(user_id, { status: 0 }, { new: true });
 
         if (!updatedstatus) {
-            return res.status(404).json({ success: false, message: 'Package not found' });
+            return res.status(404).json({ success: false, message: 'User not found' });
         }
 
         res.render('userlist');

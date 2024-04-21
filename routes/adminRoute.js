@@ -43,7 +43,7 @@ const addeventController = require("../controllers/eventController");
 
 admin_route.post('/register', registerController.insertuser);
 admin_route.get('/getallUsers', userController.getallUsers);
-admin_route.post('/inactiveuser', userController.inactiveuser);
+admin_route.post('/inactiveuser/:user_id', userController.inactiveuser);
 
 admin_route.post('/insertcategory', categoryController.insertcategory);
 admin_route.get('/category', categoryController.category);
