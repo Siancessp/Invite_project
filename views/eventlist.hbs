@@ -38,16 +38,16 @@
 <th>Fullname</th>
 <th>Mobile</th>
 <th>Email</th>
-<th>Status</th>
 </tr>
 </thead>
 <tbody>
-   <tr>
-<td>Fullname</td>
-<td>Mobile</td>
-<td>Email</td>
-<td>Status</td>
-</tr>
+    {{#each existedeventDetails}}
+        <tr>
+            <td>{{this.eventname}}</td>
+            <td>{{this.event_start_date}}</td>
+            <td>{{this.event_location}}</td>
+        </tr>
+    {{/each}}
 </tbody>
 </table>
 </div>
