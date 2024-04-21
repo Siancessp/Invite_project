@@ -39,6 +39,7 @@
 <th>Mobile</th>
 <th>Email</th>
 <th>Status</th>
+<th>Details</th>
 </tr>
 </thead>
 <tbody>
@@ -53,6 +54,26 @@
                 {{else ifEquals status 0}}
                     <a href="/activeuser/{{this._id}}" class="btn btn-primary">Inactive</a>
                 {{/ifEquals}}
+            </td>
+            <td>
+                <button class="btn btn-success" onclick="toggleDropdowns()">Select</button>
+                <div id="dropdowns" style="display: none;">
+                    <select>
+                        <option value="option1">Option 1</option>
+                        <option value="option2">Option 2</option>
+                        <option value="option3">Option 3</option>
+                    </select>
+                    <select>
+                        <option value="option1">Option 1</option>
+                        <option value="option2">Option 2</option>
+                        <option value="option3">Option 3</option>
+                    </select>
+                    <select>
+                        <option value="option1">Option 1</option>
+                        <option value="option2">Option 2</option>
+                        <option value="option3">Option 3</option>
+                    </select>
+                </div>
             </td>
         </tr>
     {{/each}}
