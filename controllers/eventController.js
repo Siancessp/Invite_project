@@ -104,24 +104,22 @@ const getallevent = async (req, res) => {
     }
 }
 
-const geteventbyUserid = async (req,res) =>
-{
-    try
-    {
+const geteventbyUserid = async (req, res) => {
+    try {
         const user_id = req.params.user_id;
         const usercreatedeventDetails = await EventDetails.find({ user_id: user_id });
         
-        if (!usercreatedeventDetails) {
+        if (usercreatedeventDetails.length === 0) {
             return res.status(404).json({ success: false, msg: 'Event Details not found' });
         }
-         res.render('userseventlist', { usercreatedeventDetails });
-    }
-    catch(error)
-    {
+        
+        res.render('userseventlist', { usercreatedeventDetails });
+    } catch(error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 module.exports = {
     addeventcategory,
