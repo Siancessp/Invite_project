@@ -203,9 +203,10 @@ const updateprofileById = async (req, res) => {
     const baseImageUrlP = "/uploads/profile_image";
     const baseImageUrlB = "/uploads/background_image";
 
-    const { profile_image, background_image } = req.files;
-
     try {
+        // Check if req.files exists before attempting to destructure
+        const { profile_image, background_image } = req.files || {};
+
         let updateFields = {};
 
         if (fullname) updateFields.fullname = fullname;
@@ -244,8 +245,6 @@ const updateprofileById = async (req, res) => {
         });
     }
 };
-
-
 
 const user_login = async (req, res) => {
     try {
