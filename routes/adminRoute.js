@@ -8,7 +8,7 @@ const ifEquals = function(arg1, arg2, options) {
 };
 
 // Set up Handlebars as the view engine
-app.engine('hbs', exphbs({
+admin_route.engine('hbs', exphbs({
     helpers: {
         // Register the ifEquals helper specifically for this engine
         ifEquals: ifEquals
