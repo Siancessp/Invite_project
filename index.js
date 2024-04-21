@@ -11,6 +11,10 @@ const user_route = require("./routes/userRoute");
 // Set up the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+hbs.registerHelper('ifEquals', function(arg1, arg2, options) {
+    return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+});
+
 // Set up Handlebars engine
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
