@@ -29,8 +29,29 @@ const getallUsers = async (req, res) => {
     }
 }
 
+const inactiveuser = async (req,res) =>
+{
+    try
+    {
+        const id = req.params.id;
+
+        const updatedstatus = await userRegister.findByIdAndUpdate(id, { status: 0 }, { new: true });
+
+        if (!updatedstatus) {
+            return res.status(404).json({ success: false, message: 'Package not found' });
+        }
+
+        res.render('userlist');
+    }
+    catch(error)
+    {
+        console.log(error.message);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 module.exports = {
     User,
-    getallUsers
+    getallUsers,
+    inactiveuser
 }

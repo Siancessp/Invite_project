@@ -49,8 +49,8 @@
             <td>{{this.email}}</td>
              <td>
                 {{#if status}}
-                    {{#ifEquals status 0}}
-                        <button class="btn btn-primary">Active</button>
+                    {{#ifEquals status 1}}
+                        <a href="/inactiveuser" class="btn btn-primary">Active</a>
                     {{else}}
                         <button class="btn btn-secondary">Inactive</button>
                     {{/ifEquals}}
