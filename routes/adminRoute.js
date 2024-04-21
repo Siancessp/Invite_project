@@ -42,16 +42,16 @@ const tourcategoryController = require("../controllers/tourcategoryController");
 const addeventController = require("../controllers/eventController");
 
 admin_route.post('/register', registerController.insertuser);
-admin_route.get('/getallUsers', authMiddleware, userController.getallUsers);
+admin_route.get('/getallUsers', userController.getallUsers);
 
-admin_route.post('/insertcategory', authMiddleware, categoryController.insertcategory);
-admin_route.get('/category', authMiddleware, categoryController.category);
+admin_route.post('/insertcategory', categoryController.insertcategory);
+admin_route.get('/category', categoryController.category);
 
-admin_route.get('/wekendcategory', authMiddleware, weakendcategoryController.wekendcategory);
-admin_route.post('/insertweakendcategory', authMiddleware, weakendcategoryController.insertweakendcategory);
+admin_route.get('/wekendcategory', weakendcategoryController.wekendcategory);
+admin_route.post('/insertweakendcategory', weakendcategoryController.insertweakendcategory);
 
-admin_route.get('/tourcategory', authMiddleware, tourcategoryController.tourcategory);
-admin_route.post('/inserttourcategory', authMiddleware, tourcategoryController.inserttourcategory);
+admin_route.get('/tourcategory', tourcategoryController.tourcategory);
+admin_route.post('/inserttourcategory', tourcategoryController.inserttourcategory);
 
 admin_route.get('/',loginController.login);
 admin_route.get('/login',loginController.login);
