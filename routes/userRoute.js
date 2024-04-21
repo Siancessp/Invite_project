@@ -3,7 +3,7 @@ const user_route = express.Router();
 const Razorpay = require('razorpay');
 const path = require("path");
 
-// const authuserMiddleware = require('../middleware/authuserMiddleware');
+const authuserMiddleware = require('../middleware/authuserMiddleware');
 
 const bodyParser = require('body-parser');
 user_route.use(bodyParser.json());
