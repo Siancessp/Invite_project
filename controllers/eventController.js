@@ -127,5 +127,6 @@ module.exports = {
     addeventcategory,
     inserteventcategory,
     getallevent,
-    fetchCategories
+    fetchCategories,
+    geteventbyUserid
 }
