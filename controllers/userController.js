@@ -47,8 +47,27 @@ const inactiveuser = async (req, res) => {
     }
 };
 
+const activeuser = async (req, res) => {
+    try {
+        const user_id = req.params.user_id;
+
+        const updatedUser = await userRegister.findByIdAndUpdate(user_id, { status: 1 }, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const existedUserDetails = await userRegister.find(); // Fetch updated user details
+        res.render('userlist', { existedUserDetails });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
 module.exports = {
     User,
     getallUsers,
-    inactiveuser
+    inactiveuser,
+    activeuser
 }

@@ -48,13 +48,11 @@
             <td>{{this.mobile}}</td>
             <td>{{this.email}}</td>
              <td>
-               
-                    {{#ifEquals status 1}}
-                     <a href="/inactiveuser/{{this._id}}" class="btn btn-primary">Active</a>
-                    {{else ifEquals status 0}}
-                        <button class="btn btn-secondary">Inactive</button>
-                    {{/ifEquals}}
-               
+                {{#ifEquals status 1}}
+                    <a href="/inactiveuser/{{this._id}}" class="btn btn-primary">Active</a>
+                {{else ifEquals status 0}}
+                    <a href="/activeuser/{{this._id}}" class="btn btn-primary">Inactive</a>
+                {{/ifEquals}}
             </td>
         </tr>
     {{/each}}
