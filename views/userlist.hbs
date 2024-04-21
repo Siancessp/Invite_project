@@ -47,11 +47,15 @@
             <td>{{this.fullname}}</td>
             <td>{{this.mobile}}</td>
             <td>{{this.email}}</td>
-            <td>
-                {{#if (eq status 1)}}
-                    <button class="btn btn-primary">Active</button>
+              <td>
+                {{#if status}}
+                    {{#if (status === 1)}}
+                        <button class="btn btn-primary">Active</button>
+                    {{else}}
+                        <button class="btn btn-secondary">Inactive</button>
+                    {{/if}}
                 {{else}}
-                    <button class="btn btn-secondary">Inactive</button>
+                    <button class="btn btn-secondary">Status not available</button>
                 {{/if}}
             </td>
         </tr>
