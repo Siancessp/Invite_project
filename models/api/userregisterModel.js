@@ -34,6 +34,10 @@ const userregisterSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    status: {
+        type: Number,
+        default: 1
+    },
     referal_code: {
         type: String,
         required: true
