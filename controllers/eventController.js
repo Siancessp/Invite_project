@@ -36,15 +36,15 @@ const inserteventcategory = async (req, res) => {
         // Extract category id from request body
         const { categoryid } = req.body;
 
-        // Extract token from request headers
-        const token = req.body.token || req.query.token || req.headers["authorization"];
-        console.log(token);
+        // // Extract token from request headers
+        // const token = req.body.token || req.query.token || req.headers["authorization"];
+        // console.log(token);
 
-        // Verify token and attach user info to request
-        jwt.verify(token, config.secret_jwt, async (err, decoded) => {
-            if (err) {
-                return res.status(403).json({ success: false, message: "Failed to authenticate token" });
-            }
+        // // Verify token and attach user info to request
+        // jwt.verify(token, config.secret_jwt, async (err, decoded) => {
+        //     if (err) {
+        //         return res.status(403).json({ success: false, message: "Failed to authenticate token" });
+        //     }
 
             // Token is valid, proceed with inserting event category
             const newEvent = new Event({
@@ -59,7 +59,7 @@ const inserteventcategory = async (req, res) => {
             } else {
                 res.render('addeventcategory', { message: "Failed to create event!" });
             }
-        });
+        // });
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
