@@ -29,6 +29,7 @@ module.exports = (io) =>
 
         socket.on('send_message',(data)=>{
             io.to(data.chatId).emit("send_message",data)
+            io.to(data.userId).emit("new_chat",data)
         })
 
         socket.on('disconnec',()=>
