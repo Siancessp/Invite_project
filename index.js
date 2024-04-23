@@ -8,6 +8,8 @@ const Razorpay = require('razorpay');
 const admin_route = require("./routes/adminRoute");
 const user_route = require("./routes/userRoute");
 
+const firebase = require('./firebase');
+
 // Set up the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
