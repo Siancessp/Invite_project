@@ -11,6 +11,7 @@ const user_route = require("./routes/userRoute");
 const { Server } = require("socket.io");
 const http = require('http');
 const server = http.createServer(app);
+const chatSocket = require('./socket/socket');
 const io = new Server(server, { 
     cors: {
         origin: "*"
@@ -49,6 +50,8 @@ app.use((req, res, next) => {
 app.use('/', admin_route);
 app.use('/api', user_route);
 
+chatSocket(io)
+
 app.use(express.urlencoded({ extended: false }));
 
 app.use(session({
@@ -56,15 +59,6 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-
-io.on("connection", (socket) => {
-    console.log('a user connacted'.socket.id);
-
-    socket.on('disconnect', () =>
-    {
-        console.log("user disconnect");
-    });
-  });
 
 // Connect to MongoDB
 mongoose.connect("mongodb+srv://swarupamohapatra11:CpMeZSu7zxgRYAX2@cluster0.8ujr7jw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
