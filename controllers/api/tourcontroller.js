@@ -5,13 +5,13 @@ const jwt = require("jsonwebtoken");
 const config = require("../../config/config");
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
+const firebase = require('../../firebase');
 
 const tourCategory = require("../../models/tourcategoryModel");
 const Tour = require("../../models/addtourcategoryModel");
 const TourDetails = require("../../models/api/tourModel");
 const userRegister = require("../../models/api/userregisterModel");
 
-const ActivityTable = require("../../models/api/activityModel");
 
 const securePassword = async (password) => {
     try {
@@ -101,8 +101,30 @@ const addtourDetails = async (req, res) => {
             tour_price_child: tour_price_child
         });
 
-        const savedTourDetails = await newTourDetails.save();;
-        
+        const savedTourDetails = await newTourDetails.save();
+
+        const allUsers = await userRegister.find();
+        const userwithTokens = allUsers.filter(user => user.deviceToken);
+        if(!userwithTokens)
+        {
+            res.status(400).json({
+                success: false,
+                msg: 'No users with device tokens available'
+            });
+        }
+
+        const deviceTokens = userwithTokens.map(user => user.deviceToken);
+        const message = {
+            notification: {
+                title: 'New Tour Added!',
+                body: 'Check out the latest Tour details.'
+            },
+            tokens: deviceTokens
+        };
+
+        const responses = await firebase.messaging().sendMulticast(message);
+        console.log('Successfully sent notification:', responses);
+
         const response = {
             success: true,
             msg: "Tour added Successfully!",

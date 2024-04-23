@@ -7,6 +7,7 @@ const config = require("../config/config");
 
 const weakendCategory = require("../models/wekendcategoryModel");
 const weakEnd = require("../models/addweakendcategoryModel");
+const WeekendDetails = require("../models/api/weakendModel");
 
 
 const wekendcategory = async (req, res) => {
@@ -88,11 +89,49 @@ const insertweakendcategorydata = async (req, res) => {
     }
 };
 
+const getwekendbyUserid = async (req, res) => {
+    try {
+        const user_id = req.params.user_id;
+        const usercreatedweekendDetails = await WeekendDetails.find({ user_id: user_id });
+        
+        if (usercreatedweekendDetails.length === 0) {
+            return res.status(404).json({ success: false, msg: 'Weekend Details not found' });
+        }
+        
+        res.render('usersweekendlist', { usercreatedweekendDetails });
+    } catch(error) {
+        console.log(error.message);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+const getallweekenddetails = async (req, res) =>
+{
+    try{
+        const existedweekendDetails = await WeekendDetails.find();
+        if(!existedweekendDetails)
+        {
+            return res.status(400).json({
+                success: false,
+                message: 'Weekend Details not found'
+            });
+        } 
+
+        req.render('weekendlist',{ existedweekendDetails });
+    }
+    catch(error)
+    {
+        console.log(error.message);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 module.exports = {
     insertweakendcategory,
     insertweakendcategorydata,
     fetchweakendCategories,
     wekendcategory,
-    addweakendcategory
+    addweakendcategory,
+    getwekendbyUserid,
+    getallweekenddetails
 }

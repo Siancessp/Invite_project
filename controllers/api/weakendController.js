@@ -3,6 +3,7 @@ const app = express();
 const bcryptjs = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const config = require("../../config/config");
+const firebase = require('../../firebase');
 
 const weakendCategory = require("../../models/wekendcategoryModel");
 const weakEnd = require("../../models/addweakendcategoryModel");
@@ -102,6 +103,28 @@ const addweakendDetails = async (req,res)=>
         });
 
         const savedWeakendDetails = await newWeakendDetails.save();
+
+        const allUsers = await userRegister.find();
+        const userswithToken = allUsers.filter(user => user.deviceToken);
+
+        if (userswithToken.length === 0) {
+            return res.status(400).json({ success: false, msg: 'No users with device tokens available' });
+        }
+        const deviceTokens = userswithToken.map(user => user.deviceToken);
+
+        const message = {
+            notification: {
+                title: 'New Weekend Added!',
+                body: 'Check out the latest Weekend details.'
+            },
+            tokens: deviceTokens
+        };
+
+        // Send notification
+        const responses = await firebase.messaging().sendMulticast(message);
+
+        console.log('Successfully sent notification:', responses);
+
         const response = {
             success: true,
             msg: "Weakend added Successfully!",

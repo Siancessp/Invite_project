@@ -7,6 +7,7 @@ const config = require("../config/config");
 
 const TourCategory = require("../models/tourcategoryModel");
 const Tour = require("../models/addtourcategoryModel");
+const TourDetails = require("../models/api/tourModel");
 
 const tourcategory = async (req, res) => {
     try {
@@ -92,11 +93,41 @@ const inserttourcategorydata = async (req, res) => {
     }
 };
 
+const getalltourDetails = async (req, res) => {
+    try {
+        const existedtourDetails = await TourDetails.find();
+        if (!existedtourDetails || existedtourDetails.length === 0) {
+            return res.status(404).json({ success: false, msg: 'Tour Details not found' });
+        }
+         res.render('tourlist', { existedtourDetails });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+const gettourbyUserid = async (req, res) => {
+    try {
+        const user_id = req.params.user_id;
+        const usercreatedtourDetails = await TourDetails.find({ user_id: user_id });
+        
+        if (usercreatedtourDetails.length === 0) {
+            return res.status(404).json({ success: false, msg: 'Tour Details not found' });
+        }
+        
+        res.render('usertourlist', { usercreatedtourDetails });
+    } catch(error) {
+        console.log(error.message);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 module.exports = {
     tourcategory,
     fetchtourCategories,
     inserttourcategory,
     addtourcategory,
-    inserttourcategorydata
+    inserttourcategorydata,
+    getalltourDetails,
+    gettourbyUserid
 }

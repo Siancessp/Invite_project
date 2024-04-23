@@ -94,7 +94,7 @@ const creategroupChat = async (req, res) => {
 function formatDate(date) {
     if (!date) return null;
 
-    const now = new Date();
+    const now = new Date();  
     const diffInMs = Math.abs(now - new Date(date));
     const diffInHours = diffInMs / (1000 * 60 * 60); // Convert milliseconds to hours
 

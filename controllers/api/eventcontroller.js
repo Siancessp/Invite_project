@@ -3,6 +3,7 @@ const app = express();
 const bcryptjs = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const config = require("../../config/config");
+const firebase = require('../../firebase');
 
 const Event = require("../../models/addeventcategoryModels");
 const Category = require("../../models/addcategoryModel");
@@ -134,6 +135,33 @@ const addeventDetails = async (req,res)=>
         });
 
         const savedEventDetails = await newEventDetails.save();
+        const allUsers = await userRegister.find();
+
+        // Filter users who have device tokens
+        const usersWithTokens = allUsers.filter(user => user.deviceToken);
+
+        // Check if there are users with device tokens
+        if (usersWithTokens.length === 0) {
+            return res.status(400).json({ success: false, msg: 'No users with device tokens available' });
+        }
+
+        // Extract device tokens from users with tokens
+        const deviceTokens = usersWithTokens.map(user => user.deviceToken);
+
+        // Prepare notification message
+        const message = {
+            notification: {
+                title: 'New Event Added!',
+                body: 'Check out the latest event details.'
+            },
+            tokens: deviceTokens
+        };
+
+        // Send notification
+        const responses = await firebase.messaging().sendMulticast(message);
+
+        console.log('Successfully sent notification:', responses);
+
         const response = {
             success: true,
             msg: "Event added Successfully!",
