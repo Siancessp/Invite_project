@@ -67,13 +67,17 @@ admin_route.post('/verifylogin',loginController.verifylogin);
 admin_route.get('/addeventcategory', addeventController.addeventcategory);
 admin_route.get('/getallevent',  addeventController.getallevent);
 admin_route.post('/eventcategory', upload.single('eventtemplate'),addeventController.inserteventcategory);
-admin_route.get('/geteventbyUserid/:user_id',addeventController.geteventbyUserid);
+admin_route.get('/geteventbyuserid/:user_id',addeventController.geteventbyUserid);
 
 admin_route.get('/addweakendcategory',  weakendcategoryController.addweakendcategory);
 admin_route.post('/insertweakendcategorydata',  upload.single('weakendtemplate'), weakendcategoryController.insertweakendcategorydata);
+admin_route.get('/getallweekenddetails',  weakendcategoryController.getallweekenddetails);
+admin_route.get('/getwekendbyuserid/:user_id',  weakendcategoryController.getwekendbyUserid);
 
 admin_route.get('/addtourcategory', tourcategoryController.addtourcategory);
 admin_route.post('/inserttourcategorydata', upload.single('tourtemplate'), tourcategoryController.inserttourcategorydata);
+admin_route.get('/getalltourdetails',  tourcategoryController.getalltourDetails);
+admin_route.get('/gettourbyuserid/:user_id',  tourcategoryController.gettourbyUserid);
 
 
 module.exports = admin_route;
