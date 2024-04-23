@@ -57,7 +57,7 @@ const myMessages = async (req, res) => {
                 path: "users",
                 select : "fullname" //The person who login
             }
-        );
+        ).sort({ createdAt: -1 });
 
             return res.send({
                 data: Messages,

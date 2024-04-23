@@ -123,7 +123,7 @@ user_route.get('/fetchpostbycategoryId/:categoryId', newsfeedController.fetchpos
 
 user_route.post('/createprivatechat', authuserMiddleware, chatController.createprivateChat);
 user_route.post('/creategroupchat', authuserMiddleware, chatController.creategroupChat);
-user_route.get('/myChats', authuserMiddleware, chatController.myChats);
+user_route.get('/myChats/:user_id', authuserMiddleware, chatController.myChats);
 
 user_route.post('/sendmessage', authuserMiddleware, messageController.sendMessage);
 user_route.get('/mymessages/:chatId', authuserMiddleware, messageController.myMessages);

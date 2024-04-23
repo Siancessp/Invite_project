@@ -106,15 +106,15 @@ function formatDate(date) {
 };
 
 const myChats = async (req, res) => {
-    const userData = req.user;
+    const userId  = req.params.user_id;
 
     try {
         const Chats = await Chat.find({
-            users: userData._id
+            users: userId
         }).populate({
             path: "users",
-            select: "fullname",
-            match: { _id: { $ne: userData._id}}
+            select: "fullname",//The person with whome i have created the chat
+            match: { _id: { $ne: userId}}
         });
         const formattedChats = Chats.map(chat => {
             return {

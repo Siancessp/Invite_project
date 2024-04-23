@@ -8,6 +8,15 @@ const Razorpay = require('razorpay');
 const admin_route = require("./routes/adminRoute");
 const user_route = require("./routes/userRoute");
 
+const { Server } = require("socket.io");
+const http = require('http');
+const server = http.createServer(app);
+const io = new Server(server, { 
+    cors: {
+        origin: "*"
+    }
+ });
+
 const firebase = require('./firebase');
 
 // Set up the public directory
@@ -47,6 +56,15 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+io.on("connection", (socket) => {
+    console.log('a user connacted'.socket.id);
+
+    socket.on('disconnect', () =>
+    {
+        console.log("user disconnect");
+    });
+  });
 
 // Connect to MongoDB
 mongoose.connect("mongodb+srv://swarupamohapatra11:CpMeZSu7zxgRYAX2@cluster0.8ujr7jw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
