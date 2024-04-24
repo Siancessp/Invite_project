@@ -12,8 +12,8 @@ const userRegister = require("../../models/api/userregisterModel");
 
 const sendMessage = async (req, res) =>
 {
-    const { chatId, text } = req.body;//Get the id who we want to send message
-    const userId = req.user.userId;
+    const { chatId, text, receiverId } = req.body;//Get the id who we want to send messagey
+    const userId = req.user._id;
     try
     {
         const newMessage = await Message.create(
@@ -31,7 +31,7 @@ const sendMessage = async (req, res) =>
         }).populate({
             path:"users",
             select:"fullname",
-            match:{_id: { $ne: userId }}
+            match:{_id: { $ne: receiverId }}
         });
         res.send({
             data: newMessage,
