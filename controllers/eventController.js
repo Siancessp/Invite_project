@@ -109,7 +109,6 @@ const geteventbyUserid = async (req, res) => {
     try {
         const user_id = req.params.user_id;
         const usercreatedeventDetails = await EventDetails.find({ user_id: user_id });
-        const totalincome = await BookingDetails.find({ user_id: user_id });
         
         if (usercreatedeventDetails.length === 0) {
             const previousPage = req.headers.referer || '/';
@@ -117,6 +116,7 @@ const geteventbyUserid = async (req, res) => {
         }
         
         const eventIds = usercreatedeventDetails.map(event => event._id);
+        console.log(eventIds);
 
         // Query the BookingDetails table using the extracted event IDs
         const bookingDetails = await BookingDetails.find({ bookedevent_id: { $in: eventIds } });
