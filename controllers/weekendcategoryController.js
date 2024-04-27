@@ -8,7 +8,7 @@ const config = require("../config/config");
 const weakendCategory = require("../models/wekendcategoryModel");
 const weakEnd = require("../models/addweakendcategoryModel");
 const WeekendDetails = require("../models/api/weakendModel");
-
+const BookingDetails = require("../models/api/bookingModel");
 
 const wekendcategory = async (req, res) => {
     try {
@@ -99,6 +99,21 @@ const getwekendbyUserid = async (req, res) => {
             return res.redirect(previousPage);
         }
         
+        const weekendIds = usercreatedweekendDetails.map(weekend => weekend._id);
+        const bookingDetails = await BookingDetails.find({ bookedevent_id: { $in: weekendIds } });
+
+        const weekendTotalPrices = {};
+        bookingDetails.forEach(booking => {
+            const weekendId = booking.bookedevent_id.toString();
+            const grandTotalPrice = parseFloat(booking.grandtotalprice) || 0;
+            weekendTotalPrices[weekendId] = (weekendTotalPrices[weekendId] || 0) + grandTotalPrice;
+        });
+
+        usercreatedweekendDetails.forEach(weekend => {
+            const weekendId = weekend._id.toString();
+            weekend.grandTotalPrice = weekendTotalPrices[weekendId] || 0;
+        });
+
         res.render('usersweekendlist', { usercreatedweekendDetails });
     } catch(error) {
         console.log(error.message);
