@@ -112,7 +112,7 @@ const gettourbyUserid = async (req, res) => {
         const usercreatedtourDetails = await TourDetails.find({ user_id: user_id });
         
         if (usercreatedtourDetails.length === 0) {
-            const previousPage = req.headers.referer || '/'; // If referer is not available, redirect to the root page
+            const previousPage = req.headers.referer || '/';
             return res.redirect(previousPage);
         }
         

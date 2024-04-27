@@ -110,7 +110,8 @@ const geteventbyUserid = async (req, res) => {
         const usercreatedeventDetails = await EventDetails.find({ user_id: user_id });
         
         if (usercreatedeventDetails.length === 0) {
-            return res.status(404).json({ success: false, msg: 'Event Details not found' });
+            const previousPage = req.headers.referer || '/';
+            return res.redirect(previousPage);
         }
         
         res.render('userseventlist', { usercreatedeventDetails });

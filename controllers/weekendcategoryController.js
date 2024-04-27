@@ -95,7 +95,8 @@ const getwekendbyUserid = async (req, res) => {
         const usercreatedweekendDetails = await WeekendDetails.find({ user_id: user_id });
         
         if (usercreatedweekendDetails.length === 0) {
-            return res.status(404).json({ success: false, msg: 'Weekend Details not found' });
+            const previousPage = req.headers.referer || '/';
+            return res.redirect(previousPage);
         }
         
         res.render('usersweekendlist', { usercreatedweekendDetails });
