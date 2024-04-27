@@ -112,7 +112,8 @@ const gettourbyUserid = async (req, res) => {
         const usercreatedtourDetails = await TourDetails.find({ user_id: user_id });
         
         if (usercreatedtourDetails.length === 0) {
-            return res.status(404).json({ success: false, msg: 'Tour Details not found' });
+            const previousPage = req.headers.referer || '/'; // If referer is not available, redirect to the root page
+            return res.redirect(previousPage);
         }
         
         res.render('usertourlist', { usercreatedtourDetails });
