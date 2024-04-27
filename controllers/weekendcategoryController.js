@@ -117,7 +117,7 @@ const getallweekenddetails = async (req, res) =>
             });
         } 
 
-        req.render('weekendlist',{ existedweekendDetails });
+        res.render('weekendlist',{ existedweekendDetails });
     }
     catch(error)
     {
