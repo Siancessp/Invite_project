@@ -42,14 +42,15 @@
 </tr>
 </thead>
 <tbody>
-    {{#each usercreatedeventDetails}}
-        <tr>
-            <td>{{this.eventname}}</td>
-            <td>{{this.event_start_date}}</td>
-            <td>{{this.event_location}}</td>
-        </tr>
-    {{/each}}
-</tbody>
+        {{#each usercreatedeventDetails}}
+            <tr>
+                <td>{{this.eventname}}</td>
+                <td>{{this.event_start_date}}</td>
+                <td>{{this.event_location}}</td>
+                <td>{{this.totalIncome}}</td> <!-- Add this line to display total income per event -->
+            </tr>
+        {{/each}}
+    </tbody>
 </table>
 </div>
 
