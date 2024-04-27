@@ -112,8 +112,7 @@ const gettourbyUserid = async (req, res) => {
         const usercreatedtourDetails = await TourDetails.find({ user_id: user_id });
         
         if (usercreatedtourDetails.length === 0) {
-            // return res.status(404).json({ success: false, msg: 'Tour Details not found' });
-            res.render('usertourlist', { usercreatedtourDetails });
+            return res.status(404).json({ success: false, msg: 'Tour Details not found' });
         }
         
         res.render('usertourlist', { usercreatedtourDetails });
