@@ -108,23 +108,49 @@ const getallevent = async (req, res) => {
 const geteventbyUserid = async (req, res) => {
     try {
         const user_id = req.params.user_id;
+        console.log("User ID:", user_id); // Check the value of user_id
+        
         const usercreatedeventDetails = await EventDetails.find({ user_id: user_id });
+        console.log("User created event details:", usercreatedeventDetails); // Check the value of usercreatedeventDetails
         
         if (usercreatedeventDetails.length === 0) {
             const previousPage = req.headers.referer || '/';
+            console.log("Redirecting to:", previousPage); // Check the value of previousPage
             return res.redirect(previousPage);
         }
         
         const eventIds = usercreatedeventDetails.map(event => event._id);
+        console.log("Event IDs:", eventIds); // Check the value of eventIds
 
         const bookingDetails = await BookingDetails.find({ bookedevent_id: { $in: eventIds } });
+        console.log("Booking details:", bookingDetails); // Check the value of bookingDetails
+        
+        // Initialize an object to store the total grand total price for each event ID
+        const eventTotalPrices = {};
 
+        // Loop through the booking details and sum up the grand total prices for each event ID
+        bookingDetails.forEach(booking => {
+            const eventId = booking.bookedevent_id.toString(); // Convert ObjectId to string
+            const grandTotalPrice = parseFloat(booking.grandtotalprice) || 0; // Parse and get grand total price
+            eventTotalPrices[eventId] = (eventTotalPrices[eventId] || 0) + grandTotalPrice;
+        });
+        console.log("Event total prices:", eventTotalPrices); // Check the value of eventTotalPrices
+
+        // Loop through the usercreatedeventDetails and add the total grand total price for each event
+        usercreatedeventDetails.forEach(event => {
+            const eventId = event._id.toString(); // Convert ObjectId to string
+            event.grandTotalPrice = eventTotalPrices[eventId] || 0; // Add the total grand total price to the event details
+        });
+        console.log("User created event details with grand total prices:", usercreatedeventDetails); // Check the value of usercreatedeventDetails with grand total prices
+        
+        // Render the 'userseventlist' view with the updated usercreatedeventDetails array
         res.render('userseventlist', { usercreatedeventDetails });
     } catch(error) {
-        console.log(error.message);
+        console.error(error.message);
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 
 module.exports = {
