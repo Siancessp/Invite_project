@@ -116,18 +116,32 @@ const geteventbyUserid = async (req, res) => {
         }
         
         const eventIds = usercreatedeventDetails.map(event => event._id);
-        console.log(eventIds);
 
-        // Query the BookingDetails table using the extracted event IDs
+        // Find booking details for the events using the extracted event IDs
         const bookingDetails = await BookingDetails.find({ bookedevent_id: { $in: eventIds } });
-        console.log(bookingDetails);
 
+        // Calculate the total price for each event
+        const eventTotalPrices = {};
+        bookingDetails.forEach(booking => {
+            const eventId = booking.bookedevent_id.toString();
+            const totalPrice = booking.totalPrice || 0; // Assuming totalPrice is the field containing the total price
+            eventTotalPrices[eventId] = (eventTotalPrices[eventId] || 0) + totalPrice;
+        });
+
+        // Update usercreatedeventDetails to include the total price for each event
+        usercreatedeventDetails.forEach(event => {
+            const eventId = event._id.toString();
+            event.grandTotalPrice = eventTotalPrices[eventId] || 0; // Add the total price to the event details
+        });
+
+        // Pass the updated usercreatedeventDetails array to the view for rendering
         res.render('userseventlist', { usercreatedeventDetails });
     } catch(error) {
-        console.log(error.message);
+        console.error(error.message);
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 
 module.exports = {
