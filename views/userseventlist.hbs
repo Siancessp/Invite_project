@@ -39,6 +39,8 @@
 <th>Event Start Date</th>
 <th>Event Location</th>
 <th>Total Income Perevent</th>
+<th>Total Income Of Admin</th>
+<th>Total Income Of Event Creator</th>
 </tr>
 </thead>
 <tbody>
@@ -48,6 +50,8 @@
                 <td>{{this.event_start_date}}</td>
                 <td>{{this.event_location}}</td>
                 <td>{{this.grandTotalPrice}}</td>  <!-- Add this line to display total income per event -->
+                <td>{{this.tenPercent}}</td>  <!-- Add this line to display total income per event -->
+                <td>{{this.ninetyPercent}}</td>  <!-- Add this line to display total income per event -->
             </tr>
         {{/each}}
     </tbody>

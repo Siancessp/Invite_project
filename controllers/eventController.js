@@ -9,6 +9,7 @@ const Event = require("../models/addeventcategoryModels");
 const Category = require("../models/addcategoryModel");
 const EventDetails = require("../models/api/eventModel");
 const BookingDetails = require("../models/api/bookingModel");
+const userregister = require('../models/api/userregisterModel');
 
 const fetchCategories = async () => {
     try {
@@ -107,7 +108,8 @@ const getallevent = async (req, res) => {
 
 const geteventbyUserid = async (req, res) => {
     try {
-        const user_id = req.params.user_id;       
+        const user_id = req.params.user_id;
+        const userDetails = await userregister.findOne( { _id: user_id});
         const usercreatedeventDetails = await EventDetails.find({ user_id: user_id });
         
         if (usercreatedeventDetails.length === 0) {
@@ -130,6 +132,10 @@ const geteventbyUserid = async (req, res) => {
         usercreatedeventDetails.forEach(event => {
             const eventId = event._id.toString();
             event.grandTotalPrice = eventTotalPrices[eventId] || 0;
+
+            // Calculate 10% and 90% of the grand total
+            event.tenPercent = event.grandTotalPrice * 0.1;
+            event.ninetyPercent = event.grandTotalPrice * 0.9;
         });
         
         res.render('userseventlist', { usercreatedeventDetails });
