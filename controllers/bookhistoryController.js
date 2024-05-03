@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/config");
 
 const BookingDetails = require("../models/api/bookingModel");
+const Event = require("../models/addeventcategoryModels");
 
 const getbookinghistorybyUserid = async (req, res) => {
     try {
@@ -16,7 +17,9 @@ const getbookinghistorybyUserid = async (req, res) => {
             return res.redirect(previousPage);
         }
 
-        console.log(userbookingDetails.bookedevent_id);
+        const bookedEventIds = userbookingDetails.map(booking => booking.bookedevent_id);
+        const events = await Event.find({ _id: { $in: bookedEventIds } });
+        console.log(events);
 
         res.render('userbookinghistorylist', { userbookingDetails });
     } catch(error) {
