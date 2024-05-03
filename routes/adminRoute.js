@@ -79,7 +79,7 @@ admin_route.post('/inserttourcategorydata', upload.single('tourtemplate'), tourc
 admin_route.get('/getalltourdetails',  tourcategoryController.getalltourDetails);
 admin_route.get('/gettourbyuserid/:user_id',  tourcategoryController.gettourbyUserid);
 
-admin_route.get('/gettourbyuserid/:user_id',  tourcategoryController.gettourbyUserid);
+admin_route.get('/getbookinghistorybyUserid/:user_id',  bookinghistoryController.getbookinghistorybyUserid);
 
 
 module.exports = admin_route;
