@@ -23,6 +23,8 @@ const getbookinghistorybyUserid = async (req, res) => {
             bookingStatuses[booking.bookedevent_id] = booking.status_code;
         });
 
+        console.log(bookingStatuses);
+
         const events = await Event.find({ _id: { $in: bookedEventIds } });
 
 
