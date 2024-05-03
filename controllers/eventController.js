@@ -135,6 +135,9 @@ const geteventbyUserid = async (req, res) => {
             // Calculate 10% and 90% of the grand total
             event.tenPercent = event.grandTotalPrice * 0.1;
             event.ninetyPercent = event.grandTotalPrice * 0.9;
+
+            const event_start_date = new Date(event.event_start_date); // Assuming startDate is the field name in EventDetails
+            event.event_start_date = event_start_date.toLocaleDateString('en-GB');
         });
         
         res.render('userseventlist', { usercreatedeventDetails });
