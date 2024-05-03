@@ -22,14 +22,13 @@ const getbookinghistorybyUserid = async (req, res) => {
         userbookingDetails.forEach(booking => {
             const { bookedevent_id, status_code } = booking;
             if (status_code === '1') {
-                eventPromises.push(Event.find({ _id: bookedevent_id }));
+                eventPromises.push(Event.find({ _id: bookedevent_id }).select('eventname'));
             } else if (status_code === '2') {
             } else {
                 // Handle other status codes
             }
         });
          const userbookedeventDetails = await Promise.all(eventPromises);
-         console.log(userbookedeventDetails);
         res.render('userbookinghistorylist', { userbookingDetails });
     } catch(error) {
         console.error(error.message);
