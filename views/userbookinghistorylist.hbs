@@ -35,16 +35,19 @@
 <table id="example1" class="table table-bordered table-striped">
 <thead>
 <tr>
-<th>Event Name</th>
-<th>Event Start Date</th>
-<th>Event Location</th>
-<th>Total Income Perevent</th>
-<th>Total Income Of Admin</th>
-<th>Total Income Of Event Creator</th>
+<th>BookedEvent Name</th>
+<th>Number of Days</th>
+<th>Booking Dates</th>
 </tr>
 </thead>
 <tbody>
-       
+         {{#each userbookingDetails}}
+            <tr>
+                <td>{{this.bookedevent_id}}</td>
+                <td>{{this.nummberofDays}}</td>
+                <td>{{this.BookingDates}}</td>
+            </tr>
+        {{/each}}
     </tbody>
 </table>
 </div>
