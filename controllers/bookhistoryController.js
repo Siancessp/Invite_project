@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/config");
 
 const BookingDetails = require("../models/api/bookingModel");
-const Event = require("../models/addeventcategoryModels");
+const Event = require("../models/api/eventModel");
 
 const getbookinghistorybyUserid = async (req, res) => {
     try {
