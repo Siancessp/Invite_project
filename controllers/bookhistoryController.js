@@ -7,6 +7,8 @@ const config = require("../config/config");
 
 const BookingDetails = require("../models/api/bookingModel");
 const Event = require("../models/api/eventModel");
+const Weekend = require("../models/api/weakendModel");
+const Tour = require("../models/api/tourModel");
 
 const getbookinghistorybyUserid = async (req, res) => {
     try {
@@ -24,13 +26,18 @@ const getbookinghistorybyUserid = async (req, res) => {
             if (status_code === '1') {
                 eventPromises.push(Event.find({ _id: bookedevent_id }).select('eventname'));
             } else if (status_code === '2') {
+                eventPromises.push(Weekend.find({ _id: bookedevent_id }).select('weakendname'));
             } else {
-                // Handle other status codes
+                eventPromises.push(Tour.find({ _id: bookedevent_id }).select('tourname'));
             }
         });
          const userbookedeventDetails = await Promise.all(eventPromises);
          userbookingDetails.forEach((booking, index) => {
-            console.log(booking.eventname = userbookedeventDetails[index][0].eventname);
+            booking.eventname = userbookedeventDetails[index][0].eventname
+            booking.BookingDatesFormatted = booking.BookingDates.map(date => {
+                const formattedDate = new Date(date).toLocaleDateString('en-GB');
+                return formattedDate;
+            });
         });
         res.render('userbookinghistorylist', { userbookingDetails });
     } catch(error) {
