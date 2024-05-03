@@ -16,7 +16,7 @@ const getbookinghistorybyUserid = async (req, res) => {
             return res.redirect(previousPage);
         }
 
-        console.log(userbookingDetails);
+        console.log(userbookingDetails.bookedevent_id);
 
         res.render('userbookinghistorylist', { userbookingDetails });
     } catch(error) {
