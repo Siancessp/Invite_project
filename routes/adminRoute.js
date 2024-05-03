@@ -41,6 +41,8 @@ const tourcategoryController = require("../controllers/tourcategoryController");
 
 const addeventController = require("../controllers/eventController");
 
+const bookingController = require("../controllers/")
+
 admin_route.post('/register', registerController.insertuser);
 admin_route.get('/getallUsers', userController.getallUsers);
 admin_route.get('/inactiveuser/:user_id', userController.inactiveuser);
@@ -77,6 +79,8 @@ admin_route.get('/getwekendbyuserid/:user_id',  weakendcategoryController.getwek
 admin_route.get('/addtourcategory', tourcategoryController.addtourcategory);
 admin_route.post('/inserttourcategorydata', upload.single('tourtemplate'), tourcategoryController.inserttourcategorydata);
 admin_route.get('/getalltourdetails',  tourcategoryController.getalltourDetails);
+admin_route.get('/gettourbyuserid/:user_id',  tourcategoryController.gettourbyUserid);
+
 admin_route.get('/gettourbyuserid/:user_id',  tourcategoryController.gettourbyUserid);
 
 

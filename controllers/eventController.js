@@ -114,7 +114,6 @@ const geteventbyUserid = async (req, res) => {
         
         if (usercreatedeventDetails.length === 0) {
             const previousPage = req.headers.referer || '/';
-            console.log("Redirecting to:", previousPage);
             return res.redirect(previousPage);
         }
         
