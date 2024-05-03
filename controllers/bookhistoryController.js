@@ -18,12 +18,6 @@ const getbookinghistorybyUserid = async (req, res) => {
         }
 
         const bookedEventIds = userbookingDetails.map(booking => booking.bookedevent_id);
-        const statusCodes = userbookingDetails.map(booking => booking.status_code);
-
-        console.log(statusCodes);
-
-        const events = await Event.find({ _id: { $in: bookedEventIds } });
-
 
         res.render('userbookinghistorylist', { userbookingDetails });
     } catch(error) {
