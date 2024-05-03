@@ -36,12 +36,10 @@ const userController = require('../controllers/userController');
 
 const categoryController = require("../controllers/categoryController");
 const weakendcategoryController = require("../controllers/weekendcategoryController");
-
 const tourcategoryController = require("../controllers/tourcategoryController");
-
 const addeventController = require("../controllers/eventController");
 
-const bookingController = require("../controllers/")
+const bookinghistoryController = require("../controllers/bookhistoryController");
 
 admin_route.post('/register', registerController.insertuser);
 admin_route.get('/getallUsers', userController.getallUsers);
