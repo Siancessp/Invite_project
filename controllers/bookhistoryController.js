@@ -29,10 +29,10 @@ const getbookinghistorybyUserid = async (req, res) => {
             }
         });
          const userbookedeventDetails = await Promise.all(eventPromises);
+         console.log(userbookedeventDetails);
          userbookingDetails.forEach((booking, index) => {
             booking.eventName = userbookedeventDetails[index].eventname;
         });
-        console.log(userbookingDetails);
         res.render('userbookinghistorylist', { userbookingDetails });
     } catch(error) {
         console.error(error.message);
