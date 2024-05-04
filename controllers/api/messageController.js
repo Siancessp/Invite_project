@@ -12,30 +12,28 @@ const userRegister = require("../../models/api/userregisterModel");
 
 const sendMessage = async (req, res) =>
 {
-    const { chatId, text, receiverId } = req.body;//Get the id who we want to send messagey
-    const userId = req.user._id;
+    const { userId, chatId, text } = req.body;//Get the id who we want to send message
+    const userData = req.user;
+    console.log("User data:", userData);//Get the id the person who log in
+    let userIds = [userData._id, userId];
     try
     {
         const newMessage = await Message.create(
             {
                 chatId,
                 text,
-                user: userId
+                users: userData._id
             }
         );
         
-       const chatUpdate = await Chat.findByIdAndUpdate(chatId,{
+        await Chat.findByIdAndUpdate(chatId,{
             latestMessage: text
         },{
             new: true
-        }).populate({
-            path:"users",
-            select:"fullname",
-            match:{_id: { $ne: receiverId }}
         });
         res.send({
-            data: newMessage,
-            roomData: chatUpdate,
+            data: newMessage, 
+            
             status: true
         });
     }
@@ -58,9 +56,9 @@ const myMessages = async (req, res) => {
         }).populate(
             {
                 path: "users",
-                select : "fullname" //The person who login
+                select: "fullname"
             }
-        ).sort({ createdAt: -1 });
+        );
 
             return res.send({
                 data: Messages,
