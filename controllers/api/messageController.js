@@ -22,7 +22,7 @@ const sendMessage = async (req, res) =>
             {
                 chatId,
                 text,
-                users: userData._id
+                user: userData._id
             }
         );
         
@@ -55,7 +55,7 @@ const myMessages = async (req, res) => {
             chatId: chatId
         }).populate(
             {
-                path: "users",
+                path: "user",
                 select: "fullname"
             }
         );
