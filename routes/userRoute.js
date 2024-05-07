@@ -46,6 +46,8 @@ const commentController = require("../controllers/api/commentcontroller");
 const chatController = require("../controllers/api/chatController");
 const messageController = require("../controllers/api/messageController");
 
+const resturantController = require("../controllers/api/resturantController");
+
 user_route.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.js'));
 });
@@ -127,5 +129,7 @@ user_route.get('/myChats/:user_id', authuserMiddleware, chatController.myChats);
 
 user_route.post('/sendmessage', authuserMiddleware, messageController.sendMessage);
 user_route.get('/mymessages/:chatId', authuserMiddleware, messageController.myMessages);
+
+user_route.post('/addresturantdetails',resturantController.addresturantDetails);
 
 module.exports = user_route;
