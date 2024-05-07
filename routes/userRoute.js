@@ -135,5 +135,6 @@ user_route.get('/mymessages/:chatId', authuserMiddleware, messageController.myMe
 
 user_route.post('/addresturantdetails', upload.single('resturantlogo'), resturantController.addresturantDetails);
 user_route.get('/getresturantdetails', resturantController.getresturantdetails);
+user_route.get('/updateofferbyreturantId/:resturant_id', resturantController.updateofferbyreturantId);
 
 module.exports = user_route;

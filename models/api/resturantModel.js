@@ -47,7 +47,15 @@ const resturantSchema = new mongoose.Schema(
         {
             type: String
         },
+        offer_start_time:
+        {
+            type: String
+        },
         offer_end_date:
+        {
+            type: String
+        },
+        offer_end_time:
         {
             type: String
         },

@@ -37,7 +37,7 @@ const addresturantDetails = async (req,res) =>
 {
     try{
         const { resturantlogo } = req.file || {};
-        const { resturantname, mobileno, address, user_id, resturantdescription, todays_offer } = req.body;
+        const { resturantname, mobileno, address, user_id, resturantdescription, todays_offer, offer_start_date, offer_start_time, offer_end_date, offer_end_time } = req.body;
         const menu = req.body.menu || [];
         const price = req.body.price || [];
 
@@ -51,6 +51,10 @@ const addresturantDetails = async (req,res) =>
                 menu: menu,
                 price: price,
                 todays_offer: todays_offer,
+                offer_start_date: offer_start_date,
+                offer_start_time: offer_start_time,
+                offer_end_date: offer_end_date,
+                offer_end_time: offer_end_time,
                 resturantdescription: resturantdescription
             },
 
@@ -96,50 +100,94 @@ const addresturantDetails = async (req,res) =>
     }
 };
 
-const getresturantdetails = async (req,res) =>
-{
-    try
-    {
+const getresturantdetails = async (req, res) => {
+    try {
         const existingResturantdetails = await Resturant.find({});
-        if (!existingResturantdetails) {
-            return res.status(404).json({ success: false, msg: 'Event Details not found' });
+        
+        if (!existingResturantdetails || existingResturantdetails.length === 0) {
+            return res.status(404).json({ success: false, msg: 'Restaurant details not found' });
         }
 
+        const today = new Date();
+
         let resturantDetailsWithUser = [];
-        for(let i = 0; i < existingResturantdetails.length; i++)
-        {
+        for (let i = 0; i < existingResturantdetails.length; i++) {
             const resturantDetails = existingResturantdetails[i];
-            
+
             const resturantDetailWithUser = {
                 resturant_id: resturantDetails._id,
-                resturantlogo: resturantDetails.resturantlogo,
+                user_id: resturantDetails.user_id,
                 resturantname: resturantDetails.resturantname,
                 resturantdescription: resturantDetails.resturantdescription,
                 mobileno: resturantDetails.mobileno,
                 address: resturantDetails.address,
                 menu: resturantDetails.menu,
                 price: resturantDetails.price,
-                todays_offer: resturantDetails.todays_offer
+                offer_start_date: resturantDetails.offer_start_date,
+                offer_start_time: resturantDetails.offer_start_time,
+                offer_end_time: resturantDetails.offer_end_time,
+                offer_end_date: resturantDetails.offer_end_date
             };
+
+            if (today >= new Date(resturantDetails.offer_start_date) && today <= new Date(resturantDetails.offer_end_date)) {
+                resturantDetailWithUser.todays_offer = resturantDetails.todays_offer;
+            }
+            else {
+                resturantDetailWithUser.todays_offer = "Get you soon with exciting offers....";
+            }
+
             resturantDetailsWithUser.push(resturantDetailWithUser);
         }
 
         const response = {
             success: true,
-            msg: "Successfully fetched event details with users",
+            msg: "Successfully fetched restaurant details",
             data: resturantDetailsWithUser
         };
 
         res.status(200).json(response);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ success: false, msg: "Internal Server Error!" });
+    }
+};
+
+const updateofferbyreturantId = async (req,res) =>
+{
+    try{
+        const resturant_id = req.params.resturant_id;
+        const { todays_offer, offer_start_date, offer_start_time, offer_end_time, offer_end_date } = req.body;
+        const updatingofferDetails = await Resturant.findOne({ _id : resturant_id});
+
+        if (!updatingofferDetails) {
+            return res.status(404).json({ success: false, msg: 'Restaurant details not found' });
+        }
+
+        if(!todays_offer || !offer_start_date || !offer_start_time || !offer_end_time || !offer_end_date)
+        {
+            return res.status(400).json({ success: false, msg: 'Missing mandatory fields' });
+        }
+        else
+        {
+            updatingofferDetails.todays_offer = todays_offer;
+            updatingofferDetails.offer_start_date = offer_start_date;
+            updatingofferDetails.offer_start_time = offer_start_time;
+            updatingofferDetails.offer_end_time = offer_end_time;
+            updatingofferDetails.offer_end_date = offer_end_date;
+
+            await updatingofferDetails.save();
+        }
+        return res.status(200).json({ success: true, msg: 'Offer details updated successfully', data: updatingofferDetails });
     }
     catch(error)
     {
         console.error(error);
-        return res.status(500).send( { success: false, msg: "Internal Server Error!"});
-    }  
+        return res.status(500).send({ success: false, msg: "Internal Server Errorr!"});
+    }   
 };
 
 module.exports = {
     addresturantDetails,
-    getresturantdetails
+    getresturantdetails,
+    updateofferbyreturantId
 }
