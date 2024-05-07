@@ -6,7 +6,7 @@ const config = require("../../config/config");
 const firebase = require('../../firebase');
 
 const Resturant = require('../../models/api/resturantModel');
-const { default: tokens } = require('razorpay/dist/types/tokens');
+const userRegister = require("../../models/api/userregisterModel");
 
 const securePassword = async (password) =>
 {
@@ -36,8 +36,10 @@ const create_token = async (id) =>
 const addresturantDetails = async (req,res) =>
 {
     try{
-        const resturantlogo = req.file.resturantlogo;
-        const { resturantname, mobileno, address, menu, price, user_id, resturantdescription } = req.body;
+        const { resturantlogo } = req.file || {};
+        const { resturantname, mobileno, address, user_id, resturantdescription, todays_offer } = req.body;
+        const menu = req.body.menu || [];
+        const price = req.body.price || [];
 
         const newResturantDetails = new Resturant(
             {
@@ -48,6 +50,7 @@ const addresturantDetails = async (req,res) =>
                 address: address,
                 menu: menu,
                 price: price,
+                todays_offer: todays_offer,
                 resturantdescription: resturantdescription
             },
 
@@ -76,7 +79,7 @@ const addresturantDetails = async (req,res) =>
 
         const responses = await firebase.messaging().sendMulticast(message);
 
-        console.log('Successfully sent notification:', response);
+        console.log('Successfully sent notification:', responses);
 
         const response =
         {
@@ -102,6 +105,7 @@ const getresturantdetails = async (req,res) =>
             return res.status(404).json({ success: false, msg: 'Event Details not found' });
         }
 
+        let resturantDetailsWithUser = [];
         for(let i = 0; i < existingResturantdetails.length; i++)
         {
             const resturantDetails = existingResturantdetails[i];
@@ -114,9 +118,19 @@ const getresturantdetails = async (req,res) =>
                 mobileno: resturantDetails.mobileno,
                 address: resturantDetails.address,
                 menu: resturantDetails.menu,
-                price: resturantDetails.price
+                price: resturantDetails.price,
+                todays_offer: resturantDetails.todays_offer
             };
+            resturantDetailsWithUser.push(resturantDetailWithUser);
         }
+
+        const response = {
+            success: true,
+            msg: "Successfully fetched event details with users",
+            data: resturantDetailsWithUser
+        };
+
+        res.status(200).json(response);
     }
     catch(error)
     {
@@ -126,5 +140,6 @@ const getresturantdetails = async (req,res) =>
 };
 
 module.exports = {
-    addresturantDetails
+    addresturantDetails,
+    getresturantdetails
 }

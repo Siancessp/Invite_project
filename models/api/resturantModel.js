@@ -8,8 +8,7 @@ const resturantSchema = new mongoose.Schema(
         },
         resturantlogo:
         {
-            type: String,
-            required: true 
+            type: String
         },
         resturantname:
         {
@@ -31,15 +30,26 @@ const resturantSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        menu:
-        {
+        menu: [{
             type: String,
             required: true
+        }],
+        price: [{
+            type: String,
+            required: true
+        }],
+        todays_offer:
+        {
+            type: String,
+            default: "Get you soon with exciting offers...."
         },
-        price:
+        offer_start_date:
         {
-            type: String,
-            required: true
+            type: String
+        },
+        offer_end_date:
+        {
+            type: String
         },
         created_date: {
             type: Date,
