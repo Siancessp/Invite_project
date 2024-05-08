@@ -50,7 +50,10 @@ app.use('/', admin_route);
 app.use('/api', user_route);
 
 io.on('connection', (socket) => {
-        console.log('a user connected', socket.id);
+        socket.on('user-message', (message) =>
+    {
+        io.emit("message",message);
+    });
 });
 
 app.use(express.urlencoded({ extended: false }));
