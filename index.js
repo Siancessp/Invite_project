@@ -74,5 +74,5 @@ mongoose.connect("mongodb+srv://swarupamohapatra11:CpMeZSu7zxgRYAX2@cluster0.8uj
 const PORT = 80; // Use a valid port number, e.g., 5000
 
 server.listen(PORT, '20.163.173.61', () => {
-    console.log(`Server is running on http://20.163.173.61:${PORT}`);
+    console.log(`Server is running on http://20.163.173.61/api:${PORT}`);
 });
