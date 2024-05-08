@@ -71,8 +71,8 @@ mongoose.connect("mongodb+srv://swarupamohapatra11:CpMeZSu7zxgRYAX2@cluster0.8uj
     console.error('MongoDB connection error:', error);
 });
 
-const PORT = '20.163.173.61'; // Replace this with your actual server's IP address or domain name
+const PORT = 80; // Use a valid port number, e.g., 5000
 
-server.listen(PORT, () => {
-    console.log(`Server is running on http://${PORT}`);
+server.listen(PORT, '20.163.173.61', () => {
+    console.log(`Server is running on http://20.163.173.61:${PORT}`);
 });
