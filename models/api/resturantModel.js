@@ -1,5 +1,17 @@
 const mongoose = require("mongoose");
 
+const MenuItemSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    menu: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: String,
+        required: true
+    }
+});
+
 const resturantSchema = new mongoose.Schema(
     {
         user_id: {
@@ -30,14 +42,7 @@ const resturantSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        menu: [{
-            type: String,
-            required: true
-        }],
-        price: [{
-            type: String,
-            required: true
-        }],
+        menu: [MenuItemSchema],
         todays_offer:
         {
             type: String,
