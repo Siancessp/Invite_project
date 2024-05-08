@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const mongoose = require('mongoose');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require("../../config/config");
@@ -41,6 +42,14 @@ const addresturantDetails = async (req,res) =>
         const menu = req.body.menu || [];
         const price = req.body.price || [];
 
+        const menuWithIds = menu.map((menuItem, index) => {
+            return {
+                _id: new mongoose.Types.ObjectId(), // Use mongoose.Types.ObjectId to generate ObjectId
+                menu: menuItem,
+                price: price[index] || 0
+            };
+        });
+
         const newResturantDetails = new Resturant(
             {
                 user_id: user_id,
@@ -48,8 +57,7 @@ const addresturantDetails = async (req,res) =>
                 resturantlogo: resturantlogo,
                 mobileno: mobileno,
                 address: address,
-                menu: menu,
-                price: price,
+                menu: menuWithIds,
                 todays_offer: todays_offer,
                 offer_start_date: offer_start_date,
                 offer_start_time: offer_start_time,
@@ -122,7 +130,6 @@ const getresturantdetails = async (req, res) => {
                 mobileno: resturantDetails.mobileno,
                 address: resturantDetails.address,
                 menu: resturantDetails.menu,
-                price: resturantDetails.price,
                 offer_start_date: resturantDetails.offer_start_date,
                 offer_start_time: resturantDetails.offer_start_time,
                 offer_end_time: resturantDetails.offer_end_time,
@@ -155,7 +162,7 @@ const getresturantdetails = async (req, res) => {
 const updateofferbyreturantId = async (req,res) =>
 {
     try{
-        const resturant_id = req.params.resturant_id;
+        const resturant_id = req.body.resturant_id;
         const { todays_offer, offer_start_date, offer_start_time, offer_end_time, offer_end_date } = req.body;
         const updatingofferDetails = await Resturant.findOne({ _id : resturant_id});
 
@@ -186,8 +193,44 @@ const updateofferbyreturantId = async (req,res) =>
     }   
 };
 
+const updatemenubyresturantId = async (req, res) => {
+    try {
+        const { resturant_id, menu_id, newMenuName, newPrice } = req.body;
+        const updatingmenuDetails = await Resturant.findOne({ _id: resturant_id });
+
+        if (!updatingmenuDetails) {
+            return res.status(404).json({ success: false, msg: 'Restaurant details not found' });   
+        }
+
+        const menuItemToUpdate = updatingmenuDetails.menu.find(menuItem => String(menuItem._id) === String(menu_id));
+
+        if(!menuItemToUpdate)
+        {
+            return res.status(404).json({ success: false, msg: "Menu item not found"});
+        }
+
+        if(newMenuName)
+        {
+            menuItemToUpdate.menu = newMenuName;
+        }
+        if(newPrice)
+        {
+            menuItemToUpdate.price = newPrice;
+        }
+
+        await updatingmenuDetails.save();
+
+        return res.status(200).json({ success: true, msg: 'Menu item updated successfully', data: updatingmenuDetails });
+    } catch(error) {
+        console.error(error);
+        return res.status(500).send({ success: false, msg: "Internal Server Error!"});
+    }
+};
+
+
 module.exports = {
     addresturantDetails,
     getresturantdetails,
-    updateofferbyreturantId
+    updateofferbyreturantId,
+    updatemenubyresturantId
 }
