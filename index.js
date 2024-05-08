@@ -67,11 +67,11 @@ mongoose.connect("mongodb+srv://swarupamohapatra11:CpMeZSu7zxgRYAX2@cluster0.8uj
     useUnifiedTopology: true
 }).then(() => {
     console.log('MongoDB connected');
-    const PORT = 5000;
-    server.listen(PORT, () => {
-        console.log(`Server is running on port http://20.163.173.61/api`);
-    });
 }).catch((error) => {
     console.error('MongoDB connection error:', error);
 });
 
+const PORT = 5000;
+server.listen(PORT, () => {
+    console.log(`Server is running on port http://20.163.173.61:${PORT}`);
+});
