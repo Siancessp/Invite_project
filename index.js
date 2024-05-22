@@ -76,7 +76,7 @@ mongoose.connect("mongodb+srv://swarupamohapatra11:CpMeZSu7zxgRYAX2@cluster0.8uj
 });
 
 const PORT = 5000; // Specify the port number
-const HOST = '20.163.173.61'; // Specify the IP address
+const HOST = '0.0.0.0'; // Specify the IP address
 
 server.listen(PORT, HOST, () => {
     console.log(`Server running at http://${HOST}:${PORT}/`);
