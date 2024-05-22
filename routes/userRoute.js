@@ -16,6 +16,9 @@ const storage = multer.diskStorage({
             cb(null, path.join(__dirname, '../public/uploads/profile_image'));
         } else if (file.fieldname === "background_image") {
             cb(null, path.join(__dirname, '../public/uploads/background_image'));
+        }
+        else if (file.fieldname === "resturantlogo") {
+            cb(null, path.join(__dirname, '../public/uploads/resturant_logo'));
         } else {
             cb(new Error("Invalid fieldname"), null);
         }
@@ -45,6 +48,8 @@ const likeController = require("../controllers/api/likecontroller");
 const commentController = require("../controllers/api/commentcontroller");
 const chatController = require("../controllers/api/chatController");
 const messageController = require("../controllers/api/messageController");
+
+const resturantController = require("../controllers/api/resturantController");
 
 user_route.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.js'));
@@ -127,5 +132,10 @@ user_route.get('/myChats/:user_id', authuserMiddleware, chatController.myChats);
 
 user_route.post('/sendmessage', authuserMiddleware, messageController.sendMessage);
 user_route.get('/mymessages/:chatId', authuserMiddleware, messageController.myMessages);
+
+user_route.post('/addresturantdetails', upload.single('resturantlogo'), resturantController.addresturantDetails);
+user_route.get('/getresturantdetails', resturantController.getresturantdetails);
+user_route.post('/updateofferbyreturantId', resturantController.updateofferbyreturantId);
+user_route.post('/updatemenubyresturantId', resturantController.updatemenubyresturantId);
 
 module.exports = user_route;

@@ -50,7 +50,7 @@ app.use('/', admin_route);
 app.use('/api', user_route);
 
 io.on('connection', (socket) => {
-        console.log('a user connected', socket.id);
+    console.log('a user connected', socket.id);
 });
 
 app.use(express.urlencoded({ extended: false }));
@@ -71,7 +71,8 @@ mongoose.connect("mongodb+srv://swarupamohapatra11:CpMeZSu7zxgRYAX2@cluster0.8uj
     console.error('MongoDB connection error:', error);
 });
 
-const PORT = 5000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+const PORT = '20.163.173.61'; // Use a valid port number, e.g., 5000
+
+server.listen(PORT, () => {
+    console.log(`Server is running on http://${PORT}/api`);
 });

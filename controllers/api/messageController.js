@@ -16,6 +16,7 @@ const sendMessage = async (req, res) =>
     const userData = req.user;
     console.log("User data:", userData);//Get the id the person who log in
     let userIds = [userData._id, userId];
+    console.log('+++++++++');
     try
     {
         const newMessage = await Message.create(
